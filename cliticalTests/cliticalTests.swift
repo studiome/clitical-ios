@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import clitical
+@testable import clitical_ios
 
 final class cliticalTests: XCTestCase {
 
