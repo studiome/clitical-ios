@@ -8,6 +8,9 @@ final class PatientDataTests: XCTestCase {
         // results.
         let pd = PatientData();
         XCTAssertEqual(pd.sex, Sex.Female);
+        XCTAssertNil(pd.age);
+        XCTAssertNil(pd.height);
+        XCTAssertNil(pd.weight);
         XCTAssertEqual(pd.activity, Activity.Ambulatory);
         XCTAssertEqual(pd.ckd,CKD.Normal);
     }
