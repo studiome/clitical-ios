@@ -11,6 +11,7 @@ final class PatientDataTests: XCTestCase {
         XCTAssertNil(pd.age);
         XCTAssertNil(pd.height);
         XCTAssertNil(pd.weight);
+        XCTAssertNil(pd.alb);
         XCTAssertEqual(pd.activity, Activity.Ambulatory);
         XCTAssertEqual(pd.ckd,CKD.Normal);
     }

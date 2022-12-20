@@ -4,6 +4,7 @@ public struct PatientData {
     public var age: Int?
     public var height:Double?
     public var weight:Double?
+    public var alb:Double?
     public var activity:Activity
     public var ckd: CKD
     public init() {
