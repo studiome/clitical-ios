@@ -11,9 +11,9 @@ public struct PatientData {
     }
 }
 
-public enum Sex:String{
-    case Male = "Male"
-    case Female = "Female"
+public enum Sex{
+    case Male
+    case Female
 }
 
 public enum Activity{
