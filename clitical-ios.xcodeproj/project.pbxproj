@@ -34,14 +34,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		212A1FC12951B38000508396 /* clitical2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = clitical2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		212A1FC12951B38000508396 /* clitical-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "clitical-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		212A1FC42951B38000508396 /* cliticalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cliticalApp.swift; sourceTree = "<group>"; };
 		212A1FC62951B38000508396 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		212A1FC82951B38000508396 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		212A1FCB2951B38000508396 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		212A1FD12951B38000508396 /* clitical2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = clitical2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		212A1FD12951B38000508396 /* clitical-iosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "clitical-iosTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		212A1FD52951B38000508396 /* cliticalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cliticalTests.swift; sourceTree = "<group>"; };
-		212A1FDB2951B38000508396 /* clitical2UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = clitical2UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		212A1FDB2951B38000508396 /* clitical-iosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "clitical-iosUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		212A1FDF2951B38000508396 /* cliticalUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cliticalUITests.swift; sourceTree = "<group>"; };
 		212A1FE12951B38000508396 /* cliticalUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cliticalUITestsLaunchTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -84,9 +84,9 @@
 		212A1FC22951B38000508396 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				212A1FC12951B38000508396 /* clitical2.app */,
-				212A1FD12951B38000508396 /* clitical2Tests.xctest */,
-				212A1FDB2951B38000508396 /* clitical2UITests.xctest */,
+				212A1FC12951B38000508396 /* clitical-ios.app */,
+				212A1FD12951B38000508396 /* clitical-iosTests.xctest */,
+				212A1FDB2951B38000508396 /* clitical-iosUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -130,9 +130,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		212A1FC02951B38000508396 /* clitical2 */ = {
+		212A1FC02951B38000508396 /* clitical-ios */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 212A1FE52951B38000508396 /* Build configuration list for PBXNativeTarget "clitical2" */;
+			buildConfigurationList = 212A1FE52951B38000508396 /* Build configuration list for PBXNativeTarget "clitical-ios" */;
 			buildPhases = (
 				212A1FBD2951B38000508396 /* Sources */,
 				212A1FBE2951B38000508396 /* Frameworks */,
@@ -142,14 +142,14 @@
 			);
 			dependencies = (
 			);
-			name = clitical2;
+			name = "clitical-ios";
 			productName = clitical;
-			productReference = 212A1FC12951B38000508396 /* clitical2.app */;
+			productReference = 212A1FC12951B38000508396 /* clitical-ios.app */;
 			productType = "com.apple.product-type.application";
 		};
-		212A1FD02951B38000508396 /* clitical2Tests */ = {
+		212A1FD02951B38000508396 /* clitical-iosTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 212A1FE82951B38000508396 /* Build configuration list for PBXNativeTarget "clitical2Tests" */;
+			buildConfigurationList = 212A1FE82951B38000508396 /* Build configuration list for PBXNativeTarget "clitical-iosTests" */;
 			buildPhases = (
 				212A1FCD2951B38000508396 /* Sources */,
 				212A1FCE2951B38000508396 /* Frameworks */,
@@ -160,14 +160,14 @@
 			dependencies = (
 				212A1FD32951B38000508396 /* PBXTargetDependency */,
 			);
-			name = clitical2Tests;
+			name = "clitical-iosTests";
 			productName = cliticalTests;
-			productReference = 212A1FD12951B38000508396 /* clitical2Tests.xctest */;
+			productReference = 212A1FD12951B38000508396 /* clitical-iosTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		212A1FDA2951B38000508396 /* clitical2UITests */ = {
+		212A1FDA2951B38000508396 /* clitical-iosUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 212A1FEB2951B38000508396 /* Build configuration list for PBXNativeTarget "clitical2UITests" */;
+			buildConfigurationList = 212A1FEB2951B38000508396 /* Build configuration list for PBXNativeTarget "clitical-iosUITests" */;
 			buildPhases = (
 				212A1FD72951B38000508396 /* Sources */,
 				212A1FD82951B38000508396 /* Frameworks */,
@@ -178,9 +178,9 @@
 			dependencies = (
 				212A1FDD2951B38000508396 /* PBXTargetDependency */,
 			);
-			name = clitical2UITests;
+			name = "clitical-iosUITests";
 			productName = cliticalUITests;
-			productReference = 212A1FDB2951B38000508396 /* clitical2UITests.xctest */;
+			productReference = 212A1FDB2951B38000508396 /* clitical-iosUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -206,7 +206,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 212A1FBC2951B38000508396 /* Build configuration list for PBXProject "clitical2" */;
+			buildConfigurationList = 212A1FBC2951B38000508396 /* Build configuration list for PBXProject "clitical-ios" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -219,9 +219,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				212A1FC02951B38000508396 /* clitical2 */,
-				212A1FD02951B38000508396 /* clitical2Tests */,
-				212A1FDA2951B38000508396 /* clitical2UITests */,
+				212A1FC02951B38000508396 /* clitical-ios */,
+				212A1FD02951B38000508396 /* clitical-iosTests */,
+				212A1FDA2951B38000508396 /* clitical-iosUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -284,12 +284,12 @@
 /* Begin PBXTargetDependency section */
 		212A1FD32951B38000508396 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 212A1FC02951B38000508396 /* clitical2 */;
+			target = 212A1FC02951B38000508396 /* clitical-ios */;
 			targetProxy = 212A1FD22951B38000508396 /* PBXContainerItemProxy */;
 		};
 		212A1FDD2951B38000508396 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 212A1FC02951B38000508396 /* clitical2 */;
+			target = 212A1FC02951B38000508396 /* clitical-ios */;
 			targetProxy = 212A1FDC2951B38000508396 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -487,7 +487,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/clitical2.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/clitical2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/clitical-ios.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/clitical-ios";
 			};
 			name = Debug;
 		};
@@ -507,7 +507,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/clitical2.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/clitical2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/clitical-ios.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/clitical-ios";
 			};
 			name = Release;
 		};
@@ -552,7 +552,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		212A1FBC2951B38000508396 /* Build configuration list for PBXProject "clitical2" */ = {
+		212A1FBC2951B38000508396 /* Build configuration list for PBXProject "clitical-ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				212A1FE32951B38000508396 /* Debug */,
@@ -561,7 +561,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		212A1FE52951B38000508396 /* Build configuration list for PBXNativeTarget "clitical2" */ = {
+		212A1FE52951B38000508396 /* Build configuration list for PBXNativeTarget "clitical-ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				212A1FE62951B38000508396 /* Debug */,
@@ -570,7 +570,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		212A1FE82951B38000508396 /* Build configuration list for PBXNativeTarget "clitical2Tests" */ = {
+		212A1FE82951B38000508396 /* Build configuration list for PBXNativeTarget "clitical-iosTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				212A1FE92951B38000508396 /* Debug */,
@@ -579,7 +579,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		212A1FEB2951B38000508396 /* Build configuration list for PBXNativeTarget "clitical2UITests" */ = {
+		212A1FEB2951B38000508396 /* Build configuration list for PBXNativeTarget "clitical-iosUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				212A1FEC2951B38000508396 /* Debug */,
