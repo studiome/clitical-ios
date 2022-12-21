@@ -1,12 +1,12 @@
 import XCTest
 @testable import CLPatientData
 
-final class PatientDataTests: XCTestCase {
+final class CLPatientDataTests: XCTestCase {
     func testInit() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
-        let pd = PatientData();
+        let pd = CLPatientData();
         XCTAssertEqual(pd.sex, Sex.Female);
         XCTAssertNil(pd.age);
         XCTAssertNil(pd.height);
