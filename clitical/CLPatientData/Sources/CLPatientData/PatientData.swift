@@ -1,4 +1,4 @@
-public struct CLPatientData {
+public struct PatientData {
     
     public var sex: Sex
     public var age: Int?

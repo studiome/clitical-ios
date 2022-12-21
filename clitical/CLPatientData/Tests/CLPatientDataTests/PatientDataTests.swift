@@ -3,7 +3,7 @@ import XCTest
 
 final class PatientDataTests: XCTestCase {
     func testInit() throws {
-        let pd = CLPatientData();
+        let pd = PatientData();
         XCTAssertEqual(pd.sex, Sex.female);
         XCTAssertNil(pd.age);
         XCTAssertNil(pd.height);
