@@ -1,20 +1,20 @@
 import XCTest
 @testable import CLPatientData
 
-final class CLPatientDataTests: XCTestCase {
+final class PatientDataTests: XCTestCase {
     func testInit() throws {
         let pd = CLPatientData();
-        XCTAssertEqual(pd.sex, Sex.Female);
+        XCTAssertEqual(pd.sex, Sex.female);
         XCTAssertNil(pd.age);
         XCTAssertNil(pd.height);
         XCTAssertNil(pd.weight);
         XCTAssertNil(pd.alb);
-        XCTAssertEqual(pd.activity, Activity.Ambulatory);
+        XCTAssertEqual(pd.activity, Activity.ambulatory);
         XCTAssertFalse(pd.hasCHF);
         XCTAssertFalse(pd.hasCAD);
         XCTAssertFalse(pd.hasCVD);
-        XCTAssertEqual(pd.ckd,CKD.Normal);
-        XCTAssertEqual(pd.malignantNeoplasm, MalignantNeoplasm.No);
+        XCTAssertEqual(pd.ckd,CKD.normal);
+        XCTAssertEqual(pd.malignantNeoplasm, MalignantNeoplasm.no);
         XCTAssertFalse(pd.hasAILesion);
         XCTAssertFalse(pd.hasFPLesion);
         XCTAssertFalse(pd.hasBKLesion);
@@ -26,6 +26,6 @@ final class CLPatientDataTests: XCTestCase {
         XCTAssertFalse(pd.isSmoking);
         XCTAssertFalse(pd.hasContraLateralLesion);
         XCTAssertFalse(pd.hasOtherVD);
-        XCTAssertEqual(pd.rutherford, RutherfordClassification.Class4);
+        XCTAssertEqual(pd.rutherford, RutherfordClassification.class4);
     }
 }

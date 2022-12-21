@@ -25,13 +25,13 @@ public struct CLPatientData {
     public var rutherford: RutherfordClassification
     
     public init() {
-        sex = Sex.Female;
-        activity = Activity.Ambulatory;
+        sex = Sex.female;
+        activity = Activity.ambulatory;
         hasCHF = false;
         hasCAD = false;
         hasCVD = false;
-        ckd = .Normal;
-        malignantNeoplasm = .No;
+        ckd = .normal;
+        malignantNeoplasm = .no;
         hasAILesion = false;
         hasFPLesion = false;
         hasBKLesion = false;
@@ -43,37 +43,37 @@ public struct CLPatientData {
         isSmoking = false;
         hasContraLateralLesion = false;
         hasOtherVD = false;
-        rutherford = .Class4;
+        rutherford = .class4;
     }
 }
 
 public enum Sex{
-    case Male
-    case Female
+    case male
+    case female
 }
 
 public enum Activity{
-    case Ambulatory
-    case Wheelchair
-    case Immobile
+    case ambulatory
+    case wheelchair
+    case immobile
 }
 
 public enum CKD{
-    case Normal
-    case G3
-    case G4
-    case G5
-    case G5D
+    case normal
+    case g3
+    case g4
+    case g5
+    case g5D
 }
 
 public enum MalignantNeoplasm{
-    case No
-    case PastHistory
-    case UnderTreatment
+    case no
+    case pastHistory
+    case underTreatment
 }
 
 public enum RutherfordClassification{
-    case Class4
-    case Class5
-    case Class6
+    case class4
+    case class5
+    case class6
 }
