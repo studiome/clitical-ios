@@ -1,5 +1,4 @@
-public struct PatientData {
-    
+public class PatientData {
     public var sex: Sex = .female
     public var age: Int?
     public var height:Double?
