@@ -8,7 +8,7 @@ public class PatientData {
     public var hasCHF: Bool = false
     public var hasCAD: Bool  = false
     public var hasCVD: Bool = false
-    public var ckd: CKD = CKD.normal
+    public var ckd: CKD = .normal
     public var malignantNeoplasm: MalignantNeoplasm = .no
     public var hasAILesion: Bool = false
     public var hasFPLesion: Bool = false
