@@ -9,7 +9,8 @@ import XCTest
 @testable import CLPatientData
 final class PatientRiskTests: XCTestCase {
     func testInit() throws {
-        let risk = PatientRisk();
+        let pd = PatientData();
+        var risk = PatientRisk(ofPatient: pd);
         XCTAssertNil(risk.gnri);
         XCTAssertNil(risk.gnriRisk);
         XCTAssertNil(risk.predicted30DDeathOrAmputation);
