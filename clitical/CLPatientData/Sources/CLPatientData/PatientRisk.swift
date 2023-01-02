@@ -5,7 +5,6 @@
 //  Created by kmiyahara on 2023/01/02.
 //
 
-import Foundation
 public struct PatientRisk{
     public var gnri: Double?
     public var gnriRisk: GNRIRisk?
