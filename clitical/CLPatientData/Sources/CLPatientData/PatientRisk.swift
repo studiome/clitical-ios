@@ -4,6 +4,7 @@
 //
 //  Created by kmiyahara on 2023/01/02.
 //
+import Foundation
 
 public struct PatientRisk{
     var gnri: Double? {
@@ -30,7 +31,23 @@ public struct PatientRisk{
     }
     
     private func calcGNRI() -> Double?{
-        return nil
+        guard let height = patientData.height else{
+            return nil
+        }
+        guard let weight = patientData.weight else{
+            return nil
+        }
+        guard let alb = patientData.alb else{
+            return nil
+        }
+        guard height != 0.0 else{
+            return nil
+        }
+        var wi:Double = weight/(22.0 * pow(height, 2));
+        if (wi >= 1.0){
+            wi = 1.0
+        }
+        return 14.89*alb + 41.7*wi
     }
     
     private func calcPredicted30DDA() -> Double?{
