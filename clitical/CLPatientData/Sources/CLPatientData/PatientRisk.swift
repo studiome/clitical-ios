@@ -76,7 +76,7 @@ public struct PatientRisk{
         case 92.0..<98.0:
             return GNRIRisk.low
         case 82.0..<92.0:
-            return GNRIRisk.medium
+            return GNRIRisk.moderate
         case 0.0..<82.0:
             return GNRIRisk.major
         default:
@@ -104,7 +104,7 @@ public struct PatientRisk{
 public enum GNRIRisk{
     case noRisk
     case low
-    case medium
+    case moderate
     case major
 }
 
