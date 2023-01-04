@@ -4,17 +4,17 @@ import XCTest
 final class PatientDataTests: XCTestCase {
     func testInit() throws {
         let pd = PatientData();
-        XCTAssertEqual(pd.sex, Sex.female);
+        XCTAssertEqual(pd.sex, .female);
         XCTAssertNil(pd.age);
         XCTAssertNil(pd.height);
         XCTAssertNil(pd.weight);
         XCTAssertNil(pd.alb);
-        XCTAssertEqual(pd.activity, Activity.ambulatory);
+        XCTAssertEqual(pd.activity, .ambulatory);
         XCTAssertFalse(pd.hasCHF);
         XCTAssertFalse(pd.hasCAD);
         XCTAssertFalse(pd.hasCVD);
-        XCTAssertEqual(pd.ckd,CKD.normal);
-        XCTAssertEqual(pd.malignantNeoplasm, MalignantNeoplasm.no);
+        XCTAssertEqual(pd.ckd,.normal);
+        XCTAssertEqual(pd.malignantNeoplasm, .no);
         XCTAssertFalse(pd.hasAILesion);
         XCTAssertFalse(pd.hasFPLesion);
         XCTAssertFalse(pd.hasBKLesion);
@@ -26,6 +26,6 @@ final class PatientDataTests: XCTestCase {
         XCTAssertFalse(pd.isSmoking);
         XCTAssertFalse(pd.hasContraLateralLesion);
         XCTAssertFalse(pd.hasOtherVD);
-        XCTAssertEqual(pd.rutherford, RutherfordClassification.class4);
+        XCTAssertEqual(pd.rutherford, .class4);
     }
 }
