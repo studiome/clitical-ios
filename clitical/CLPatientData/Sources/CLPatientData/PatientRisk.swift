@@ -24,23 +24,16 @@ public struct PatientRisk {
     
     lazy var gnriRisk: GNRIRisk? = classifyGNRI()
     
-    var predicted30DDeathOrAmputation: Double? {
-        return calcPredicted30DDA()
-    }// 0.0 ... 1.0
+    lazy var predicted30DDeathOrAmputation: Double? = calcPredicted30DDA()
+    // 0.0 ... 1.0
     
-    var predicted30DMALE: Double?{
-        return calcPredicted30DMALE()
-    } // 0.0 ... 1.0
+    lazy var predicted30DMALE: Double? = calcPredicted30DMALE()// 0.0 ... 1.0
     
-    var predicted2YOS: Double? {
-        return calcPredicted2YOS()
-    } // 0.0 ... 1.0
+    lazy var predicted2YOS: Double? = calcPredicted2YOS()// 0.0 ... 1.0
     
     lazy var predicted2YOSRisk: TwoYearOSRisk? = classifyOS()
     
-    var predicted2YAFS: Double? {
-        return calcPredicted2YAFS()
-    }// 0.0 ... 1.0
+    lazy var predicted2YAFS: Double? = calcPredicted2YAFS() // 0.0 ... 1.0
     
     var patientData: PatientData
     
