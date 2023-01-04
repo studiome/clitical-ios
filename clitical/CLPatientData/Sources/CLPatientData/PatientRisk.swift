@@ -95,7 +95,7 @@ public struct PatientRisk {
         }
     }
     
-    private func classifyOS() -> TwoYearOSRisk? {
+    private mutating func classifyOS() -> TwoYearOSRisk? {
         guard let os = self.predicted2YOS else {
             return nil
         }
