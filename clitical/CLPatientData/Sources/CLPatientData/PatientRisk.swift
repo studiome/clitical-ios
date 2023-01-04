@@ -18,6 +18,9 @@
 import Foundation
 
 public struct PatientRisk {
+    private let twoYearOSH0Coeff = 0.922
+    private let twoYearAFSH0Coeff = 0.876
+    
     var gnri: Double? {
         return calcGNRI()
     }
@@ -62,19 +65,23 @@ public struct PatientRisk {
     }
     
     private func calcPredicted30DDA() -> Double? {
-        return nil
+        let sigma = 0.0
+        return 1.0 / (1.0 + exp(sigma))
     }
     
     private func calcPredicted30DMALE() -> Double? {
-        return nil
+        let sigma = 0.0
+        return 1.0 / (1.0 + exp(sigma))
     }
     
     private func calcPredicted2YOS() -> Double? {
-        return nil
+        let sigma = 0.0;
+        return pow(twoYearOSH0Coeff, exp(sigma))
     }
     
     private func calcPredicted2YAFS()->Double? {
-        return nil
+        let sigma = 0.0;
+        return pow(twoYearAFSH0Coeff, exp(sigma))
     }
     
     private func classifyGNRI() -> GNRIRisk? {
