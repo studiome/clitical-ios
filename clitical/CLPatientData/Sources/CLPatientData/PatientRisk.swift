@@ -17,68 +17,75 @@
 
 import Foundation
 
-public struct PatientRisk{
+public struct PatientRisk {
+    private let twoYearOSH0Coeff = 0.922
+    private let twoYearAFSH0Coeff = 0.876
+    
     var gnri: Double? {
         return calcGNRI()
     }
+    
     lazy var gnriRisk: GNRIRisk? = classifyGNRI()
-    var predicted30DDeathOrAmputation: Double? {
-        return calcPredicted30DDA()
-    }// 0.0 ... 1.0
-    var predicted30DMALE: Double?{
-        return calcPredicted30DMALE()
-    } // 0.0 ... 1.0
-    var predicted2YOS: Double?{
-        return calcPredicted2YOS()
-    } // 0.0 ... 1.0
+    
+    lazy var predicted30DDeathOrAmputation: Double? = calcPredicted30DDA()
+    // 0.0 ... 1.0
+    
+    lazy var predicted30DMALE: Double? = calcPredicted30DMALE()// 0.0 ... 1.0
+    
+    lazy var predicted2YOS: Double? = calcPredicted2YOS()// 0.0 ... 1.0
+    
     lazy var predicted2YOSRisk: TwoYearOSRisk? = classifyOS()
-    var predicted2YAFS: Double?{
-        return calcPredicted2YAFS()
-    }// 0.0 ... 1.0
+    
+    lazy var predicted2YAFS: Double? = calcPredicted2YAFS() // 0.0 ... 1.0
+    
     var patientData: PatientData
     
     init(ofPatient patientData: PatientData){
         self.patientData = patientData;
     }
     
-    private func calcGNRI() -> Double?{
-        guard let height = patientData.height else{
+    private func calcGNRI() -> Double? {
+        guard let height = patientData.height else {
             return nil
         }
-        guard let weight = patientData.weight else{
+        guard let weight = patientData.weight else {
             return nil
         }
-        guard let alb = patientData.alb else{
+        guard let alb = patientData.alb else {
             return nil
         }
-        guard height != 0.0 else{
+        guard height != 0.0 else {
             return nil
         }
-        var wi:Double = weight/(22.0 * pow(height, 2));
+        var wi:Double = weight / (22.0 * pow(height, 2))
         if (wi >= 1.0){
             wi = 1.0
         }
-        return 14.89*alb + 41.7*wi
+        return 14.89 * alb + 41.7 * wi
     }
     
-    private func calcPredicted30DDA() -> Double?{
-        return nil
+    private func calcPredicted30DDA() -> Double? {
+        let sigma = 0.0
+        return 1.0 / (1.0 + exp(sigma))
     }
     
-    private func calcPredicted30DMALE() -> Double?{
-        return nil
+    private func calcPredicted30DMALE() -> Double? {
+        let sigma = 0.0
+        return 1.0 / (1.0 + exp(sigma))
     }
     
-    private func calcPredicted2YOS() -> Double?{
-        return nil
+    private func calcPredicted2YOS() -> Double? {
+        let sigma = 0.0;
+        return pow(twoYearOSH0Coeff, exp(sigma))
     }
     
-    private func calcPredicted2YAFS()->Double?{
-        return nil
+    private func calcPredicted2YAFS()->Double? {
+        let sigma = 0.0;
+        return pow(twoYearAFSH0Coeff, exp(sigma))
     }
     
-    private func classifyGNRI() -> GNRIRisk?{
-        guard let gnri = self.gnri else{
+    private func classifyGNRI() -> GNRIRisk? {
+        guard let gnri = self.gnri else {
             return nil
         }
         switch gnri{
@@ -95,8 +102,8 @@ public struct PatientRisk{
         }
     }
     
-    private func classifyOS() -> TwoYearOSRisk?{
-        guard let os = self.predicted2YOS else{
+    private mutating func classifyOS() -> TwoYearOSRisk? {
+        guard let os = self.predicted2YOS else {
             return nil
         }
         switch os{
@@ -112,16 +119,15 @@ public struct PatientRisk{
     }
 }
 
-public enum GNRIRisk{
+public enum GNRIRisk {
     case noRisk
     case low
     case moderate
     case major
 }
 
-public enum TwoYearOSRisk{
+public enum TwoYearOSRisk {
     case low
     case medium
     case high
 }
-
