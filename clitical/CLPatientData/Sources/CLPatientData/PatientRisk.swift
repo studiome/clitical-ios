@@ -74,8 +74,79 @@ public struct PatientRisk {
         return 1.0 / (1.0 + exp(sigma))
     }
     
-    private func calcPredicted2YOS() -> Double? {
-        let sigma = 0.0;
+    private mutating func calcPredicted2YOS() -> Double? {
+        guard  let age = self.patientData.age else{
+            return nil
+        }
+        guard let gr = self.gnriRisk else{
+            return nil
+        }
+        
+        //questions
+        let q = TwoYearOSQuestions.allCases
+        
+        var sigma = 0.0;
+
+        // make answer list
+        q.forEach({
+            switch $0{
+            case .isFemale:
+                sigma += (patientData.sex == .female ? $0.coefficient : 0.0)
+                break
+            case .age65To74:
+                sigma += ((age >= 65 || age <= 74) ? $0.coefficient : 0.0)
+                break
+            case .age75To84:
+                sigma += ((age >= 75 || age <= 84) ? $0.coefficient : 0.0)
+                break
+            case .ageOver85:
+                sigma += (age >= 85 ? $0.coefficient : 0.0)
+                break
+            case .hasCHF:
+                sigma += (patientData.hasCHF ? $0.coefficient : 0.0 )
+                break
+            case .hasCVD:
+                sigma += (patientData.hasCVD ? $0.coefficient : 0.0 )
+                break
+            case .hasCKDG3:
+                sigma += (patientData.ckd == .g3 ? $0.coefficient : 0.0)
+                break
+            case .hasCKDG4:
+                sigma += (patientData.ckd == .g4 ? $0.coefficient : 0.0)
+                break
+            case .hasCKDG5:
+                sigma += (patientData.ckd == .g5 ? $0.coefficient : 0.0)
+                break
+            case .hasCKDG5D:
+                sigma += (patientData.ckd == .g5D ? $0.coefficient : 0.0)
+                break
+            case .hasModerateGNRIRisk:
+                sigma += (gr == .moderate ? $0.coefficient : 0.0)
+                break
+            case .hasMajorGNRIRisk:
+                sigma += (gr == .major ? $0.coefficient: 0.0)
+                break
+            case .isWheelchair:
+                sigma += (patientData.activity == .wheelchair ? $0.coefficient : 0.0)
+                break
+            case .isImmobile:
+                sigma += (patientData.activity == .immobile ? $0.coefficient : 0.0)
+                break
+            case .hasPastMalignancy:
+                sigma += (patientData.malignantNeoplasm == .pastHistory ? $0.coefficient : 0.0 )
+                break
+            case .hasTreatingMalignancy:
+                sigma += (patientData.malignantNeoplasm == .underTreatment ? $0.coefficient : 0.0 )
+                break
+            case .hasFPLesion:
+                sigma += (patientData.hasFPLesion ? $0.coefficient: 0.0)
+                break
+            case .hasBKLesion:
+                sigma += (patientData.hasBKLesion ? $0.coefficient : 0.0 )
+                break
+            }
+        })
+        
         return pow(twoYearOSH0Coeff, exp(sigma))
     }
     
