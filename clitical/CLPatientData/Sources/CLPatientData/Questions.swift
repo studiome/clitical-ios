@@ -127,7 +127,7 @@ enum ThirtyDayMALEQuestions: CaseIterable{
 let ThirtyDayMALECoeffs: [Double]
 = ThirtyDayMALEQuestions.allCases.map{$0.coefficient}
 
-enum TwoYearOSQuestions: CaseIterable{
+enum TwoYearOSQuestions: Int, CaseIterable{
     case isFemale
     case age65To74
     case age75To84
