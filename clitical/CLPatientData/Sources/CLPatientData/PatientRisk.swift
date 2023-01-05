@@ -40,7 +40,7 @@ public struct PatientRisk {
     
     var patientData: PatientData
     
-    init(ofPatient patientData: PatientData){
+    init(of patientData: PatientData){
         self.patientData = patientData;
     }
     
