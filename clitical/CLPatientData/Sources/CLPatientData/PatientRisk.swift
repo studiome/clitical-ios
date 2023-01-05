@@ -87,7 +87,6 @@ public struct PatientRisk {
         
         var sigma = 0.0;
 
-        // make answer list
         q.forEach({
             switch $0{
             case .isFemale:
