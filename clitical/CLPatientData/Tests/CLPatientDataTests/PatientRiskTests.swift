@@ -36,6 +36,7 @@ final class PatientRiskTests: XCTestCase {
     
     func testExtremelyLowRiskCase() throws{
         let pd = PatientData()
+        pd.age = 65
         pd.weight = 50.0
         pd.height = 1.50
         pd.alb = 4.0
@@ -55,6 +56,7 @@ final class PatientRiskTests: XCTestCase {
     func testLowRiskCase() throws{
         let pd = PatientData()
         pd.sex = .male
+        pd.age = 50
         pd.weight = 60.0
         pd.height = 1.65
         pd.alb = 4.0
@@ -90,6 +92,7 @@ final class PatientRiskTests: XCTestCase {
     func testMediumRiskCase() throws{
         let pd = PatientData()
         pd.sex = .female
+        pd.age = 70
         pd.weight = 55.0
         pd.height = 1.53
         pd.alb = 3.5
@@ -125,6 +128,7 @@ final class PatientRiskTests: XCTestCase {
     func testHighRiskCase1() throws{
         let pd = PatientData()
         pd.sex = .male
+        pd.age = 85
         pd.weight = 55.1
         pd.height = 1.75
         pd.alb = 3.5
@@ -160,6 +164,7 @@ final class PatientRiskTests: XCTestCase {
     func testHighRiskCase2() throws{
         let pd = PatientData()
         pd.sex = .female
+        pd.age = 90
         pd.weight = 30.0
         pd.height = 1.55
         pd.alb = 3.2
