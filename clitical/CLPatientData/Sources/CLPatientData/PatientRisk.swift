@@ -130,8 +130,91 @@ public struct PatientRisk {
         return 1.0 / (1.0 + exp(sigma))
     }
     
-    private func calcPredicted30DMALE() -> Double? {
-        let sigma = 0.0
+    private mutating func calcPredicted30DMALE() -> Double? {
+        guard  let age = self.patientData.age else{
+            return nil
+        }
+        guard let gr = self.gnriRisk else{
+            return nil
+        }
+        //questions
+        let q = ThirtyDayMALEQuestions.allCases
+        var  sigma = 0.0
+        
+        q.forEach({
+            switch $0{
+            case .intercept:
+                sigma += $0.coefficient
+                break
+            case .isFemale:
+                sigma += (patientData.sex == .female ? $0.coefficient : 0.0)
+                break
+            case .age75To84:
+                sigma += ((age >= 75 && age <= 84) ? $0.coefficient : 0.0)
+                break
+            case .ageOver85:
+                sigma += (age >= 85 ? $0.coefficient : 0.0)
+                break
+            case .hasAbnormalWBC:
+                sigma += (patientData.hasAbnormalWBC ? $0.coefficient : 0.0)
+                break
+            case .isUrgent:
+                sigma += (patientData.hasAbnormalWBC ? $0.coefficient : 0.0)
+                break
+            case .hasCHF:
+                sigma += (patientData.hasCHF ? $0.coefficient : 0.0)
+                break
+            case .hasFever:
+                sigma += (patientData.hasFever ? $0.coefficient : 0.0)
+                break
+            case .hasCKD5D:
+                sigma += (patientData.ckd == .g5D ? $0.coefficient : 0.0)
+                break
+            case .hasNoFPLesion:
+                sigma += (!patientData.hasFPLesion ? $0.coefficient : 0.0)
+                break
+            case .hasCVD:
+                sigma += (patientData.hasCVD ? $0.coefficient : 0.0)
+                break
+            case .hasDL:
+                sigma += (patientData.hasDyslipidemia ? $0.coefficient : 0.0)
+                break
+            case .hasRutherford5:
+                sigma += (patientData.rutherford == .class5 ? $0.coefficient : 0.0)
+                break
+            case .hasRutherford6:
+                sigma += (patientData.rutherford == .class6 ? $0.coefficient : 0.0)
+                break
+            case .hasNoOrLowGNRIRisk:
+                sigma += ((gr == .noRisk || gr == .low) ?  $0.coefficient : 0.0)
+                break
+            case .hasModerateGNRIRisk:
+                sigma += (gr == .moderate ?  $0.coefficient : 0.0)
+                break
+            case .isAmbulatory:
+                sigma += (patientData.activity == .ambulatory ? $0.coefficient : 0.0)
+                break
+            case .hasLocalInfection:
+                sigma += (patientData.hasLocalInfection ? $0.coefficient : 0.0)
+                break
+            case .isWheelChair:
+                sigma += (patientData.activity == .wheelchair ? $0.coefficient : 0.0)
+                break
+            case .hasCAD:
+                sigma += (patientData.hasCAD ? $0.coefficient : 0.0)
+                break
+            case .hasOthers:
+                sigma += (patientData.hasOtherVD ? $0.coefficient : 0.0)
+                break
+            case .isSmoking:
+                sigma += (patientData.isSmoking ? $0.coefficient : 0.0)
+                break
+            case .hasNoContraLateral:
+                sigma += (!patientData.hasContraLateralLesion ? $0.coefficient : 0.0)
+                break
+            }
+        })
+        
         return 1.0 / (1.0 + exp(sigma))
     }
     

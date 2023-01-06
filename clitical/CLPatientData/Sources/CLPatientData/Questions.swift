@@ -109,12 +109,12 @@ enum ThirtyDayMALEQuestions: CaseIterable{
         case .isAmbulatory: return 0.17103
         case .isWheelChair: return -0.22555
         case .isUrgent: return -0.20964
-        case .hasCHF: return -9218
-        case .hasCAD: return 375
-        case .hasCKD5D: return -2024
-        case .hasCVD: return 1592
-        case .hasOthers: return 2649
-        case .isSmoking: return 3109
+        case .hasCHF: return -0.09218
+        case .hasCAD: return 0.0375
+        case .hasCKD5D: return -0.02024
+        case .hasCVD: return 0.01592
+        case .hasOthers: return 0.02649
+        case .isSmoking: return 0.03109
         case .hasNoContraLateral: return 0.18822
         case .hasNoFPLesion: return 0.21082
         case .hasDL: return 0.2189
