@@ -133,7 +133,6 @@ enum TwoYearOSQuestions: Int, CaseIterable{
     case age75To84
     case ageOver85
     case hasCHF
-    case hasCVD
     case hasCKDG3
     case hasCKDG4
     case hasCKDG5
@@ -144,8 +143,8 @@ enum TwoYearOSQuestions: Int, CaseIterable{
     case isImmobile
     case hasPastMalignancy
     case hasTreatingMalignancy
-    case hasFPLesion
-    case hasBKLesion
+    case hasFPLesionWithoutAI
+    case hasOnlyBKLesion
     
     var coefficient: Double{
         switch self{
@@ -154,7 +153,6 @@ enum TwoYearOSQuestions: Int, CaseIterable{
         case .age75To84: return 0.76
         case .ageOver85: return 1.04
         case .hasCHF: return 0.50
-        case .hasCVD: return 0.0
         case .hasCKDG3: return 0.27
         case .hasCKDG4: return 0.61
         case .hasCKDG5: return 0.76
@@ -165,8 +163,8 @@ enum TwoYearOSQuestions: Int, CaseIterable{
         case .isImmobile: return 0.77
         case .hasPastMalignancy: return 0.20
         case .hasTreatingMalignancy: return 0.56
-        case .hasFPLesion: return -0.07
-        case .hasBKLesion: return 0.16
+        case .hasFPLesionWithoutAI: return -0.07
+        case .hasOnlyBKLesion: return 0.16
         }
     }
 }
@@ -195,8 +193,8 @@ enum TwoYearAFSQuestions: CaseIterable{
     case hasFever
     case hasAbnormalWBC
     case hasLocalInfetion
-    case hasFPLesion
-    case hasBKLesion
+    case hasFPLesionWithoutAI
+    case hasOnlyBKLesion
     
     var coefficient:Double {
         switch self{
@@ -220,8 +218,8 @@ enum TwoYearAFSQuestions: CaseIterable{
         case .hasFever: return 0.36
         case .hasAbnormalWBC: return 0.19
         case .hasLocalInfetion: return 0.15
-        case .hasFPLesion: return -0.07
-        case .hasBKLesion: return 0.15
+        case .hasFPLesionWithoutAI: return -0.07
+        case .hasOnlyBKLesion: return 0.15
         }
     }
 }

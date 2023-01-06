@@ -14,6 +14,14 @@
 // Threatening Ischaemia.
 // Eur J Vasc Endovasc Surg . 2022 Jun 7;S1078-5884(22)00340-9.
 // https://doi.org/10.1016/j.ejvs.2022.05.038
+// NOTICE
+// occlusive lesion
+// EJEVS occlusive classification
+// | AI | FP | BK | 2yr occlusive lesion
+// | +  | +- | +- | AI
+// | -  | +  | +- | FP without AI
+// | -  | -  | +  | Below IP
+// | -  | -  | -  | undefined illegal
 
 import Foundation
 
@@ -86,26 +94,23 @@ public struct PatientRisk {
         let q = TwoYearOSQuestions.allCases
         
         var sigma = 0.0;
-
+        
         q.forEach({
             switch $0{
             case .isFemale:
                 sigma += (patientData.sex == .female ? $0.coefficient : 0.0)
                 break
             case .age65To74:
-                sigma += ((age >= 65 || age <= 74) ? $0.coefficient : 0.0)
+                sigma += ((age >= 65 && age <= 74) ? $0.coefficient : 0.0)
                 break
             case .age75To84:
-                sigma += ((age >= 75 || age <= 84) ? $0.coefficient : 0.0)
+                sigma += ((age >= 75 && age <= 84) ? $0.coefficient : 0.0)
                 break
             case .ageOver85:
                 sigma += (age >= 85 ? $0.coefficient : 0.0)
                 break
             case .hasCHF:
                 sigma += (patientData.hasCHF ? $0.coefficient : 0.0 )
-                break
-            case .hasCVD:
-                sigma += (patientData.hasCVD ? $0.coefficient : 0.0 )
                 break
             case .hasCKDG3:
                 sigma += (patientData.ckd == .g3 ? $0.coefficient : 0.0)
@@ -137,11 +142,11 @@ public struct PatientRisk {
             case .hasTreatingMalignancy:
                 sigma += (patientData.malignantNeoplasm == .underTreatment ? $0.coefficient : 0.0 )
                 break
-            case .hasFPLesion:
-                sigma += (patientData.hasFPLesion ? $0.coefficient: 0.0)
+            case .hasFPLesionWithoutAI:
+                sigma += ((!patientData.hasAILesion && patientData.hasFPLesion) ? $0.coefficient: 0.0)
                 break
-            case .hasBKLesion:
-                sigma += (patientData.hasBKLesion ? $0.coefficient : 0.0 )
+            case .hasOnlyBKLesion:
+                sigma += ((!patientData.hasAILesion && !patientData.hasFPLesion && patientData.hasBKLesion) ? $0.coefficient : 0.0 )
                 break
             }
         })

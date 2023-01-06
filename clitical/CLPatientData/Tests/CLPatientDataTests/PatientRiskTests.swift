@@ -85,7 +85,7 @@ final class PatientRiskTests: XCTestCase {
         XCTAssertEqual(String(format: "%.3f", risk.predicted30DDeathOrAmputation!), "0.088")
         XCTAssertEqual(String(format: "%.3f", risk.predicted30DMALE!), "0.152")
         XCTAssertEqual(String(format: "%.2f", risk.predicted2YOS!), "0.91")
-        XCTAssertEqual(risk.predicted2YOSRisk, .low)
+        XCTAssertEqual(risk.predicted2YOSRisk!, .low)
         XCTAssertEqual(String(format: "%.2f", risk.predicted2YAFS!), "0.64")
     }
     
@@ -121,7 +121,7 @@ final class PatientRiskTests: XCTestCase {
         XCTAssertEqual(String(format: "%.3f", risk.predicted30DDeathOrAmputation!), "0.170")
         XCTAssertEqual(String(format: "%.3f", risk.predicted30DMALE!), "0.175")
         XCTAssertEqual(String(format: "%.2f", risk.predicted2YOS!), "0.67")
-        XCTAssertEqual(risk.predicted2YOSRisk, .medium)
+        XCTAssertEqual(risk.predicted2YOSRisk!, .medium)
         XCTAssertEqual(String(format: "%.2f", risk.predicted2YAFS!), "0.25")
     }
     
@@ -157,7 +157,7 @@ final class PatientRiskTests: XCTestCase {
         XCTAssertEqual(String(format: "%.3f", risk.predicted30DDeathOrAmputation!), "0.100")
         XCTAssertEqual(String(format: "%.3f", risk.predicted30DMALE!), "0.043")
         XCTAssertEqual(String(format: "%.2f", risk.predicted2YOS!), "0.08")
-        XCTAssertEqual(risk.predicted2YOSRisk, .high)
+        XCTAssertEqual(risk.predicted2YOSRisk!, .high)
         XCTAssertEqual(String(format: "%.2f", risk.predicted2YAFS!), "0.03")
     }
     
@@ -193,7 +193,7 @@ final class PatientRiskTests: XCTestCase {
         XCTAssertEqual(String(format: "%.3f", risk.predicted30DDeathOrAmputation!), "0.370")
         XCTAssertEqual(String(format: "%.3f", risk.predicted30DMALE!), "0.122")
         XCTAssertEqual(String(format: "%.2f", risk.predicted2YOS!), "0.00")
-        XCTAssertEqual(risk.predicted2YOSRisk, .high)
+        XCTAssertEqual(risk.predicted2YOSRisk!, .high)
         XCTAssertEqual(String(format: "%.2f", risk.predicted2YAFS!), "0.00")
     }
 }
