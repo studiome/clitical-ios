@@ -44,7 +44,7 @@ enum ThirtyDayDeathOrAmputationQuestions:  CaseIterable{
     case hasDL
     case hasRutherford5
     case hasModerateGNRIRisk
-    case hasGNRINoOrLowRisk
+    case hasNoOrLowGNRIRisk
     case isAmbulatory
     
     var coefficient:Double {
@@ -57,11 +57,11 @@ enum ThirtyDayDeathOrAmputationQuestions:  CaseIterable{
         case .hasCKD5D: return  -0.33797
         case .hasNoAILesion: return -0.14474
         case .hasNoFPLesion: return 0.17229
-        case .hasCVD: return -5239
-        case .hasDL: return  5969
+        case .hasCVD: return -0.05239
+        case .hasDL: return  0.05969
         case .hasRutherford5: return  0.12638
         case .hasModerateGNRIRisk: return  0.36795
-        case .hasGNRINoOrLowRisk: return  0.76479
+        case .hasNoOrLowGNRIRisk: return  0.76479
         case .isAmbulatory: return  0.54391
         }
     }

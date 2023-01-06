@@ -72,8 +72,61 @@ public struct PatientRisk {
         return 14.89 * alb + 41.7 * wi
     }
     
-    private func calcPredicted30DDA() -> Double? {
-        let sigma = 0.0
+    private mutating func calcPredicted30DDA() -> Double? {
+        guard let gr = self.gnriRisk else{
+            return nil
+        }
+        //questions
+        let q = ThirtyDayDeathOrAmputationQuestions.allCases
+        var  sigma = 0.0
+        
+        q.forEach({
+            switch $0{
+            case .intercept:
+                sigma += $0.coefficient
+                break
+            case .hasAbnormalWBC:
+                sigma += (patientData.hasAbnormalWBC ? $0.coefficient : 0.0)
+                break
+            case .isUrgent:
+                sigma += (patientData.hasAbnormalWBC ? $0.coefficient : 0.0)
+                break
+            case .hasCHF:
+                sigma += (patientData.hasCHF ? $0.coefficient : 0.0)
+                break
+            case .hasFever:
+                sigma += (patientData.hasFever ? $0.coefficient : 0.0)
+                break
+            case .hasCKD5D:
+                sigma += (patientData.ckd == .g5D ? $0.coefficient : 0.0)
+                break
+            case .hasNoAILesion:
+                sigma += (!patientData.hasAILesion ? $0.coefficient : 0.0)
+                break
+            case .hasNoFPLesion:
+                sigma += (!patientData.hasFPLesion ? $0.coefficient : 0.0)
+                break
+            case .hasCVD:
+                sigma += (patientData.hasCVD ? $0.coefficient : 0.0)
+                break
+            case .hasDL:
+                sigma += (patientData.hasDyslipidemia ? $0.coefficient : 0.0)
+                break
+            case .hasRutherford5:
+                sigma += (patientData.rutherford == .class5 ? $0.coefficient : 0.0)
+                break
+            case .hasNoOrLowGNRIRisk:
+                sigma += ((gr == .noRisk || gr == .low) ?  $0.coefficient : 0.0)
+                break
+            case .hasModerateGNRIRisk:
+                sigma += (gr == .moderate ?  $0.coefficient : 0.0)
+                break
+            case .isAmbulatory:
+                sigma += (patientData.activity == .ambulatory ? $0.coefficient : 0.0)
+                break
+            }
+        })
+        
         return 1.0 / (1.0 + exp(sigma))
     }
     
