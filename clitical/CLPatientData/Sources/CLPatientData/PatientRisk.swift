@@ -86,43 +86,69 @@ public struct PatientRisk {
                 sigma += $0.coefficient
                 break
             case .hasAbnormalWBC:
-                sigma += (patientData.hasAbnormalWBC ? $0.coefficient : 0.0)
+                sigma += (patientData.hasAbnormalWBC ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .isUrgent:
-                sigma += (patientData.hasAbnormalWBC ? $0.coefficient : 0.0)
+                sigma += (patientData.hasAbnormalWBC ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasCHF:
-                sigma += (patientData.hasCHF ? $0.coefficient : 0.0)
+                sigma += (patientData.hasCHF ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasFever:
-                sigma += (patientData.hasFever ? $0.coefficient : 0.0)
+                sigma += (patientData.hasFever ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasCKD5D:
-                sigma += (patientData.ckd == .g5D ? $0.coefficient : 0.0)
+                sigma += (patientData.ckd == .g5D ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasNoAILesion:
-                sigma += (!patientData.hasAILesion ? $0.coefficient : 0.0)
+                sigma += (!patientData.hasAILesion ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasNoFPLesion:
-                sigma += (!patientData.hasFPLesion ? $0.coefficient : 0.0)
+                sigma += (!patientData.hasFPLesion ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasCVD:
-                sigma += (patientData.hasCVD ? $0.coefficient : 0.0)
+                sigma += (patientData.hasCVD ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasDL:
-                sigma += (patientData.hasDyslipidemia ? $0.coefficient : 0.0)
+                sigma += (patientData.hasDyslipidemia ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasRutherford5:
-                sigma += (patientData.rutherford == .class5 ? $0.coefficient : 0.0)
+                sigma += (patientData.rutherford == .class5 ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasNoOrLowGNRIRisk:
-                sigma += ((gr == .noRisk || gr == .low) ?  $0.coefficient : 0.0)
+                sigma += ((gr == .noRisk || gr == .low) ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasModerateGNRIRisk:
-                sigma += (gr == .moderate ?  $0.coefficient : 0.0)
+                sigma += (gr == .moderate ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .isAmbulatory:
-                sigma += (patientData.activity == .ambulatory ? $0.coefficient : 0.0)
+                sigma += (patientData.activity == .ambulatory ?
+                          $0.coefficient
+                          : 0.0)
                 break
             }
         })
@@ -147,70 +173,114 @@ public struct PatientRisk {
                 sigma += $0.coefficient
                 break
             case .isFemale:
-                sigma += (patientData.sex == .female ? $0.coefficient : 0.0)
+                sigma += (patientData.sex == .female ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .age75To84:
-                sigma += ((age >= 75 && age <= 84) ? $0.coefficient : 0.0)
+                sigma += ((age >= 75 && age <= 84) ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .ageOver85:
-                sigma += (age >= 85 ? $0.coefficient : 0.0)
+                sigma += (age >= 85 ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasAbnormalWBC:
-                sigma += (patientData.hasAbnormalWBC ? $0.coefficient : 0.0)
+                sigma += (patientData.hasAbnormalWBC ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .isUrgent:
-                sigma += (patientData.hasAbnormalWBC ? $0.coefficient : 0.0)
+                sigma += (patientData.hasAbnormalWBC ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasCHF:
-                sigma += (patientData.hasCHF ? $0.coefficient : 0.0)
+                sigma += (patientData.hasCHF ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasFever:
-                sigma += (patientData.hasFever ? $0.coefficient : 0.0)
+                sigma += (patientData.hasFever ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasCKD5D:
-                sigma += (patientData.ckd == .g5D ? $0.coefficient : 0.0)
+                sigma += (patientData.ckd == .g5D ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasNoFPLesion:
-                sigma += (!patientData.hasFPLesion ? $0.coefficient : 0.0)
+                sigma += (!patientData.hasFPLesion ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasCVD:
-                sigma += (patientData.hasCVD ? $0.coefficient : 0.0)
+                sigma += (patientData.hasCVD ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasDL:
-                sigma += (patientData.hasDyslipidemia ? $0.coefficient : 0.0)
+                sigma += (patientData.hasDyslipidemia ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasRutherford5:
-                sigma += (patientData.rutherford == .class5 ? $0.coefficient : 0.0)
+                sigma += (patientData.rutherford == .class5 ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasRutherford6:
-                sigma += (patientData.rutherford == .class6 ? $0.coefficient : 0.0)
+                sigma += (patientData.rutherford == .class6 ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasNoOrLowGNRIRisk:
-                sigma += ((gr == .noRisk || gr == .low) ?  $0.coefficient : 0.0)
+                sigma += ((gr == .noRisk || gr == .low) ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasModerateGNRIRisk:
-                sigma += (gr == .moderate ?  $0.coefficient : 0.0)
+                sigma += (gr == .moderate ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .isAmbulatory:
-                sigma += (patientData.activity == .ambulatory ? $0.coefficient : 0.0)
+                sigma += (patientData.activity == .ambulatory ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasLocalInfection:
-                sigma += (patientData.hasLocalInfection ? $0.coefficient : 0.0)
+                sigma += (patientData.hasLocalInfection ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .isWheelChair:
-                sigma += (patientData.activity == .wheelchair ? $0.coefficient : 0.0)
+                sigma += (patientData.activity == .wheelchair ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasCAD:
-                sigma += (patientData.hasCAD ? $0.coefficient : 0.0)
+                sigma += (patientData.hasCAD ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasOthers:
-                sigma += (patientData.hasOtherVD ? $0.coefficient : 0.0)
+                sigma += (patientData.hasOtherVD ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .isSmoking:
-                sigma += (patientData.isSmoking ? $0.coefficient : 0.0)
+                sigma += (patientData.isSmoking ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasNoContraLateral:
-                sigma += (!patientData.hasContraLateralLesion ? $0.coefficient : 0.0)
+                sigma += (!patientData.hasContraLateralLesion ?
+                          $0.coefficient
+                          : 0.0)
                 break
             }
         })
@@ -234,55 +304,91 @@ public struct PatientRisk {
         q.forEach({
             switch $0{
             case .isFemale:
-                sigma += (patientData.sex == .female ? $0.coefficient : 0.0)
+                sigma += (patientData.sex == .female ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .age65To74:
-                sigma += ((age >= 65 && age <= 74) ? $0.coefficient : 0.0)
+                sigma += ((age >= 65 && age <= 74) ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .age75To84:
-                sigma += ((age >= 75 && age <= 84) ? $0.coefficient : 0.0)
+                sigma += ((age >= 75 && age <= 84) ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .ageOver85:
-                sigma += (age >= 85 ? $0.coefficient : 0.0)
+                sigma += (age >= 85 ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasCHF:
-                sigma += (patientData.hasCHF ? $0.coefficient : 0.0 )
+                sigma += (patientData.hasCHF ?
+                          $0.coefficient
+                          : 0.0 )
                 break
             case .hasCKDG3:
-                sigma += (patientData.ckd == .g3 ? $0.coefficient : 0.0)
+                sigma += (patientData.ckd == .g3 ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasCKDG4:
-                sigma += (patientData.ckd == .g4 ? $0.coefficient : 0.0)
+                sigma += (patientData.ckd == .g4 ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasCKDG5:
-                sigma += (patientData.ckd == .g5 ? $0.coefficient : 0.0)
+                sigma += (patientData.ckd == .g5 ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasCKDG5D:
-                sigma += (patientData.ckd == .g5D ? $0.coefficient : 0.0)
+                sigma += (patientData.ckd == .g5D ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasModerateGNRIRisk:
-                sigma += (gr == .moderate ? $0.coefficient : 0.0)
+                sigma += (gr == .moderate ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasMajorGNRIRisk:
-                sigma += (gr == .major ? $0.coefficient: 0.0)
+                sigma += (gr == .major ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .isWheelchair:
-                sigma += (patientData.activity == .wheelchair ? $0.coefficient : 0.0)
+                sigma += (patientData.activity == .wheelchair ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .isImmobile:
-                sigma += (patientData.activity == .immobile ? $0.coefficient : 0.0)
+                sigma += (patientData.activity == .immobile ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasPastMalignancy:
-                sigma += (patientData.malignantNeoplasm == .pastHistory ? $0.coefficient : 0.0 )
+                sigma += (patientData.malignantNeoplasm == .pastHistory ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasTreatingMalignancy:
-                sigma += (patientData.malignantNeoplasm == .underTreatment ? $0.coefficient : 0.0 )
+                sigma += (patientData.malignantNeoplasm == .underTreatment ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasFPLesionWithoutAI:
-                sigma += ((!patientData.hasAILesion && patientData.hasFPLesion) ? $0.coefficient: 0.0)
+                sigma += ((!patientData.hasAILesion && patientData.hasFPLesion) ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasOnlyBKLesion:
-                sigma += ((!patientData.hasAILesion && !patientData.hasFPLesion && patientData.hasBKLesion) ? $0.coefficient : 0.0 )
+                sigma += ((!patientData.hasAILesion
+                           && !patientData.hasFPLesion
+                           && patientData.hasBKLesion) ?
+                          $0.coefficient
+                          : 0.0)
                 break
             }
         })
@@ -306,70 +412,114 @@ public struct PatientRisk {
         q.forEach({
             switch $0{
             case .isFemale:
-                sigma += (patientData.sex == .female ? $0.coefficient : 0.0)
+                sigma += (patientData.sex == .female ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .age65To74:
-                sigma += ((age >= 65 && age <= 74) ? $0.coefficient : 0.0)
+                sigma += ((age >= 65 && age <= 74) ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .age75To84:
-                sigma += ((age >= 75 && age <= 84) ? $0.coefficient : 0.0)
+                sigma += ((age >= 75 && age <= 84) ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .ageOver85:
-                sigma += (age >= 85 ? $0.coefficient : 0.0)
+                sigma += (age >= 85 ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasCHF:
-                sigma += (patientData.hasCHF ? $0.coefficient : 0.0 )
+                sigma += (patientData.hasCHF ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasCVD:
-                sigma += (patientData.hasCVD ? $0.coefficient : 0.0 )
+                sigma += (patientData.hasCVD ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasCKDG3:
-                sigma += (patientData.ckd == .g3 ? $0.coefficient : 0.0)
+                sigma += (patientData.ckd == .g3 ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasCKDG4:
-                sigma += (patientData.ckd == .g4 ? $0.coefficient : 0.0)
+                sigma += (patientData.ckd == .g4 ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasCKDG5:
-                sigma += (patientData.ckd == .g5 ? $0.coefficient : 0.0)
+                sigma += (patientData.ckd == .g5 ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasCKDG5D:
-                sigma += (patientData.ckd == .g5D ? $0.coefficient : 0.0)
+                sigma += (patientData.ckd == .g5D ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasModerateGNRIRisk:
-                sigma += (gr == .moderate ? $0.coefficient : 0.0)
+                sigma += (gr == .moderate ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasMajorGNRIRisk:
-                sigma += (gr == .major ? $0.coefficient: 0.0)
+                sigma += (gr == .major ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .isWheelchair:
-                sigma += (patientData.activity == .wheelchair ? $0.coefficient : 0.0)
+                sigma += (patientData.activity == .wheelchair ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .isImmobile:
-                sigma += (patientData.activity == .immobile ? $0.coefficient : 0.0)
+                sigma += (patientData.activity == .immobile ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasPastMalignancy:
-                sigma += (patientData.malignantNeoplasm == .pastHistory ? $0.coefficient : 0.0 )
+                sigma += (patientData.malignantNeoplasm == .pastHistory ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasTreatingMalignancy:
-                sigma += (patientData.malignantNeoplasm == .underTreatment ? $0.coefficient : 0.0 )
+                sigma += (patientData.malignantNeoplasm == .underTreatment ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .isUrgent:
-                sigma += (patientData.isUrgent ? $0.coefficient : 0.0)
+                sigma += (patientData.isUrgent ?
+                          $0.coefficient : 0.0)
                 break
             case .hasFever:
-                sigma += (patientData.hasFever ? $0.coefficient : 0.0)
+                sigma += (patientData.hasFever ?
+                          $0.coefficient : 0.0)
                 break
             case .hasAbnormalWBC:
-                sigma += (patientData.hasAbnormalWBC ? $0.coefficient : 0.0)
+                sigma += (patientData.hasAbnormalWBC ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasLocalInfetion:
-                sigma += (patientData.hasLocalInfection ? $0.coefficient : 0.0)
+                sigma += (patientData.hasLocalInfection ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasFPLesionWithoutAI:
-                sigma += ((!patientData.hasAILesion && patientData.hasFPLesion) ? $0.coefficient: 0.0)
+                sigma += ((!patientData.hasAILesion
+                           && patientData.hasFPLesion) ?
+                          $0.coefficient
+                          : 0.0)
                 break
             case .hasOnlyBKLesion:
-                sigma += ((!patientData.hasAILesion && !patientData.hasFPLesion && patientData.hasBKLesion) ? $0.coefficient : 0.0 )
+                sigma += ((!patientData.hasAILesion
+                           && !patientData.hasFPLesion
+                           && patientData.hasBKLesion) ?
+                          $0.coefficient : 0.0)
                 break
             }
         })
