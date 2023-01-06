@@ -60,7 +60,7 @@ final class PatientRiskTests: XCTestCase {
         pd.weight = 60.0
         pd.height = 1.65
         pd.alb = 4.0
-        pd.activity = .immobile
+        pd.activity = .ambulatory
         pd.hasCHF = false
         pd.hasCAD = true
         pd.hasCVD = true
