@@ -205,7 +205,7 @@ enum TwoYearAFSQuestions: CaseIterable{
         case .hasCHF: return 0.41
         case .hasCVD: return 0.10
         case .hasCKDG3: return 0.16
-        case .hasCKDG4: return 0.35
+        case .hasCKDG4: return 0.36
         case .hasCKDG5: return 0.73
         case .hasCKDG5D: return 0.81
         case .hasModerateGNRIRisk: return 0.09
