@@ -1,3 +1,4 @@
+import Foundation
 import Combine
 
 @available(macOS 10.15, *)
@@ -56,8 +57,8 @@ public enum Sex: CaseIterable{
     case female
     public var label: String{
         switch self{
-        case .male: return "Male"
-        case .female: return "Female"
+        case .male: return NSLocalizedString("SexMale", bundle: .module, comment: "Male")
+        case .female: return NSLocalizedString("SexFemale", bundle: .module, comment: "Female")
         }
     }
 }
