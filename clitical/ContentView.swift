@@ -20,6 +20,14 @@ struct RootContentView: View {
                         Text(LocalizedStringKey(patientData.sex.label)).foregroundColor(.secondary)
                     }
                 })
+                NavigationLink(destination: CHFChoiceView(), label:{
+                    HStack{
+                        Text("CHFQuestionTitle")
+                        Spacer()
+                        Text(LocalizedStringKey(patientData.hasCHF.label))
+                            .foregroundColor(.secondary)
+                    }
+                })
             }.navigationTitle("PatientDataTitle")
         }.navigationViewStyle(.stack)
     }

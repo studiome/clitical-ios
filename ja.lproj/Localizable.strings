@@ -7,7 +7,11 @@
 */
 
 "PatientDataTitle" = "患者データ";
+"Yes" = "あり";
+"No" = "なし";
 "SexQuestionTitle" =  "性別";
 "SexQuestionDescription" =  "生物学的性別を選んでください。";
 "SexMale" = "男性";
 "SexFemale" = "女性";
+"CHFQuestionTitle" = "うっ血性心不全";
+"CHFQuestionDescription" = "「あり」には、心不全入院歴あり・有症状の場合及びエコーでの心機能低下を含む。";
