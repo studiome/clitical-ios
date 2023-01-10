@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		212A1FC52951B38000508396 /* cliticalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212A1FC42951B38000508396 /* cliticalApp.swift */; };
+		212A1FC52951B38000508396 /* CliticalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212A1FC42951B38000508396 /* CliticalApp.swift */; };
 		212A1FC72951B38000508396 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212A1FC62951B38000508396 /* ContentView.swift */; };
 		212A1FC92951B38000508396 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 212A1FC82951B38000508396 /* Assets.xcassets */; };
 		212A1FCC2951B38000508396 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 212A1FCB2951B38000508396 /* Preview Assets.xcassets */; };
@@ -36,7 +36,7 @@
 
 /* Begin PBXFileReference section */
 		212A1FC12951B38000508396 /* clitical-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "clitical-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		212A1FC42951B38000508396 /* cliticalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cliticalApp.swift; sourceTree = "<group>"; };
+		212A1FC42951B38000508396 /* CliticalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliticalApp.swift; sourceTree = "<group>"; };
 		212A1FC62951B38000508396 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		212A1FC82951B38000508396 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		212A1FCB2951B38000508396 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -99,7 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				21C78F8B2951F4180054A045 /* CLPatientData */,
-				212A1FC42951B38000508396 /* cliticalApp.swift */,
+				212A1FC42951B38000508396 /* CliticalApp.swift */,
 				212A1FC62951B38000508396 /* ContentView.swift */,
 				212A1FC82951B38000508396 /* Assets.xcassets */,
 				212A1FCA2951B38000508396 /* Preview Content */,
@@ -273,7 +273,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				212A1FC72951B38000508396 /* ContentView.swift in Sources */,
-				212A1FC52951B38000508396 /* cliticalApp.swift in Sources */,
+				212A1FC52951B38000508396 /* CliticalApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
