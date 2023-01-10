@@ -1,4 +1,3 @@
-import Foundation
 import Combine
 
 @available(macOS 10.15, *)
@@ -55,12 +54,6 @@ public class PatientData: ObservableObject {
 public enum Sex: CaseIterable{
     case male
     case female
-    public var label: String{
-        switch self{
-        case .male: return NSLocalizedString("SexMale", bundle: .module, comment: "Male")
-        case .female: return NSLocalizedString("SexFemale", bundle: .module, comment: "Female")
-        }
-    }
 }
 
 public enum Activity{

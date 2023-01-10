@@ -17,7 +17,7 @@ struct RootContentView: View {
                     HStack{
                         Text("SexQuestionTitle")
                         Spacer()
-                        Text(patientData.sex.label).foregroundColor(.secondary)
+                        Text(LocalizedStringKey(patientData.sex.label)).foregroundColor(.secondary)
                     }
                 })
             }.navigationTitle("Patient Data")

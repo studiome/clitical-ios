@@ -8,3 +8,5 @@
 
 "SexQuestionTitle" =  "Sex";
 "SexQuestionDescription" = "Choose one.";
+"SexMale" = "Male";
+"SexFemale" = "Female";
