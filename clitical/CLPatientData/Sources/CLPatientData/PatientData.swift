@@ -4,29 +4,51 @@ import Combine
 @available(iOS 13.0, *)
 
 public class PatientData: ObservableObject {
-    @Published var sex: Sex = .female
-    @Published var age: Int?
-    @Published var height:Double?
-    @Published var weight:Double?
-    @Published var alb:Double?
-    @Published var activity:Activity = .ambulatory
-    @Published var hasCHF: Bool = false
-    @Published var hasCAD: Bool  = false
-    @Published var hasCVD: Bool = false
-    @Published var ckd: CKD = .normal
-    @Published var malignantNeoplasm: MalignantNeoplasm = .no
-    @Published var hasAILesion: Bool = false
-    @Published var hasFPLesion: Bool = false
-    @Published var hasBKLesion: Bool = false
-    @Published var isUrgent: Bool = false
-    @Published var hasFever: Bool = false
-    @Published var hasAbnormalWBC: Bool = false
-    @Published var hasLocalInfection: Bool = false
-    @Published var hasDyslipidemia: Bool = false
-    @Published var isSmoking: Bool = false
-    @Published var hasContraLateralLesion: Bool = false
-    @Published var hasOtherVD: Bool = false
-    @Published var rutherford: RutherfordClassification = .class4
+    @Published public var sex: Sex
+    @Published public var age: Int?
+    @Published public var height:Double?
+    @Published public var weight:Double?
+    @Published public var alb:Double?
+    @Published public var activity:Activity
+    @Published public var hasCHF: Bool
+    @Published public var hasCAD: Bool
+    @Published public var hasCVD: Bool
+    @Published public var ckd: CKD = .normal
+    @Published public var malignantNeoplasm: MalignantNeoplasm
+    @Published public var hasAILesion: Bool
+    @Published public var hasFPLesion: Bool
+    @Published public var hasBKLesion: Bool
+    @Published public var isUrgent: Bool
+    @Published public var hasFever: Bool
+    @Published public var hasAbnormalWBC: Bool
+    @Published public var hasLocalInfection: Bool
+    @Published public var hasDyslipidemia: Bool
+    @Published public var isSmoking: Bool
+    @Published public var hasContraLateralLesion: Bool
+    @Published public var hasOtherVD: Bool
+    @Published public var rutherford: RutherfordClassification
+    
+    public init(){
+         sex = .female
+         activity = .ambulatory
+         hasCHF = false
+         hasCAD  = false
+         hasCVD = false
+         ckd = .normal
+         malignantNeoplasm = .no
+         hasAILesion = false
+         hasFPLesion = false
+         hasBKLesion = false
+         isUrgent = false
+         hasFever = false
+         hasAbnormalWBC = false
+         hasLocalInfection = false
+         hasDyslipidemia = false
+         isSmoking = false
+         hasContraLateralLesion = false
+         hasOtherVD = false
+         rutherford = .class4
+    }
 }
 
 public enum Sex{
