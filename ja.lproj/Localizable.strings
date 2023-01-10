@@ -6,8 +6,8 @@
   
 */
 
+"PatientDataTitle" = "患者データ";
 "SexQuestionTitle" =  "性別";
 "SexQuestionDescription" =  "生物学的性別を選んでください。";
 "SexMale" = "男性";
 "SexFemale" = "女性";
-

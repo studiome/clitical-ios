@@ -20,7 +20,7 @@ struct RootContentView: View {
                         Text(LocalizedStringKey(patientData.sex.label)).foregroundColor(.secondary)
                     }
                 })
-            }.navigationTitle("Patient Data")
+            }.navigationTitle("PatientDataTitle")
         }
     }
 }

@@ -5,7 +5,7 @@
   Created by kmiyahara on 2023/01/11.
   
 */
-
+"PatientDataTitle" = "Patient Data";
 "SexQuestionTitle" =  "Sex";
 "SexQuestionDescription" = "Choose one.";
 "SexMale" = "Male";
