@@ -21,7 +21,7 @@ struct RootContentView: View {
                     }
                 })
             }.navigationTitle("PatientDataTitle")
-        }
+        }.navigationViewStyle(.stack)
     }
 }
 
