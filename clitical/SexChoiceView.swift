@@ -7,7 +7,6 @@
 
 import SwiftUI
 import CLPatientData
-import Foundation
 
 struct SexChoiceView: View {
     @EnvironmentObject var patientData: PatientData
@@ -26,7 +25,6 @@ struct SexChoiceView: View {
                     .contentShape(Rectangle())
                     .onTapGesture {
                         patientData.sex = item
-                        print(patientData.sex)
                     }
                 }
             }

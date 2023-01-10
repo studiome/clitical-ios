@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		210381F4296E2DC400DA318A /* YesNo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210381F3296E2DC400DA318A /* YesNo.swift */; };
 		212A1FC52951B38000508396 /* CliticalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212A1FC42951B38000508396 /* CliticalApp.swift */; };
 		212A1FC72951B38000508396 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212A1FC62951B38000508396 /* ContentView.swift */; };
 		212A1FC92951B38000508396 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 212A1FC82951B38000508396 /* Assets.xcassets */; };
@@ -17,6 +18,7 @@
 		2196DF77296D62D900A9FF81 /* SexChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2196DF76296D62D900A9FF81 /* SexChoiceView.swift */; };
 		2196DF7A296DC20600A9FF81 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2196DF7C296DC20600A9FF81 /* Localizable.strings */; };
 		21C78F8E2951F4CF0054A045 /* CLPatientData in Frameworks */ = {isa = PBXBuildFile; productRef = 21C78F8D2951F4CF0054A045 /* CLPatientData */; };
+		21CA4E60296E293900040C50 /* CHFChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CA4E5F296E293900040C50 /* CHFChoiceView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		210381F3296E2DC400DA318A /* YesNo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YesNo.swift; sourceTree = "<group>"; };
 		212A1FC12951B38000508396 /* clitical-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "clitical-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		212A1FC42951B38000508396 /* CliticalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliticalApp.swift; sourceTree = "<group>"; };
 		212A1FC62951B38000508396 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -51,6 +54,7 @@
 		2196DF7B296DC20600A9FF81 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2196DF7D296DC21400A9FF81 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		21C78F8B2951F4180054A045 /* CLPatientData */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CLPatientData; sourceTree = "<group>"; };
+		21CA4E5F296E293900040C50 /* CHFChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CHFChoiceView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,7 +111,9 @@
 				21C78F8B2951F4180054A045 /* CLPatientData */,
 				212A1FC42951B38000508396 /* CliticalApp.swift */,
 				2196DF76296D62D900A9FF81 /* SexChoiceView.swift */,
+				21CA4E5F296E293900040C50 /* CHFChoiceView.swift */,
 				212A1FC62951B38000508396 /* ContentView.swift */,
+				210381F3296E2DC400DA318A /* YesNo.swift */,
 				212A1FC82951B38000508396 /* Assets.xcassets */,
 				212A1FCA2951B38000508396 /* Preview Content */,
 			);
@@ -281,7 +287,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				210381F4296E2DC400DA318A /* YesNo.swift in Sources */,
 				212A1FC72951B38000508396 /* ContentView.swift in Sources */,
+				21CA4E60296E293900040C50 /* CHFChoiceView.swift in Sources */,
 				2196DF77296D62D900A9FF81 /* SexChoiceView.swift in Sources */,
 				212A1FC52951B38000508396 /* CliticalApp.swift in Sources */,
 			);
@@ -476,7 +484,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -510,7 +518,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
