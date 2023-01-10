@@ -1,0 +1,10 @@
+/* 
+  Localizable.strings
+  clitical-ios
+
+  Created by kmiyahara on 2023/01/11.
+  
+*/
+
+"SexQuestionTitle" =  "Sex";
+"SexQuestionDescription" = "Choose one.";

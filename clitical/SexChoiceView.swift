@@ -9,9 +9,29 @@ import SwiftUI
 import CLPatientData
 
 struct SexChoiceView: View {
-    @EnvironmentObject var patiendData: PatientData
+    @EnvironmentObject var patientData: PatientData
     var body: some View {
-        Text(patiendData.sex == .female ? "Female": "Male")
+        
+        List{
+            Section(footer: Text("SexQuestionDescription")){
+                ForEach(Sex.allCases, id: \.self){item in
+                    HStack{
+                        Text(item.label)
+                        Spacer()
+                        if(patientData.sex == item){
+                            Image(systemName: "checkmark").foregroundColor(.blue)
+                        }
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        patientData.sex = item
+                        print(patientData.sex)
+                    }
+                }
+            }
+        }
+        .navigationTitle("SexQuestionTitle")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

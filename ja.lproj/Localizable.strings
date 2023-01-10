@@ -1,0 +1,10 @@
+/* 
+  Localizable.strings
+  clitical-ios
+
+  Created by kmiyahara on 2023/01/11.
+  
+*/
+
+"SexQuestionTitle" =  "性別";
+"SexQuestionDescription" =  "生物学的性別を選んでください。";

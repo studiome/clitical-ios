@@ -15,6 +15,7 @@
 		212A1FE02951B38000508396 /* cliticalUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212A1FDF2951B38000508396 /* cliticalUITests.swift */; };
 		212A1FE22951B38000508396 /* cliticalUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212A1FE12951B38000508396 /* cliticalUITestsLaunchTests.swift */; };
 		2196DF77296D62D900A9FF81 /* SexChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2196DF76296D62D900A9FF81 /* SexChoiceView.swift */; };
+		2196DF7A296DC20600A9FF81 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2196DF7C296DC20600A9FF81 /* Localizable.strings */; };
 		21C78F8E2951F4CF0054A045 /* CLPatientData in Frameworks */ = {isa = PBXBuildFile; productRef = 21C78F8D2951F4CF0054A045 /* CLPatientData */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +48,8 @@
 		212A1FDF2951B38000508396 /* cliticalUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cliticalUITests.swift; sourceTree = "<group>"; };
 		212A1FE12951B38000508396 /* cliticalUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cliticalUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		2196DF76296D62D900A9FF81 /* SexChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SexChoiceView.swift; sourceTree = "<group>"; };
+		2196DF7B296DC20600A9FF81 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		2196DF7D296DC21400A9FF81 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		21C78F8B2951F4180054A045 /* CLPatientData */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CLPatientData; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -79,6 +82,7 @@
 		212A1FB82951B38000508396 = {
 			isa = PBXGroup;
 			children = (
+				2196DF7C296DC20600A9FF81 /* Localizable.strings */,
 				212A1FC32951B38000508396 /* clitical */,
 				212A1FD42951B38000508396 /* cliticalTests */,
 				212A1FDE2951B38000508396 /* cliticalUITests */,
@@ -231,6 +235,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ja,
 			);
 			mainGroup = 212A1FB82951B38000508396;
 			productRefGroup = 212A1FC22951B38000508396 /* Products */;
@@ -250,6 +255,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				212A1FCC2951B38000508396 /* Preview Assets.xcassets in Resources */,
+				2196DF7A296DC20600A9FF81 /* Localizable.strings in Resources */,
 				212A1FC92951B38000508396 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -312,6 +318,18 @@
 			targetProxy = 212A1FDC2951B38000508396 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		2196DF7C296DC20600A9FF81 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2196DF7B296DC20600A9FF81 /* en */,
+				2196DF7D296DC21400A9FF81 /* ja */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		212A1FE32951B38000508396 /* Debug */ = {

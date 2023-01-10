@@ -51,9 +51,15 @@ public class PatientData: ObservableObject {
     }
 }
 
-public enum Sex{
+public enum Sex: CaseIterable{
     case male
     case female
+    public var label: String{
+        switch self{
+        case .male: return "Male"
+        case .female: return "Female"
+        }
+    }
 }
 
 public enum Activity{

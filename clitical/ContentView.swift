@@ -6,18 +6,27 @@
 //
 
 import SwiftUI
+import CLPatientData
 
 struct RootContentView: View {
+    @EnvironmentObject var patientData: PatientData
     var body: some View {
-        VStack {
-            Text("CLiTICAL")
+        NavigationView{
+            List{
+                NavigationLink(destination: SexChoiceView(), label:{
+                    HStack{
+                        Text("SexQuestionTitle")
+                        Spacer()
+                        Text(patientData.sex.label).foregroundColor(.secondary)
+                    }
+                })
+            }.navigationTitle("Patient Data")
         }
-        .padding()
     }
 }
 
 struct RootContentView_Previews: PreviewProvider {
     static var previews: some View {
-        RootContentView()
+        RootContentView().environmentObject(PatientData()).environment(\.locale, .init(identifier:"ja"))
     }
 }
