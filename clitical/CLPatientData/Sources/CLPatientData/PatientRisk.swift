@@ -25,6 +25,9 @@
 
 import Foundation
 
+@available(macOS 10.15, *)
+@available(iOS 13.0, *)
+
 public struct PatientRisk {
     private let twoYearOSH0Coeff = 0.922
     private let twoYearAFSH0Coeff = 0.876

@@ -1,27 +1,32 @@
-public class PatientData {
-    public var sex: Sex = .female
-    public var age: Int?
-    public var height:Double?
-    public var weight:Double?
-    public var alb:Double?
-    public var activity:Activity = .ambulatory
-    public var hasCHF: Bool = false
-    public var hasCAD: Bool  = false
-    public var hasCVD: Bool = false
-    public var ckd: CKD = .normal
-    public var malignantNeoplasm: MalignantNeoplasm = .no
-    public var hasAILesion: Bool = false
-    public var hasFPLesion: Bool = false
-    public var hasBKLesion: Bool = false
-    public var isUrgent: Bool = false
-    public var hasFever: Bool = false
-    public var hasAbnormalWBC: Bool = false
-    public var hasLocalInfection: Bool = false
-    public var hasDyslipidemia: Bool = false
-    public var isSmoking: Bool = false
-    public var hasContraLateralLesion: Bool = false
-    public var hasOtherVD: Bool = false
-    public var rutherford: RutherfordClassification = .class4
+import Combine
+
+@available(macOS 10.15, *)
+@available(iOS 13.0, *)
+
+public class PatientData: ObservableObject {
+    @Published var sex: Sex = .female
+    @Published var age: Int?
+    @Published var height:Double?
+    @Published var weight:Double?
+    @Published var alb:Double?
+    @Published var activity:Activity = .ambulatory
+    @Published var hasCHF: Bool = false
+    @Published var hasCAD: Bool  = false
+    @Published var hasCVD: Bool = false
+    @Published var ckd: CKD = .normal
+    @Published var malignantNeoplasm: MalignantNeoplasm = .no
+    @Published var hasAILesion: Bool = false
+    @Published var hasFPLesion: Bool = false
+    @Published var hasBKLesion: Bool = false
+    @Published var isUrgent: Bool = false
+    @Published var hasFever: Bool = false
+    @Published var hasAbnormalWBC: Bool = false
+    @Published var hasLocalInfection: Bool = false
+    @Published var hasDyslipidemia: Bool = false
+    @Published var isSmoking: Bool = false
+    @Published var hasContraLateralLesion: Bool = false
+    @Published var hasOtherVD: Bool = false
+    @Published var rutherford: RutherfordClassification = .class4
 }
 
 public enum Sex{

@@ -7,6 +7,9 @@
 
 import XCTest
 @testable import CLPatientData
+@available(macOS 10.15, *)
+@available(iOS 13.0, *)
+
 final class PatientRiskTests: XCTestCase {
     
     func testInit() throws {
