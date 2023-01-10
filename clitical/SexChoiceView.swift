@@ -17,6 +17,6 @@ struct SexChoiceView: View {
 
 struct SexChoiceView_Previews: PreviewProvider {
     static var previews: some View {
-        SexChoiceView().environmentObject(PatientData())
+        SexChoiceView().environmentObject(PatientData());
     }
 }
