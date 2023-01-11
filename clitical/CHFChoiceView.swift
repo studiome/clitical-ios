@@ -8,10 +8,9 @@
 import SwiftUI
 import CLPatientData
 
-struct CHFChoiceView: View {
+struct CHFChoiceViewBase: View {
     @EnvironmentObject var patientData: PatientData
     var body: some View {
-        
         List{
             Section(footer: Text("CHFQuestionDescription")){
                 ForEach(YesNo.allCases, id: \.self){item in
@@ -31,6 +30,16 @@ struct CHFChoiceView: View {
         }
         .navigationTitle("CHFQuestionTitle")
         .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+struct CHFChoiceView: View {
+    var body: some View {
+        if #available(iOS 15, *){
+            CHFChoiceViewBase()
+        } else {
+            CHFChoiceViewBase().listStyle(.grouped)
+        }
     }
 }
 
