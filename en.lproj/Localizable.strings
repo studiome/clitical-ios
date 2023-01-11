@@ -6,6 +6,8 @@
   
 */
 "PatientDataTitle" = "Patient Data";
+"BasicInfo" = "Basic Information";
+"Complications" = "Complications";
 "Yes" = "Yes";
 "No" = "No";
 "SexQuestionTitle" =  "Sex";

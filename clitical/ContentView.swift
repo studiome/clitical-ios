@@ -13,21 +13,26 @@ struct RootContentView: View {
     var body: some View {
         NavigationView{
             List{
-                NavigationLink(destination: SexChoiceView(), label:{
-                    HStack{
-                        Text("SexQuestionTitle")
-                        Spacer()
-                        Text(LocalizedStringKey(patientData.sex.label)).foregroundColor(.secondary)
-                    }
-                })
-                NavigationLink(destination: CHFChoiceView(), label:{
-                    HStack{
-                        Text("CHFQuestionTitle")
-                        Spacer()
-                        Text(LocalizedStringKey(patientData.hasCHF.label))
-                            .foregroundColor(.secondary)
-                    }
-                })
+                Section(header: Text("BasicInfo")){
+                    NavigationLink(destination: SexChoiceView(), label:{
+                        HStack{
+                            Text("SexQuestionTitle")
+                            Spacer()
+                            Text(LocalizedStringKey(patientData.sex.label))
+                                .foregroundColor(.secondary)
+                        }
+                    })
+                }
+                Section(header: Text("Complications")){
+                    NavigationLink(destination: CHFChoiceView(), label:{
+                        HStack{
+                            Text("CHFQuestionTitle")
+                            Spacer()
+                            Text(LocalizedStringKey(patientData.hasCHF.label))
+                                .foregroundColor(.secondary)
+                        }
+                    })
+                }
             }.navigationTitle("PatientDataTitle")
         }.navigationViewStyle(.stack)
     }
@@ -35,6 +40,7 @@ struct RootContentView: View {
 
 struct RootContentView_Previews: PreviewProvider {
     static var previews: some View {
-        RootContentView().environmentObject(PatientData()).environment(\.locale, .init(identifier:"ja"))
+        RootContentView().environmentObject(PatientData())
+            .environment(\.locale, .init(identifier:"ja"))
     }
 }

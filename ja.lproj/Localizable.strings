@@ -7,6 +7,8 @@
 */
 
 "PatientDataTitle" = "患者データ";
+"BasicInfo" = "患者基本情報";
+"Complications" = "合併症";
 "Yes" = "あり";
 "No" = "なし";
 "SexQuestionTitle" =  "性別";
