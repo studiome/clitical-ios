@@ -9,28 +9,24 @@ import SwiftUI
 import CLPatientData
 
 struct SexChoiceView: View {
+    var body: some View {
+        if #available(iOS 16.0, *) {
+            SexChoiceBase().pickerStyle(.navigationLink)
+        } else {
+            SexChoiceBase()
+        }
+    }
+}
+
+private struct SexChoiceBase: View {
     @EnvironmentObject var patientData: PatientData
     var body: some View {
-        
-        List{
-            Section(footer: Text("SexQuestionDescription")){
-                ForEach(Sex.allCases, id: \.self){item in
-                    HStack{
-                        Text(LocalizedStringKey(item.label))
-                        Spacer()
-                        if(patientData.sex == item){
-                            Image(systemName: "checkmark").foregroundColor(.blue)
-                        }
+        Picker(LocalizedStringKey("SexQuestionTitle"), selection: $patientData.sex){
+                    ForEach(Sex.allCases, id: \.self){ item in
+                        Text(LocalizedStringKey(item.label)).tag(item)
                     }
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        patientData.sex = item
-                    }
-                }
+
             }
-        }
-        .navigationTitle("SexQuestionTitle")
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
@@ -45,6 +41,10 @@ extension Sex{
 
 struct SexChoiceView_Previews: PreviewProvider {
     static var previews: some View {
-        SexChoiceView().environmentObject(PatientData()).environment(\.locale, .init(identifier: "ja"));
+        NavigationView{
+            Form{
+                SexChoiceView().environmentObject(PatientData()).environment(\.locale, .init(identifier: "ja"))
+            }
+        }
     }
 }

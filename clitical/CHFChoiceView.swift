@@ -11,32 +11,31 @@ import CLPatientData
 struct CHFChoiceView: View {
     @EnvironmentObject var patientData: PatientData
     var body: some View {
-        
-        List{
-            Section(footer: Text("CHFQuestionDescription")){
-                ForEach(YesNo.allCases, id: \.self){item in
-                    HStack{
-                        Text(LocalizedStringKey(item.label))
-                        Spacer()
-                        if(patientData.hasCHF == item.toBool()){
-                            Image(systemName: "checkmark").foregroundColor(.blue)
-                        }
-                    }
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        patientData.hasCHF = item.toBool()
-                    }
-                }
-            }
+        if #available(iOS 16.0, *) {
+            CHFChoiceBase().pickerStyle(.navigationLink)
+        } else {
+            CHFChoiceBase()
         }
-        .navigationTitle("CHFQuestionTitle")
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
+private struct CHFChoiceBase: View {
+    @EnvironmentObject var patientData: PatientData
+    var body: some View {
+        Picker(LocalizedStringKey("CHFQuestionTitle"), selection: $patientData.hasCHF){
+            ForEach(YesNo.allCases, id:\.self){ item in
+                Text(LocalizedStringKey(item.label)).tag(item.toBool())
+            }
+        }
+    }
+}
 struct CHFChoiceView_Previews: PreviewProvider {
     static var previews: some View {
-        CHFChoiceView().environmentObject(PatientData())
-            .environment(\.locale, .init(identifier: "ja"))
+        NavigationView{
+            Form{
+                CHFChoiceView().environmentObject(PatientData())
+                    .environment(\.locale, .init(identifier: "ja"))
+            }
+        }
     }
 }

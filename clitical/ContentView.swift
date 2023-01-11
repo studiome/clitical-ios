@@ -12,29 +12,21 @@ struct RootContentView: View {
     @EnvironmentObject var patientData: PatientData
     var body: some View {
         NavigationView{
-            List{
-                Section(header: Text("BasicInfo")){
-                    NavigationLink(destination: SexChoiceView(), label:{
-                        HStack{
-                            Text("SexQuestionTitle")
-                            Spacer()
-                            Text(LocalizedStringKey(patientData.sex.label))
-                                .foregroundColor(.secondary)
-                        }
-                    })
+            Form {
+                Section{
+                        SexChoiceView()
+                } header: {
+                    Text("BasicInfo")
                 }
-                Section(header: Text("Complications")){
-                    NavigationLink(destination: CHFChoiceView(), label:{
-                        HStack{
-                            Text("CHFQuestionTitle")
-                            Spacer()
-                            Text(LocalizedStringKey(patientData.hasCHF.label))
-                                .foregroundColor(.secondary)
-                        }
-                    })
+                Section{
+                    CHFChoiceView()
+                } header: {
+                    Text("Complications")
                 }
-            }.navigationTitle("PatientDataTitle")
-        }.navigationViewStyle(.stack)
+            }
+            .navigationBarTitle("PatientDataTitle")
+        }
+        .navigationViewStyle(.stack)
     }
 }
 
