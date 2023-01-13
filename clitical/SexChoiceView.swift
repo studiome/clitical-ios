@@ -10,11 +10,7 @@ import CLPatientData
 
 struct SexChoiceView: View {
     var body: some View {
-        if #available(iOS 16.0, *) {
-            SexChoiceBase().pickerStyle(.navigationLink)
-        } else {
-            SexChoiceBase()
-        }
+        SexChoiceBase()
     }
 }
 
@@ -22,11 +18,10 @@ private struct SexChoiceBase: View {
     @EnvironmentObject var patientData: PatientData
     var body: some View {
         Picker(LocalizedStringKey("SexQuestionTitle"), selection: $patientData.sex){
-                    ForEach(Sex.allCases, id: \.self){ item in
-                        Text(LocalizedStringKey(item.label)).tag(item)
-                    }
-
+            ForEach(Sex.allCases, id: \.self){ item in
+                Text(LocalizedStringKey(item.label)).tag(item)
             }
+        }
     }
 }
 
