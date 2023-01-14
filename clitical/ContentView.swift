@@ -33,8 +33,11 @@ struct RootContentView: View {
                         }
                     })
                 }
-            }.navigationTitle("PatientDataTitle")
-        }.navigationViewStyle(.stack)
+            }
+            .navigationTitle("PatientDataTitle")
+        }
+        .accentColor(jsvsColor)
+        .navigationViewStyle(.stack)
     }
 }
 
