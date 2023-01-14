@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		210381F4296E2DC400DA318A /* YesNo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210381F3296E2DC400DA318A /* YesNo.swift */; };
+		21135D462972F05C009B0C4F /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21135D452972F05C009B0C4F /* Theme.swift */; };
 		212A1FC52951B38000508396 /* CliticalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212A1FC42951B38000508396 /* CliticalApp.swift */; };
 		212A1FC72951B38000508396 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212A1FC62951B38000508396 /* ContentView.swift */; };
 		212A1FC92951B38000508396 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 212A1FC82951B38000508396 /* Assets.xcassets */; };
@@ -40,6 +41,7 @@
 
 /* Begin PBXFileReference section */
 		210381F3296E2DC400DA318A /* YesNo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YesNo.swift; sourceTree = "<group>"; };
+		21135D452972F05C009B0C4F /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		212A1FC12951B38000508396 /* clitical-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "clitical-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		212A1FC42951B38000508396 /* CliticalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliticalApp.swift; sourceTree = "<group>"; };
 		212A1FC62951B38000508396 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				21CA4E5F296E293900040C50 /* CHFChoiceView.swift */,
 				212A1FC62951B38000508396 /* ContentView.swift */,
 				210381F3296E2DC400DA318A /* YesNo.swift */,
+				21135D452972F05C009B0C4F /* Theme.swift */,
 				212A1FC82951B38000508396 /* Assets.xcassets */,
 				212A1FCA2951B38000508396 /* Preview Content */,
 			);
@@ -290,6 +293,7 @@
 				210381F4296E2DC400DA318A /* YesNo.swift in Sources */,
 				212A1FC72951B38000508396 /* ContentView.swift in Sources */,
 				21CA4E60296E293900040C50 /* CHFChoiceView.swift in Sources */,
+				21135D462972F05C009B0C4F /* Theme.swift in Sources */,
 				2196DF77296D62D900A9FF81 /* SexChoiceView.swift in Sources */,
 				212A1FC52951B38000508396 /* CliticalApp.swift in Sources */,
 			);
