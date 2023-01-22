@@ -13,20 +13,12 @@ struct WeightFormView: View {
     var body: some View {
         HStack{
             Text("WeightQuestionTitle")
-            if #available(iOS 15.0, *) {
                 TextField("WeightQuestionDescription",
                           value: $patientData.weight,
                           format: .number
                 ).multilineTextAlignment(.trailing)
                     .keyboardType(.decimalPad)
-            } else {
-                TextField("WeightQuestionDescription",
-                          value: $patientData.weight,
-                          formatter: NumberFormatter()
-                )
-                    .multilineTextAlignment(.trailing)
-                    .keyboardType(.decimalPad)
-            }
+           
         }
     }
 }

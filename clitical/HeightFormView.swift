@@ -15,22 +15,12 @@ struct HeightFormView: View {
   
             HStack{
                 Text("HeightQuestionTitle")
-                if #available(iOS 15.0, *) {
                     TextField("HeightQuestionDescription",
                               value: $patientData.height,
                               format: .number
                     ).submitLabel(.done)
                     .multilineTextAlignment(.trailing)
                     .keyboardType(.decimalPad)
-                } else {
-                    TextField("HeightQuestionDescription",
-                              value: $patientData.height,
-                              formatter: NumberFormatter()
-                    )
-                    .multilineTextAlignment(.trailing)
-                    .keyboardType(.decimalPad)
-                }
-                
             }
     }
     
