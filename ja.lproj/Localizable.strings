@@ -18,4 +18,7 @@
 "CHFQuestionTitle" = "うっ血性心不全";
 "CHFQuestionDescription" = "「あり」には、心不全入院歴あり・有症状の場合及びエコーでの心機能低下を含む。";
 "WeightQuestionTitle" = "体重 [kg]";
-"WeightQuestionDescription" = "体重[kg]を入力してください。";
+"WeightQuestionDescription" = "体重 [kg]を入力してください。";
+"HeightQuestionTitle" = "身長 [cm]";
+"HeightQuestionDescription" = "身長 [cm]を入力してください。";
+

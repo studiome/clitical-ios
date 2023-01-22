@@ -22,6 +22,7 @@ struct RootContentView: View {
                         }
                     })
                     WeightFormView()
+                    HeightFormView()
                 }
                 Section(header: Text("Complications")){
                     NavigationLink(destination: CHFChoiceView(), label:{

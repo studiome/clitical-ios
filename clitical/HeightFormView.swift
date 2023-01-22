@@ -1,5 +1,5 @@
 //
-//  WeightFormView.swift
+//  HeightFormView.swift
 //  clitical-ios
 //
 //  Created by kmiyahara on 2023/01/22.
@@ -8,32 +8,31 @@
 import SwiftUI
 import CLPatientData
 
-struct WeightFormView: View {
+struct HeightFormView: View {
     @EnvironmentObject var patientData: PatientData
     var body: some View {
         HStack{
-            Text("WeightQuestionTitle")
+            Text("HeightQuestionTitle")
             if #available(iOS 15.0, *) {
-                TextField("WeightQuestionDescription",
-                          value: $patientData.weight,
+                TextField("HeightQuestionDescription",
+                          value: $patientData.height,
                           format: .number
                 ).multilineTextAlignment(.trailing)
                     .keyboardType(.decimalPad)
             } else {
-                TextField("WeightQuestionDescription",
-                          value: $patientData.weight,
+                TextField("HeightQuestionDescription",
+                          value: $patientData.height,
                           formatter: NumberFormatter()
-                )
-                    .multilineTextAlignment(.trailing)
+                ).multilineTextAlignment(.trailing)
                     .keyboardType(.decimalPad)
             }
         }
     }
 }
 
-struct WeightFormView_Previews: PreviewProvider {
+struct HeightFormView_Previews: PreviewProvider {
     static var previews: some View {
-        WeightFormView().environmentObject(PatientData())
+        HeightFormView().environmentObject(PatientData())
             .environment(\.locale, .init(identifier: "ja"))
     }
 }
