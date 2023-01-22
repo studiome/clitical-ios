@@ -19,7 +19,6 @@ struct RootContentView: View {
                             Text("SexQuestionTitle")
                             Spacer()
                             Text(LocalizedStringKey(patientData.sex.label))
-                                .foregroundColor(.secondary)
                         }
                     })
                     WeightFormView()
@@ -30,10 +29,15 @@ struct RootContentView: View {
                             Text("CHFQuestionTitle")
                             Spacer()
                             Text(LocalizedStringKey(patientData.hasCHF.label))
-                                .foregroundColor(.secondary)
                         }
                     })
                 }
+                HStack{
+                    Text("BW")
+                    Spacer()
+                    Text(String(patientData.weight ?? Double.nan))
+                }
+               
             }
             .navigationTitle("PatientDataTitle")
         }

@@ -18,13 +18,13 @@ struct WeightFormView: View {
                           value: $patientData.weight,
                           format: .number
                 ).multilineTextAlignment(.trailing)
-                .keyboardType(.numberPad)
+                .keyboardType(.decimalPad)
             } else {
                 TextField("WeightQuestionDescription",
                           value: $patientData.weight,
                           formatter: NumberFormatter()
                 ).multilineTextAlignment(.trailing)
-                .keyboardType(.numberPad)
+                .keyboardType(.decimalPad)
             }
         }
         }
