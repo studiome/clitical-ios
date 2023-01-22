@@ -22,6 +22,7 @@ struct RootContentView: View {
                                 .foregroundColor(.secondary)
                         }
                     })
+                    WeightFormView()
                 }
                 Section(header: Text("Complications")){
                     NavigationLink(destination: CHFChoiceView(), label:{

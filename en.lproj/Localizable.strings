@@ -16,3 +16,5 @@
 "SexFemale" = "Female";
 "CHFQuestionTitle" = "Congestive heart failure";
 "CHFQuestionDescription" = "Yes: a history of admission due to CHF or clinical symptoms of CHF confirmed on echocardiography or absence of clinical symptoms but clearly reduced cardiac function on echocardiography, No: absent";
+"WeightQuestionTitle" = "Body Weight [kg]";
+"WeightQuestionDescription" = "Enter Body Weight[kg].";
