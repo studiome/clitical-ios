@@ -7,25 +7,38 @@
 
 import SwiftUI
 import CLPatientData
+import Combine
 
 struct HeightFormView: View {
     @EnvironmentObject var patientData: PatientData
     var body: some View {
-        HStack{
-            Text("HeightQuestionTitle")
-            if #available(iOS 15.0, *) {
-                TextField("HeightQuestionDescription",
-                          value: $patientData.height,
-                          format: .number
-                ).multilineTextAlignment(.trailing)
+  
+            HStack{
+                Text("HeightQuestionTitle")
+                if #available(iOS 15.0, *) {
+                    TextField("HeightQuestionDescription",
+                              value: $patientData.height,
+                              format: .number
+                    ).submitLabel(.done)
+                    .multilineTextAlignment(.trailing)
                     .keyboardType(.decimalPad)
-            } else {
-                TextField("HeightQuestionDescription",
-                          value: $patientData.height,
-                          formatter: NumberFormatter()
-                ).multilineTextAlignment(.trailing)
+                } else {
+                    TextField("HeightQuestionDescription",
+                              value: $patientData.height,
+                              formatter: NumberFormatter()
+                    )
+                    .multilineTextAlignment(.trailing)
                     .keyboardType(.decimalPad)
+                }
+                
             }
+    }
+    
+    private func  heightToString() -> String {
+        if(patientData.height == nil){
+            return ""
+        }else{
+            return String(patientData.height!)
         }
     }
 }
