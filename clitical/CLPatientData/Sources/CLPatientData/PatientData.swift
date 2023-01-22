@@ -6,8 +6,8 @@ import Combine
 public class PatientData: ObservableObject {
     @Published public var sex: Sex
     @Published public var age: Int?
-    @Published public var height:Double?
-    @Published public var weight:Double?
+    @Published public var height:Double? //cm
+    @Published public var weight:Double? //kg
     @Published public var alb:Double?
     @Published public var activity:Activity
     @Published public var hasCHF: Bool

@@ -56,7 +56,7 @@ public struct PatientRisk {
     }
     
     private func calcGNRI() -> Double? {
-        guard let height = patientData.height else {
+        guard let heightCM = patientData.height else {
             return nil
         }
         guard let weight = patientData.weight else {
@@ -65,10 +65,11 @@ public struct PatientRisk {
         guard let alb = patientData.alb else {
             return nil
         }
-        guard height != 0.0 else {
+        guard heightCM != 0.0 else {
             return nil
         }
-        var wi:Double = weight / (22.0 * pow(height, 2))
+        let heightM = heightCM / 100.0
+        var wi:Double = weight / (22.0 * pow(heightM, 2))
         if (wi >= 1.0){
             wi = 1.0
         }

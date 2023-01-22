@@ -41,7 +41,7 @@ final class PatientRiskTests: XCTestCase {
         let pd = PatientData()
         pd.age = 65
         pd.weight = 50.0
-        pd.height = 1.50
+        pd.height = 150.0
         pd.alb = 4.0
         pd.hasAILesion = true
         //Others are all false
@@ -61,7 +61,7 @@ final class PatientRiskTests: XCTestCase {
         pd.sex = .male
         pd.age = 50
         pd.weight = 60.0
-        pd.height = 1.65
+        pd.height = 165.0
         pd.alb = 4.0
         pd.activity = .ambulatory
         pd.hasCHF = false
@@ -97,7 +97,7 @@ final class PatientRiskTests: XCTestCase {
         pd.sex = .female
         pd.age = 70
         pd.weight = 55.0
-        pd.height = 1.53
+        pd.height = 153.0
         pd.alb = 3.5
         pd.activity = .wheelchair
         pd.hasCHF = true
@@ -133,7 +133,7 @@ final class PatientRiskTests: XCTestCase {
         pd.sex = .male
         pd.age = 85
         pd.weight = 55.1
-        pd.height = 1.75
+        pd.height = 175.0
         pd.alb = 3.5
         pd.activity = .immobile
         pd.hasCHF = false
@@ -169,7 +169,7 @@ final class PatientRiskTests: XCTestCase {
         pd.sex = .female
         pd.age = 90
         pd.weight = 30.0
-        pd.height = 1.55
+        pd.height = 155.0
         pd.alb = 3.2
         pd.activity = .immobile
         pd.hasCHF = true
