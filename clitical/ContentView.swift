@@ -32,12 +32,18 @@ struct RootContentView: View {
                         }
                     })
                 }
-                HStack{
-                    Text("BW")
-                    Spacer()
-                    Text(String(patientData.weight ?? Double.nan))
+                Section(header: Text("Data")){
+                    HStack{
+                        Text("BW")
+                        Spacer()
+                        Text(String(patientData.weight ?? Double.nan))
+                    }
+                    HStack{
+                        Text("BH")
+                        Spacer()
+                        Text(String(patientData.height ?? Double.nan))
+                    }
                 }
-               
             }
             .navigationTitle("PatientDataTitle")
         }
