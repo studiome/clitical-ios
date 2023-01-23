@@ -46,6 +46,7 @@
 		21135D452972F05C009B0C4F /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		2126FE18297D406300A23B18 /* WeightFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightFormView.swift; sourceTree = "<group>"; };
 		2126FE1A297D673400A23B18 /* HeightFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeightFormView.swift; sourceTree = "<group>"; };
+		2126FE1C297E02C400A23B18 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		212A1FC12951B38000508396 /* clitical-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "clitical-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		212A1FC42951B38000508396 /* CliticalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliticalApp.swift; sourceTree = "<group>"; };
 		212A1FC62951B38000508396 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -57,7 +58,6 @@
 		212A1FDF2951B38000508396 /* cliticalUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cliticalUITests.swift; sourceTree = "<group>"; };
 		212A1FE12951B38000508396 /* cliticalUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cliticalUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		2196DF76296D62D900A9FF81 /* SexChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SexChoiceView.swift; sourceTree = "<group>"; };
-		2196DF7B296DC20600A9FF81 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2196DF7D296DC21400A9FF81 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		21C78F8B2951F4180054A045 /* CLPatientData */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CLPatientData; sourceTree = "<group>"; };
 		21CA4E5F296E293900040C50 /* CHFChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CHFChoiceView.swift; sourceTree = "<group>"; };
@@ -249,8 +249,8 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				Base,
 				ja,
+				Base,
 			);
 			mainGroup = 212A1FB82951B38000508396;
 			productRefGroup = 212A1FC22951B38000508396 /* Products */;
@@ -343,8 +343,8 @@
 		2196DF7C296DC20600A9FF81 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				2196DF7B296DC20600A9FF81 /* en */,
 				2196DF7D296DC21400A9FF81 /* ja */,
+				2126FE1C297E02C400A23B18 /* en */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

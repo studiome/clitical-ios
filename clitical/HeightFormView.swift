@@ -12,13 +12,12 @@ import Combine
 struct HeightFormView: View {
     @EnvironmentObject var patientData: PatientData
     var body: some View {
-  
             HStack{
                 Text("HeightQuestionTitle")
                     TextField("HeightQuestionDescription",
                               value: $patientData.height,
                               format: .number
-                    ).submitLabel(.done)
+                    )
                     .multilineTextAlignment(.trailing)
                     .keyboardType(.decimalPad)
             }

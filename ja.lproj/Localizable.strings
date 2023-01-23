@@ -21,4 +21,5 @@
 "WeightQuestionDescription" = "体重 [kg]を入力してください。";
 "HeightQuestionTitle" = "身長 [cm]";
 "HeightQuestionDescription" = "身長 [cm]を入力してください。";
+"DONE" = "完了";
 

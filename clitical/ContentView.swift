@@ -10,6 +10,7 @@ import CLPatientData
 
 struct RootContentView: View {
     @EnvironmentObject var patientData: PatientData
+    @FocusState var isActive: Bool
     var body: some View {
         NavigationView{
             List{
@@ -21,8 +22,8 @@ struct RootContentView: View {
                             Text(LocalizedStringKey(patientData.sex.label))
                         }
                     })
-                    WeightFormView()
-                    HeightFormView()
+                    WeightFormView().focused($isActive)
+                    HeightFormView().focused($isActive)
                 }
                 Section(header: Text("Complications")){
                     NavigationLink(destination: CHFChoiceView(), label:{
@@ -33,19 +34,16 @@ struct RootContentView: View {
                         }
                     })
                 }
-                Section(header: Text("Data")){
-                    HStack{
-                        Text("BW")
-                        Spacer()
-                        Text(String(patientData.weight ?? Double.nan))
-                    }
-                    HStack{
-                        Text("BH")
-                        Spacer()
-                        Text(String(patientData.height ?? Double.nan))
+            }
+            .toolbar{
+                ToolbarItemGroup(placement: .keyboard){
+                    Spacer()
+                    Button("DONE"){
+                        isActive = false
                     }
                 }
             }
+            
             .navigationTitle("PatientDataTitle")
         }
         .accentColor(jsvsColor)
