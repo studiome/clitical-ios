@@ -26,4 +26,7 @@
 "HeightQuestionDescription" = "身長 [cm]を入力してください。";
 "DONE" = "完了";
 "PredictRisks" = "リスク予測";
+"ErrorTitle"  = "エラー";
+"NumberFieldErrorMessage" = "数値入力を確認してください。";
+
 

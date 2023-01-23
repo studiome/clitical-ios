@@ -25,3 +25,5 @@
 "HeightQuestionDescription" = "Enter Body Height [cm].";
 "DONE" = "Done";
 "PredictRisks" = "Predict Risk";
+"ErrorTitle"  = "Error";
+"NumberFieldErrorMessage" = "Check Number Field. ";

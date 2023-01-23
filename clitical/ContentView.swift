@@ -11,6 +11,7 @@ import CLPatientData
 struct RootContentView: View {
     @EnvironmentObject var patientData: PatientData
     @FocusState var isActive: Bool
+    @State var failure: Bool = false
     var body: some View {
         NavigationView{
             VStack{
@@ -40,6 +41,18 @@ struct RootContentView: View {
                     }
                     Section{
                         Button("PredictRisks"){
+                            if(patientData.age == nil ||
+                               patientData.height == nil ||
+                               patientData.weight == nil ||
+                               patientData.alb == nil){
+                                failure = true
+                                return
+                            }
+                                failure = false
+                        }.alert("ErrorTitle", isPresented: $failure){
+                            
+                        } message: {
+                            Text("NumberFieldErrorMessage")
                         }
                     }
                 }
