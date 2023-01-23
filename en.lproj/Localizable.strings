@@ -7,6 +7,9 @@
 */
 "PatientDataTitle" = "Patient Data";
 "BasicInfo" = "Basic Information";
+"ClinicalInfo" = "Clinical Information";
+"SocialHistory" = "Socail History";
+"LesionInfo" = "Lesion Information";
 "Complications" = "Complications";
 "Yes" = "Yes";
 "No" = "No";
@@ -21,3 +24,4 @@
 "HeightQuestionTitle" = "Body Height [cm]";
 "HeightQuestionDescription" = "Enter Body Height [cm].";
 "DONE" = "Done";
+"PredictRisks" = "Predict Risk";

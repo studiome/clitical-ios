@@ -13,37 +13,46 @@ struct RootContentView: View {
     @FocusState var isActive: Bool
     var body: some View {
         NavigationView{
-            List{
-                Section(header: Text("BasicInfo")){
-                    NavigationLink(destination: SexChoiceView(), label:{
-                        HStack{
-                            Text("SexQuestionTitle")
-                            Spacer()
-                            Text(LocalizedStringKey(patientData.sex.label))
+            VStack{
+                List{
+                    Section(header: Text("BasicInfo")){
+                        NavigationLink(destination: SexChoiceView(), label:{
+                            HStack{
+                                Text("SexQuestionTitle")
+                                Spacer()
+                                Text(LocalizedStringKey(patientData.sex.label))
+                            }
+                        })
+                        WeightFormView().focused($isActive)
+                        HeightFormView().focused($isActive)
+                    }
+                    Section(header: Text("ClinicalInfo")){}
+                    Section(header: Text("SocialHistory")){}
+                    Section(header: Text("LesionInfo")){}
+                    Section(header: Text("Complications")){
+                        NavigationLink(destination: CHFChoiceView(), label:{
+                            HStack{
+                                Text("CHFQuestionTitle")
+                                Spacer()
+                                Text(LocalizedStringKey(patientData.hasCHF.label))
+                            }
+                        })
+                    }
+                    Section{
+                        Button("PredictRisks"){
                         }
-                    })
-                    WeightFormView().focused($isActive)
-                    HeightFormView().focused($isActive)
-                }
-                Section(header: Text("Complications")){
-                    NavigationLink(destination: CHFChoiceView(), label:{
-                        HStack{
-                            Text("CHFQuestionTitle")
-                            Spacer()
-                            Text(LocalizedStringKey(patientData.hasCHF.label))
-                        }
-                    })
-                }
-            }
-            .toolbar{
-                ToolbarItemGroup(placement: .keyboard){
-                    Spacer()
-                    Button("DONE"){
-                        isActive = false
                     }
                 }
+                .toolbar{
+                    ToolbarItemGroup(placement: .keyboard){
+                        Spacer()
+                        Button("DONE"){
+                            isActive = false
+                        }
+                    }
+                }
+              
             }
-            
             .navigationTitle("PatientDataTitle")
         }
         .accentColor(jsvsColor)
