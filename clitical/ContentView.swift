@@ -36,9 +36,58 @@ struct RootContentView: View {
                             Text(LocalizedStringKey(patientData.isSmoking.label))
                         }
                     })
+                    NavigationLink(destination: ActivityChoiceView(), label:{
+                        HStack{
+                            Text("ActivityQuestionTitle")
+                            Spacer()
+                            //Text(LocalizedStringKey(patientData.activity.label))
+                        }
+                    })
                 }
                 Section(header: Text("ClinicalInfo")){
                     AlbFormView().focused($isActive)
+                    NavigationLink(destination: UrgencyChoiceView(), label:{
+                        HStack{
+                            Text("UrgencydQuestionTitle")
+                            Spacer()
+                            Text(LocalizedStringKey(patientData.isUrgent.label))
+                        }
+                    })
+                    NavigationLink(destination: CKDChoiceView(), label:{
+                        HStack{
+                            Text("CKDQuestionTitle")
+                            Spacer()
+                            //Text(LocalizedStringKey(patientData.ckd.label))
+                        }
+                    })
+                    NavigationLink(destination: FeverChoiceView(), label:{
+                        HStack{
+                            Text("FeverQuestionTitle")
+                            Spacer()
+                            Text(LocalizedStringKey(patientData.hasFever.label))
+                        }
+                    })
+                    NavigationLink(destination: WBCChoiceView(), label:{
+                        HStack{
+                            Text("WBCQuestionTitle")
+                            Spacer()
+                            Text(LocalizedStringKey(patientData.hasAbnormalWBC.label))
+                        }
+                    })
+                    NavigationLink(destination: LocalInfectionChoiceView(), label:{
+                        HStack{
+                            Text("LocalInfectionQuestionTitle")
+                            Spacer()
+                            Text(LocalizedStringKey(patientData.hasLocalInfection.label))
+                        }
+                    })
+                    NavigationLink(destination: RutherfordClassChoiceView(), label:{
+                        HStack{
+                            Text("RutherfordQuestionTitle")
+                            Spacer()
+                            //Text(LocalizedStringKey(patientData.rutherford.label))
+                        }
+                    })
                 }
                 Section(header: Text("LesionInfo")){
                     NavigationLink(destination: AILesionChoiceView(), label:{
@@ -48,14 +97,71 @@ struct RootContentView: View {
                             Text(LocalizedStringKey(patientData.hasAILesion.label))
                         }
                     })
+                    NavigationLink(destination: FPLesionChoiceView(), label:{
+                        HStack{
+                            Text("FPLesionQuestionTitle")
+                            Spacer()
+                            Text(LocalizedStringKey(patientData.hasFPLesion.label))
+                        }
+                    })
+                    NavigationLink(destination: BKLesionChoiceView(), label:{
+                        HStack{
+                            Text("BKLesionQuestionTitle")
+                            Spacer()
+                            Text(LocalizedStringKey(patientData.hasBKLesion.label))
+                        }
+                    })
                 }
-                Section(header: Text("OtherLesionInfo")){}
+                Section(header: Text("OtherLesionInfo")){
+                    NavigationLink(destination: ContralateralChoiceView(), label:{
+                        HStack{
+                            Text("ContralateralQuestionTitle")
+                            Spacer()
+                            Text(LocalizedStringKey(patientData.hasContraLateralLesion.label))
+                        }
+                    })
+                    NavigationLink(destination: OtherVDChoiceView(), label:{
+                        HStack{
+                            Text("OtherVDQuestionTitle")
+                            Spacer()
+                            Text(LocalizedStringKey(patientData.hasOtherVD.label))
+                        }
+                    })
+                }
                 Section(header: Text("Complications")){
                     NavigationLink(destination: CHFChoiceView(), label:{
                         HStack{
                             Text("CHFQuestionTitle")
                             Spacer()
                             Text(LocalizedStringKey(patientData.hasCHF.label))
+                        }
+                    })
+                    NavigationLink(destination: CADChoiceView(), label:{
+                        HStack{
+                            Text("CADQuestionTitle")
+                            Spacer()
+                            Text(LocalizedStringKey(patientData.hasCAD.label))
+                        }
+                    })
+                    NavigationLink(destination: CVDChoiceView(), label:{
+                        HStack{
+                            Text("CVDQuestionTitle")
+                            Spacer()
+                            Text(LocalizedStringKey(patientData.hasCVD.label))
+                        }
+                    })
+                    NavigationLink(destination: DLChoiceView(), label:{
+                        HStack{
+                            Text("DLQuestionTitle")
+                            Spacer()
+                            Text(LocalizedStringKey(patientData.hasDyslipidemia.label))
+                        }
+                    })
+                    NavigationLink(destination: MalignancyChoiceView(), label:{
+                        HStack{
+                            Text("MalicnancyQuestionTitle")
+                            Spacer()
+                            //Text(LocalizedStringKey(patientData.malignantNeoplasm.label))
                         }
                     })
                 }
