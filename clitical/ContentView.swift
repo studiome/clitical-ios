@@ -17,6 +17,7 @@ struct RootContentView: View {
             VStack{
                 List{
                     Section(header: Text("BasicInfo")){
+                        AgeFormView().focused($isActive)
                         NavigationLink(destination: SexChoiceView(), label:{
                             HStack{
                                 Text("SexQuestionTitle")
