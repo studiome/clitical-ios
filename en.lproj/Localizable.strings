@@ -10,7 +10,7 @@
 "ClinicalInfo" = "Clinical Information";
 "SocialHistory" = "Socail History";
 "LesionInfo" = "Sites of Artery Occlusive Lesions";
-"OtherLesionInfo" = "Other Lesions";
+"OtherLesionInfo" = "Concomitant Lesions";
 "Complications" = "Complications";
 "Yes" = "Yes";
 "No" = "No";
