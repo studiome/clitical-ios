@@ -75,6 +75,7 @@ struct RootContentView: View {
                         failure = true
                         return
                     }
+                    let risk = PatientRisk(of:patientData)
                     failure = false
                 }.alert("ErrorTitle", isPresented: $failure){
                     

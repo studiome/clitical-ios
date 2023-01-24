@@ -32,26 +32,26 @@ public struct PatientRisk {
     private let twoYearOSH0Coeff = 0.922
     private let twoYearAFSH0Coeff = 0.876
     
-    var gnri: Double? {
+    public var gnri: Double? {
         return calcGNRI()
     }
     
-    lazy var gnriRisk: GNRIRisk? = classifyGNRI()
+    public lazy var gnriRisk: GNRIRisk? = classifyGNRI()
     
-    lazy var predicted30DDeathOrAmputation: Double? = calcPredicted30DDA()
+    public lazy var predicted30DDeathOrAmputation: Double? = calcPredicted30DDA()
     // 0.0 ... 1.0
     
-    lazy var predicted30DMALE: Double? = calcPredicted30DMALE()// 0.0 ... 1.0
+    public lazy var predicted30DMALE: Double? = calcPredicted30DMALE()// 0.0 ... 1.0
     
-    lazy var predicted2YOS: Double? = calcPredicted2YOS()// 0.0 ... 1.0
+    public lazy var predicted2YOS: Double? = calcPredicted2YOS()// 0.0 ... 1.0
     
-    lazy var predicted2YOSRisk: TwoYearOSRisk? = classifyOS()
+    public lazy var predicted2YOSRisk: TwoYearOSRisk? = classifyOS()
     
-    lazy var predicted2YAFS: Double? = calcPredicted2YAFS() // 0.0 ... 1.0
+    public lazy var predicted2YAFS: Double? = calcPredicted2YAFS() // 0.0 ... 1.0
     
     var patientData: PatientData
     
-    init(of patientData: PatientData){
+    public init(of patientData: PatientData){
         self.patientData = patientData;
     }
     
