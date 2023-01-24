@@ -12,6 +12,7 @@ struct RootContentView: View {
     @EnvironmentObject var patientData: PatientData
     @FocusState var isActive: Bool
     @State var failure: Bool = false
+    @State var errorMessage: String  = ""
     var body: some View {
         NavigationView{
             List{
@@ -48,6 +49,7 @@ struct RootContentView: View {
                         }
                     })
                 }
+                Section(header: Text("OtherLesionInfo")){}
                 Section(header: Text("Complications")){
                     NavigationLink(destination: CHFChoiceView(), label:{
                         HStack{
@@ -62,6 +64,14 @@ struct RootContentView: View {
                        patientData.height == nil ||
                        patientData.weight == nil ||
                        patientData.alb == nil){
+                        errorMessage = QuestionError.NumberFormIsNil.message
+                        failure = true
+                        return
+                    }
+                    if (patientData.hasAILesion == false &&
+                        patientData.hasFPLesion == false &&
+                        patientData.hasBKLesion == false){
+                        errorMessage = QuestionError.IrrelevantLesion.message
                         failure = true
                         return
                     }
@@ -69,7 +79,7 @@ struct RootContentView: View {
                 }.alert("ErrorTitle", isPresented: $failure){
                     
                 } message: {
-                    Text("NumberFieldErrorMessage")
+                    Text(LocalizedStringKey(errorMessage))
                 }.buttonStyle(.borderless)
             }
             .toolbar{

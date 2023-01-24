@@ -11,6 +11,7 @@
 "ClinicalInfo" = "臨床情報";
 "SocialHistory" = "生活歴";
 "LesionInfo" = "動脈病変部位";
+"OtherLesionInfo" = "その他の病変"; 
 "Complications" = "合併症";
 "Yes" = "あり";
 "No" = "なし";
@@ -36,5 +37,6 @@
 "PredictRisks" = "リスク予測 ...";
 "ErrorTitle"  = "エラー";
 "NumberFieldErrorMessage" = "数値入力を確認してください。";
+"IrrelevantLesionMessage" = "動脈病変部位の選択を確認してください。 少なくとも一つの部位が「あり」になる必要があります。";
 
 

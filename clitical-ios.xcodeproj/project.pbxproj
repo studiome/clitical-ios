@@ -12,6 +12,7 @@
 		2115F425297FB4860057C89C /* AlbFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F424297FB4860057C89C /* AlbFormView.swift */; };
 		2115F427297FBF350057C89C /* SmokingChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F426297FBF350057C89C /* SmokingChoiceView.swift */; };
 		2115F429297FC8AC0057C89C /* AILesionChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F428297FC8AC0057C89C /* AILesionChoiceView.swift */; };
+		2115F42B298005270057C89C /* QuestionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F42A298005270057C89C /* QuestionError.swift */; };
 		2126FE19297D406300A23B18 /* WeightFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2126FE18297D406300A23B18 /* WeightFormView.swift */; };
 		2126FE1B297D673400A23B18 /* HeightFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2126FE1A297D673400A23B18 /* HeightFormView.swift */; };
 		212A1FC52951B38000508396 /* CliticalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212A1FC42951B38000508396 /* CliticalApp.swift */; };
@@ -51,6 +52,7 @@
 		2115F424297FB4860057C89C /* AlbFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbFormView.swift; sourceTree = "<group>"; };
 		2115F426297FBF350057C89C /* SmokingChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmokingChoiceView.swift; sourceTree = "<group>"; };
 		2115F428297FC8AC0057C89C /* AILesionChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AILesionChoiceView.swift; sourceTree = "<group>"; };
+		2115F42A298005270057C89C /* QuestionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionError.swift; sourceTree = "<group>"; };
 		2126FE18297D406300A23B18 /* WeightFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightFormView.swift; sourceTree = "<group>"; };
 		2126FE1A297D673400A23B18 /* HeightFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeightFormView.swift; sourceTree = "<group>"; };
 		2126FE1C297E02C400A23B18 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 				2115F426297FBF350057C89C /* SmokingChoiceView.swift */,
 				21CA4E5F296E293900040C50 /* CHFChoiceView.swift */,
 				212A1FC62951B38000508396 /* ContentView.swift */,
+				2115F42A298005270057C89C /* QuestionError.swift */,
 				2115F428297FC8AC0057C89C /* AILesionChoiceView.swift */,
 				2126FE18297D406300A23B18 /* WeightFormView.swift */,
 				2115F424297FB4860057C89C /* AlbFormView.swift */,
@@ -318,6 +321,7 @@
 				2196DF77296D62D900A9FF81 /* SexChoiceView.swift in Sources */,
 				21365624297F65E300BFDAFD /* AgeFormView.swift in Sources */,
 				212A1FC52951B38000508396 /* CliticalApp.swift in Sources */,
+				2115F42B298005270057C89C /* QuestionError.swift in Sources */,
 				2126FE1B297D673400A23B18 /* HeightFormView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

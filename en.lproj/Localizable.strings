@@ -9,7 +9,8 @@
 "BasicInfo" = "Basic Information";
 "ClinicalInfo" = "Clinical Information";
 "SocialHistory" = "Socail History";
-"LesionInfo" = "Sites of artery occlusive lesions";
+"LesionInfo" = "Sites of Artery Occlusive Lesions";
+"OtherLesionInfo" = "Other Lesions";
 "Complications" = "Complications";
 "Yes" = "Yes";
 "No" = "No";
@@ -36,3 +37,4 @@
 "PredictRisks" = "Predict Risk ...";
 "ErrorTitle"  = "Error";
 "NumberFieldErrorMessage" = "Check Number Field. ";
+"IrrelevantLesionMessage" = "Check artery lesion. At least 1 lesion should be YES";
