@@ -10,7 +10,7 @@
 "BasicInfo" = "患者基本情報";
 "ClinicalInfo" = "臨床情報";
 "SocialHistory" = "生活歴";
-"LesionInfo" = "病変部位";
+"LesionInfo" = "動脈病変部位";
 "Complications" = "合併症";
 "Yes" = "あり";
 "No" = "なし";
@@ -22,6 +22,8 @@
 "CHFQuestionDescription" = "「あり」には、心不全入院歴あり・有症状の場合及びエコーでの心機能低下を含む。";
 "SmokingQuestionTitle" = "喫煙歴";
 "SmokingQuestionDescription" = "あり：喫煙中・喫煙歴あり";
+"AILesionQuestionTitle" = "大動脈・腸骨動脈領域";
+"AILesionQuestionDescription" = "大動脈・腸骨動脈領域病変の有無";
 "AgeQuestionTitle" = "年齢 [歳]";
 "AgeQuestionDescription" = "年齢 [歳]を入力してください。";
 "WeightQuestionTitle" = "体重 [kg]";

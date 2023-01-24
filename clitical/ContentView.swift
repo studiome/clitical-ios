@@ -39,7 +39,15 @@ struct RootContentView: View {
                 Section(header: Text("ClinicalInfo")){
                     AlbFormView().focused($isActive)
                 }
-                Section(header: Text("LesionInfo")){}
+                Section(header: Text("LesionInfo")){
+                    NavigationLink(destination: AILesionChoiceView(), label:{
+                        HStack{
+                            Text("AILesionQuestionTitle")
+                            Spacer()
+                            Text(LocalizedStringKey(patientData.hasAILesion.label))
+                        }
+                    })
+                }
                 Section(header: Text("Complications")){
                     NavigationLink(destination: CHFChoiceView(), label:{
                         HStack{
