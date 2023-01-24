@@ -29,7 +29,9 @@ struct RootContentView: View {
                         HeightFormView().focused($isActive)
                     }
                     Section(header: Text("SocialHistory")){}
-                    Section(header: Text("ClinicalInfo")){}
+                    Section(header: Text("ClinicalInfo")){
+                        AlbFormView().focused($isActive)
+                    }
                     Section(header: Text("LesionInfo")){}
                     Section(header: Text("Complications")){
                         NavigationLink(destination: CHFChoiceView(), label:{

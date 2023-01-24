@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		210381F4296E2DC400DA318A /* YesNo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210381F3296E2DC400DA318A /* YesNo.swift */; };
 		21135D462972F05C009B0C4F /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21135D452972F05C009B0C4F /* Theme.swift */; };
+		2115F425297FB4860057C89C /* AlbFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F424297FB4860057C89C /* AlbFormView.swift */; };
 		2126FE19297D406300A23B18 /* WeightFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2126FE18297D406300A23B18 /* WeightFormView.swift */; };
 		2126FE1B297D673400A23B18 /* HeightFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2126FE1A297D673400A23B18 /* HeightFormView.swift */; };
 		212A1FC52951B38000508396 /* CliticalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212A1FC42951B38000508396 /* CliticalApp.swift */; };
@@ -45,6 +46,7 @@
 /* Begin PBXFileReference section */
 		210381F3296E2DC400DA318A /* YesNo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YesNo.swift; sourceTree = "<group>"; };
 		21135D452972F05C009B0C4F /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		2115F424297FB4860057C89C /* AlbFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbFormView.swift; sourceTree = "<group>"; };
 		2126FE18297D406300A23B18 /* WeightFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightFormView.swift; sourceTree = "<group>"; };
 		2126FE1A297D673400A23B18 /* HeightFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeightFormView.swift; sourceTree = "<group>"; };
 		2126FE1C297E02C400A23B18 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 				21CA4E5F296E293900040C50 /* CHFChoiceView.swift */,
 				212A1FC62951B38000508396 /* ContentView.swift */,
 				2126FE18297D406300A23B18 /* WeightFormView.swift */,
+				2115F424297FB4860057C89C /* AlbFormView.swift */,
 				21365623297F65E300BFDAFD /* AgeFormView.swift */,
 				2126FE1A297D673400A23B18 /* HeightFormView.swift */,
 				210381F3296E2DC400DA318A /* YesNo.swift */,
@@ -300,6 +303,7 @@
 			files = (
 				210381F4296E2DC400DA318A /* YesNo.swift in Sources */,
 				212A1FC72951B38000508396 /* ContentView.swift in Sources */,
+				2115F425297FB4860057C89C /* AlbFormView.swift in Sources */,
 				21CA4E60296E293900040C50 /* CHFChoiceView.swift in Sources */,
 				2126FE19297D406300A23B18 /* WeightFormView.swift in Sources */,
 				21135D462972F05C009B0C4F /* Theme.swift in Sources */,

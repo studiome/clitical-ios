@@ -21,11 +21,13 @@
 "CHFQuestionTitle" = "うっ血性心不全";
 "CHFQuestionDescription" = "「あり」には、心不全入院歴あり・有症状の場合及びエコーでの心機能低下を含む。";
 "AgeQuestionTitle" = "年齢 [歳]";
-"AgeQuestionDescription" = "年齢 [歳] を入力してください。";
+"AgeQuestionDescription" = "年齢 [歳]を入力してください。";
 "WeightQuestionTitle" = "体重 [kg]";
 "WeightQuestionDescription" = "体重 [kg]を入力してください。";
 "HeightQuestionTitle" = "身長 [cm]";
 "HeightQuestionDescription" = "身長 [cm]を入力してください。";
+"AlbQuestionTitle" = "アルミン値 [g/dl]";
+"AlbQuestionDescription" = "アルブミン値 [g/dl]を入力してください。";
 "DONE" = "完了";
 "PredictRisks" = "リスク予測";
 "ErrorTitle"  = "エラー";

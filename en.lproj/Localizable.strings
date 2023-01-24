@@ -25,6 +25,9 @@
 "WeightQuestionDescription" = "Enter Body Weight [kg].";
 "HeightQuestionTitle" = "Body Height [cm]";
 "HeightQuestionDescription" = "Enter Body Height [cm].";
+"AlbQuestionTitle" = "Albumin [g/dl]";
+"AlbQuestionDescription" = "Enter Albumin [g/dl].";
+
 "DONE" = "Done";
 "PredictRisks" = "Predict Risk";
 "ErrorTitle"  = "Error";
