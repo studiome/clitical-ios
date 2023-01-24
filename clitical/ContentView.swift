@@ -24,8 +24,8 @@ struct RootContentView: View {
                             Text(LocalizedStringKey(patientData.sex.label))
                         }
                     })
-                    WeightFormView().focused($isActive)
                     HeightFormView().focused($isActive)
+                    WeightFormView().focused($isActive)
                 }
                 Section(header: Text("SocialHistory")){
                     NavigationLink(destination: SmokingChoiceView(), label:{
