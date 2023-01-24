@@ -70,7 +70,6 @@ struct RootContentView: View {
             .navigationTitle("PatientDataTitle")
         }
         .accentColor(jsvsColor)
-        .navigationViewStyle(.stack)
     }
 }
 
