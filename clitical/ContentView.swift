@@ -28,7 +28,15 @@ struct RootContentView: View {
                         WeightFormView().focused($isActive)
                         HeightFormView().focused($isActive)
                     }
-                    Section(header: Text("SocialHistory")){}
+                    Section(header: Text("SocialHistory")){
+                        NavigationLink(destination: SmokingChoiceView(), label:{
+                            HStack{
+                                Text("SmokingQuestionTitle")
+                                Spacer()
+                                Text(LocalizedStringKey(patientData.isSmoking.label))
+                            }
+                        })
+                    }
                     Section(header: Text("ClinicalInfo")){
                         AlbFormView().focused($isActive)
                     }

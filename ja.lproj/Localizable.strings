@@ -20,6 +20,8 @@
 "SexFemale" = "女性";
 "CHFQuestionTitle" = "うっ血性心不全";
 "CHFQuestionDescription" = "「あり」には、心不全入院歴あり・有症状の場合及びエコーでの心機能低下を含む。";
+"SmokingQuestionTitle" = "喫煙歴";
+"SmokingQuestionDescription" = "あり：喫煙中・喫煙歴あり";
 "AgeQuestionTitle" = "年齢 [歳]";
 "AgeQuestionDescription" = "年齢 [歳]を入力してください。";
 "WeightQuestionTitle" = "体重 [kg]";
