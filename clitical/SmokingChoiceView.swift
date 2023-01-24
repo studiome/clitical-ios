@@ -17,14 +17,14 @@ struct SmokingChoiceView: View {
                     HStack{
                         Text(LocalizedStringKey(item.label))
                         Spacer()
-                        if(patientData.hasCHF == item.toBool()){
+                        if(patientData.isSmoking == item.toBool()){
                             Image(systemName: "checkmark")
                                 .foregroundColor(jsvsColor)
                         }
                     }
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        patientData.hasCHF = item.toBool()
+                        patientData.isSmoking = item.toBool()
                     }
                 }
             }
