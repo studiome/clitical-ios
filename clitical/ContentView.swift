@@ -14,66 +14,63 @@ struct RootContentView: View {
     @State var failure: Bool = false
     var body: some View {
         NavigationView{
-            VStack{
-                List{
-                    Section(header: Text("BasicInfo")){
-                        AgeFormView().focused($isActive)
-                        NavigationLink(destination: SexChoiceView(), label:{
-                            HStack{
-                                Text("SexQuestionTitle")
-                                Spacer()
-                                Text(LocalizedStringKey(patientData.sex.label))
-                            }
-                        })
-                        WeightFormView().focused($isActive)
-                        HeightFormView().focused($isActive)
-                    }
-                    Section(header: Text("SocialHistory")){
-                        NavigationLink(destination: SmokingChoiceView(), label:{
-                            HStack{
-                                Text("SmokingQuestionTitle")
-                                Spacer()
-                                Text(LocalizedStringKey(patientData.isSmoking.label))
-                            }
-                        })
-                    }
-                    Section(header: Text("ClinicalInfo")){
-                        AlbFormView().focused($isActive)
-                    }
-                    Section(header: Text("LesionInfo")){}
-                    Section(header: Text("Complications")){
-                        NavigationLink(destination: CHFChoiceView(), label:{
-                            HStack{
-                                Text("CHFQuestionTitle")
-                                Spacer()
-                                Text(LocalizedStringKey(patientData.hasCHF.label))
-                            }
-                        })
-                    }
-                        Button("PredictRisks"){
-                            if(patientData.age == nil ||
-                               patientData.height == nil ||
-                               patientData.weight == nil ||
-                               patientData.alb == nil){
-                                failure = true
-                                return
-                            }
-                                failure = false
-                        }.alert("ErrorTitle", isPresented: $failure){
-                            
-                        } message: {
-                            Text("NumberFieldErrorMessage")
-                        }.buttonStyle(.borderless)
-                }
-                .toolbar{
-                    ToolbarItemGroup(placement: .keyboard){
-                        Spacer()
-                        Button("DONE"){
-                            isActive = false
+            List{
+                Section(header: Text("BasicInfo")){
+                    AgeFormView().focused($isActive)
+                    NavigationLink(destination: SexChoiceView(), label:{
+                        HStack{
+                            Text("SexQuestionTitle")
+                            Spacer()
+                            Text(LocalizedStringKey(patientData.sex.label))
                         }
+                    })
+                    WeightFormView().focused($isActive)
+                    HeightFormView().focused($isActive)
+                }
+                Section(header: Text("SocialHistory")){
+                    NavigationLink(destination: SmokingChoiceView(), label:{
+                        HStack{
+                            Text("SmokingQuestionTitle")
+                            Spacer()
+                            Text(LocalizedStringKey(patientData.isSmoking.label))
+                        }
+                    })
+                }
+                Section(header: Text("ClinicalInfo")){
+                    AlbFormView().focused($isActive)
+                }
+                Section(header: Text("LesionInfo")){}
+                Section(header: Text("Complications")){
+                    NavigationLink(destination: CHFChoiceView(), label:{
+                        HStack{
+                            Text("CHFQuestionTitle")
+                            Spacer()
+                            Text(LocalizedStringKey(patientData.hasCHF.label))
+                        }
+                    })
+                }
+                Button("PredictRisks"){
+                    if(patientData.age == nil ||
+                       patientData.height == nil ||
+                       patientData.weight == nil ||
+                       patientData.alb == nil){
+                        failure = true
+                        return
+                    }
+                    failure = false
+                }.alert("ErrorTitle", isPresented: $failure){
+                    
+                } message: {
+                    Text("NumberFieldErrorMessage")
+                }.buttonStyle(.borderless)
+            }
+            .toolbar{
+                ToolbarItemGroup(placement: .keyboard){
+                    Spacer()
+                    Button("DONE"){
+                        isActive = false
                     }
                 }
-              
             }
             .navigationTitle("PatientDataTitle")
         }
