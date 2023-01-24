@@ -42,7 +42,6 @@ struct RootContentView: View {
                             }
                         })
                     }
-                    Section{
                         Button("PredictRisks"){
                             if(patientData.age == nil ||
                                patientData.height == nil ||
@@ -56,8 +55,7 @@ struct RootContentView: View {
                             
                         } message: {
                             Text("NumberFieldErrorMessage")
-                        }
-                    }
+                        }.buttonStyle(.borderless)
                 }
                 .toolbar{
                     ToolbarItemGroup(placement: .keyboard){

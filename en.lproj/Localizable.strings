@@ -29,6 +29,6 @@
 "AlbQuestionDescription" = "Enter Albumin [g/dl].";
 
 "DONE" = "Done";
-"PredictRisks" = "Predict Risk";
+"PredictRisks" = "Predict Risk ...";
 "ErrorTitle"  = "Error";
 "NumberFieldErrorMessage" = "Check Number Field. ";
