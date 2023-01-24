@@ -28,8 +28,8 @@ struct RootContentView: View {
                         WeightFormView().focused($isActive)
                         HeightFormView().focused($isActive)
                     }
-                    Section(header: Text("ClinicalInfo")){}
                     Section(header: Text("SocialHistory")){}
+                    Section(header: Text("ClinicalInfo")){}
                     Section(header: Text("LesionInfo")){}
                     Section(header: Text("Complications")){
                         NavigationLink(destination: CHFChoiceView(), label:{
