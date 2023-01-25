@@ -29,7 +29,7 @@ struct ActivityChoiceView: View {
                 }
             }
         }
-        .navigationTitle("SexQuestionTitle")
+        .navigationTitle("ActivityQuestionTitle")
         .navigationBarTitleDisplayMode(.inline)
     }
 }

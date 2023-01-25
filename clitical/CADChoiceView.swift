@@ -9,6 +9,7 @@ import SwiftUI
 import CLPatientData
 
 struct CADChoiceView: View {
+    
     var body: some View {
         Text("CADQuestionDescription")
     }
