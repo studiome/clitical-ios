@@ -9,8 +9,28 @@ import SwiftUI
 import CLPatientData
 
 struct UrgencyChoiceView: View {
+    @EnvironmentObject var patientData: PatientData
     var body: some View {
-        Text("UrgencyQuestionDescription")
+        List{
+            Section(footer: Text("UrgencyQuestionDescription")){
+                ForEach(YesNo.allCases, id: \.self){item in
+                    HStack{
+                        Text(LocalizedStringKey(item.label))
+                        Spacer()
+                        if(patientData.isUrgent == item.toBool()){
+                            Image(systemName: "checkmark")
+                                .foregroundColor(jsvsColor)
+                        }
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        patientData.isUrgent = item.toBool()
+                    }
+                }
+            }
+        }
+        .navigationTitle("UrgencyQuestionTitle")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
