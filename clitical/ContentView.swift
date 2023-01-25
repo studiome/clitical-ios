@@ -46,18 +46,18 @@ struct RootContentView: View {
                 }
                 Section(header: Text("ClinicalInfo")){
                     AlbFormView().focused($isActive)
-                    NavigationLink(destination: UrgencyChoiceView(), label:{
-                        HStack{
-                            Text("UrgencydQuestionTitle")
-                            Spacer()
-                            Text(LocalizedStringKey(patientData.isUrgent.label))
-                        }
-                    })
                     NavigationLink(destination: CKDChoiceView(), label:{
                         HStack{
                             Text("CKDQuestionTitle")
                             Spacer()
                             Text(LocalizedStringKey(patientData.ckd.label))
+                        }
+                    })
+                    NavigationLink(destination: UrgencyChoiceView(), label:{
+                        HStack{
+                            Text("UrgencydQuestionTitle")
+                            Spacer()
+                            Text(LocalizedStringKey(patientData.isUrgent.label))
                         }
                     })
                     NavigationLink(destination: FeverChoiceView(), label:{
