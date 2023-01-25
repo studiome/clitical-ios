@@ -9,8 +9,28 @@ import SwiftUI
 import CLPatientData
 
 struct OtherVDChoiceView: View {
+    @EnvironmentObject var patientData: PatientData
     var body: some View {
-        Text("OtherVDQuestionDescription")
+        List{
+            Section(footer: Text("OtherVDQuestionDescription")){
+                ForEach(YesNo.allCases, id: \.self){item in
+                    HStack{
+                        Text(LocalizedStringKey(item.label))
+                        Spacer()
+                        if(patientData.hasOtherVD == item.toBool()){
+                            Image(systemName: "checkmark")
+                                .foregroundColor(jsvsColor)
+                        }
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        patientData.hasOtherVD = item.toBool()
+                    }
+                }
+            }
+        }
+        .navigationTitle("OtherVDQuestionTitle")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
