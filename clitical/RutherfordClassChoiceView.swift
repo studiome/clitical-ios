@@ -19,7 +19,7 @@ struct RutherfordClassChoiceView: View {
                         Spacer()
                         if(patientData.rutherford == item){
                             Image(systemName: "checkmark")
-                                .foregroundColor(jsvsColor)
+                                .foregroundColor(.teal)
                         }
                     }
                     .contentShape(Rectangle())

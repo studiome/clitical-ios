@@ -19,7 +19,7 @@ struct WBCChoiceView: View {
                         Spacer()
                         if(patientData.hasAbnormalWBC == item.toBool()){
                             Image(systemName: "checkmark")
-                                .foregroundColor(jsvsColor)
+                                .foregroundColor(.teal)
                         }
                     }
                     .contentShape(Rectangle())

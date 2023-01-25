@@ -19,7 +19,7 @@ struct LocalInfectionChoiceView: View {
                         Spacer()
                         if(patientData.hasLocalInfection == item.toBool()){
                             Image(systemName: "checkmark")
-                                .foregroundColor(jsvsColor)
+                                .foregroundColor(.teal)
                         }
                     }
                     .contentShape(Rectangle())

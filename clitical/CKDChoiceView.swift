@@ -19,7 +19,7 @@ struct CKDChoiceView: View {
                         Spacer()
                         if(patientData.ckd == item){
                             Image(systemName: "checkmark")
-                                .foregroundColor(jsvsColor)
+                                .foregroundColor(.teal)
                         }
                     }
                     .contentShape(Rectangle())

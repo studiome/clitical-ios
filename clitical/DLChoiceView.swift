@@ -19,7 +19,7 @@ struct DLChoiceView: View {
                         Spacer()
                         if(patientData.hasDyslipidemia == item.toBool()){
                             Image(systemName: "checkmark")
-                                .foregroundColor(jsvsColor)
+                                .foregroundColor(.teal)
                         }
                     }
                     .contentShape(Rectangle())

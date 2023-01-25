@@ -19,7 +19,7 @@ struct BKLesionChoiceView: View {
                         Spacer()
                         if(patientData.hasBKLesion == item.toBool()){
                             Image(systemName: "checkmark")
-                                .foregroundColor(jsvsColor)
+                                .foregroundColor(.teal)
                         }
                     }
                     .contentShape(Rectangle())

@@ -19,7 +19,7 @@ struct MalignancyChoiceView: View {
                         Spacer()
                         if(patientData.malignantNeoplasm == item){
                             Image(systemName: "checkmark")
-                                .foregroundColor(jsvsColor)
+                                .foregroundColor(.teal)
                         }
                     }
                     .contentShape(Rectangle())

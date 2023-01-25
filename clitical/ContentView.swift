@@ -187,7 +187,7 @@ struct RootContentView: View {
                     
                 } message: {
                     Text(LocalizedStringKey(errorMessage))
-                }
+                }.accentColor(.teal)
                 Button("RESET"){
                     patientData.clear()
                 }.accentColor(.red)
@@ -202,7 +202,7 @@ struct RootContentView: View {
             }
             .navigationTitle("PatientDataTitle")
         }
-        .accentColor(jsvsColor)
+        .accentColor(.teal)
     }
 }
 

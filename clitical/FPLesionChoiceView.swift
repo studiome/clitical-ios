@@ -19,7 +19,7 @@ struct FPLesionChoiceView: View {
                         Spacer()
                         if(patientData.hasFPLesion == item.toBool()){
                             Image(systemName: "checkmark")
-                                .foregroundColor(jsvsColor)
+                                .foregroundColor(.teal)
                         }
                     }
                     .contentShape(Rectangle())

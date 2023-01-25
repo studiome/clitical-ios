@@ -19,7 +19,7 @@ struct AILesionChoiceView: View {
                         Spacer()
                         if(patientData.hasAILesion == item.toBool()){
                             Image(systemName: "checkmark")
-                                .foregroundColor(jsvsColor)
+                                .foregroundColor(.teal)
                         }
                     }
                     .contentShape(Rectangle())

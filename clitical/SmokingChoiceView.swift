@@ -19,7 +19,7 @@ struct SmokingChoiceView: View {
                         Spacer()
                         if(patientData.isSmoking == item.toBool()){
                             Image(systemName: "checkmark")
-                                .foregroundColor(jsvsColor)
+                                .foregroundColor(.teal)
                         }
                     }
                     .contentShape(Rectangle())

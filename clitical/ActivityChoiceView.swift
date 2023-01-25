@@ -19,7 +19,7 @@ struct ActivityChoiceView: View {
                         Spacer()
                         if(patientData.activity == item){
                             Image(systemName: "checkmark")
-                                .foregroundColor(jsvsColor)
+                                .foregroundColor(.teal)
                         }
                     }
                     .contentShape(Rectangle())

@@ -19,7 +19,7 @@ struct ContralateralChoiceView: View {
                         Spacer()
                         if(patientData.hasContraLateralLesion == item.toBool()){
                             Image(systemName: "checkmark")
-                                .foregroundColor(jsvsColor)
+                                .foregroundColor(.teal)
                         }
                     }
                     .contentShape(Rectangle())

@@ -19,7 +19,7 @@ struct SexChoiceViewBase: View {
                         Spacer()
                         if(patientData.sex == item){
                             Image(systemName: "checkmark")
-                                .foregroundColor(jsvsColor)
+                                .foregroundColor(.teal)
                         }
                     }
                     .contentShape(Rectangle())

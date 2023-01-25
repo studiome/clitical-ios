@@ -19,7 +19,7 @@ struct CADChoiceView: View {
                         Spacer()
                         if(patientData.hasCAD == item.toBool()){
                             Image(systemName: "checkmark")
-                                .foregroundColor(jsvsColor)
+                                .foregroundColor(.teal)
                         }
                     }
                     .contentShape(Rectangle())

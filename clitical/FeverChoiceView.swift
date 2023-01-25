@@ -19,7 +19,7 @@ struct FeverChoiceView: View {
                         Spacer()
                         if(patientData.hasFever == item.toBool()){
                             Image(systemName: "checkmark")
-                                .foregroundColor(jsvsColor)
+                                .foregroundColor(.teal)
                         }
                     }
                     .contentShape(Rectangle())

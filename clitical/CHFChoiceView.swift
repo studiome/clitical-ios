@@ -19,7 +19,7 @@ struct CHFChoiceViewBase: View {
                         Spacer()
                         if(patientData.hasCHF == item.toBool()){
                             Image(systemName: "checkmark")
-                                .foregroundColor(jsvsColor)
+                                .foregroundColor(.teal)
                         }
                     }
                     .contentShape(Rectangle())
