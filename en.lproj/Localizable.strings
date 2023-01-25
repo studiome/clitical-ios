@@ -54,6 +54,9 @@
 "LocalInfectionQuestionDescription" = "Absent or present: the wound was suppurative or showed at least two of the following findings: heat, erythema, lymphangitis, lymph node swelling, oedema, and pain";
 "RutherfordClassQuestionTitle" = "Rutherford Classification";
 "RutherfordClassQuestionDescription" = "classes 4, 5, or 6";
+"Rutherford4" = "Class 4";
+"Rutherford5" = "Class 5";
+"Rutherford6" = "Class 6";
 "FPLesionQuestionTitle" = "Femoro-Popliteal";
 "FPLesionQuestionDescription" = "Femoro-Popliteal present or absent";
 "BKLesionQuestionTitle" = "Infrapopliteal";

@@ -55,6 +55,9 @@
 "LocalInfectionQuestionDescription" = "あり：膿瘍あり、もしくは次から二つ [発熱・発赤・リンパ管炎・リンパ節腫脹・疼痛]";
 "RutherfordClassQuestionTitle" = "ラザフォード分類";
 "RutherfordClassQuestionDescription" = "class 4, 5, 6から選んでください。";
+"Rutherford4" = "Class 4";
+"Rutherford5" = "Class 5";
+"Rutherford6" = "Class 6";
 "FPLesionQuestionTitle" = "大腿膝窩領域";
 "FPLesionQuestionDescription" = "大腿膝窩領域病変の有無";
 "BKLesionQuestionTitle" = "膝下膝窩以下末梢領域";
