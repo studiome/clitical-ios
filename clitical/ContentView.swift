@@ -187,7 +187,10 @@ struct RootContentView: View {
                     
                 } message: {
                     Text(LocalizedStringKey(errorMessage))
-                }.buttonStyle(.borderless)
+                }
+                Button("RESET"){
+                    patientData.clear()
+                }.accentColor(.red)
             }
             .toolbar{
                 ToolbarItemGroup(placement: .keyboard){

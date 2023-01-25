@@ -81,3 +81,4 @@
 "ErrorTitle"  = "Error";
 "NumberFieldErrorMessage" = "Check Number Field. ";
 "IrrelevantLesionMessage" = "Check artery lesion. At least 1 lesion should be YES";
+"RESET" = "Reset data";

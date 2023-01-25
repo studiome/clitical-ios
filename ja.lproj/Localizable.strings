@@ -82,3 +82,4 @@
 "ErrorTitle"  = "エラー";
 "NumberFieldErrorMessage" = "数値入力を確認してください。";
 "IrrelevantLesionMessage" = "動脈病変部位の選択を確認してください。 少なくとも一つの部位が「あり」になる必要があります。";
+"RESET" = "データをリセット";

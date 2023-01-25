@@ -29,25 +29,52 @@ public class PatientData: ObservableObject {
     @Published public var rutherford: RutherfordClassification
     
     public init(){
-         sex = .female
-         activity = .ambulatory
-         hasCHF = false
-         hasCAD  = false
-         hasCVD = false
-         ckd = .normal
-         malignantNeoplasm = .no
-         hasAILesion = false
-         hasFPLesion = false
-         hasBKLesion = false
-         isUrgent = false
-         hasFever = false
-         hasAbnormalWBC = false
-         hasLocalInfection = false
-         hasDyslipidemia = false
-         isSmoking = false
-         hasContraLateralLesion = false
-         hasOtherVD = false
-         rutherford = .class4
+        sex = .female
+        alb = nil
+        activity = .ambulatory
+        hasCHF = false
+        hasCAD  = false
+        hasCVD = false
+        ckd = .normal
+        malignantNeoplasm = .no
+        hasAILesion = false
+        hasFPLesion = false
+        hasBKLesion = false
+        isUrgent = false
+        hasFever = false
+        hasAbnormalWBC = false
+        hasLocalInfection = false
+        hasDyslipidemia = false
+        isSmoking = false
+        hasContraLateralLesion = false
+        hasOtherVD = false
+        rutherford = .class4
+    }
+    
+    public func clear(){
+        sex = .female
+        age = nil
+        height = nil
+        weight = nil
+        alb = nil
+        activity = .ambulatory
+        hasCHF = false
+        hasCAD  = false
+        hasCVD = false
+        ckd = .normal
+        malignantNeoplasm = .no
+        hasAILesion = false
+        hasFPLesion = false
+        hasBKLesion = false
+        isUrgent = false
+        hasFever = false
+        hasAbnormalWBC = false
+        hasLocalInfection = false
+        hasDyslipidemia = false
+        isSmoking = false
+        hasContraLateralLesion = false
+        hasOtherVD = false
+        rutherford = .class4
     }
 }
 
