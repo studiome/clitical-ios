@@ -9,8 +9,28 @@ import SwiftUI
 import CLPatientData
 
 struct ContralateralChoiceView: View {
+    @EnvironmentObject var patientData: PatientData
     var body: some View {
-        Text("ContralateralQuestionDescription")
+        List{
+            Section(footer: Text("ContralateralQuestionDescription")){
+                ForEach(YesNo.allCases, id: \.self){item in
+                    HStack{
+                        Text(LocalizedStringKey(item.label))
+                        Spacer()
+                        if(patientData.hasContraLateralLesion == item.toBool()){
+                            Image(systemName: "checkmark")
+                                .foregroundColor(jsvsColor)
+                        }
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        patientData.hasContraLateralLesion = item.toBool()
+                    }
+                }
+            }
+        }
+        .navigationTitle("ContralateralQuestionTitle")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
