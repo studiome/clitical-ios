@@ -70,13 +70,13 @@ public enum CKD: CaseIterable{
     case g5D
 }
 
-public enum MalignantNeoplasm{
+public enum MalignantNeoplasm: CaseIterable{
     case no
     case pastHistory
     case underTreatment
 }
 
-public enum RutherfordClassification{
+public enum RutherfordClassification: CaseIterable{
     case class4
     case class5
     case class6
