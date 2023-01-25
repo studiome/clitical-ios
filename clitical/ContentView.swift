@@ -85,7 +85,7 @@ struct RootContentView: View {
                         HStack{
                             Text("RutherfordClassQuestionTitle")
                             Spacer()
-                            //Text(LocalizedStringKey(patientData.rutherford.label))
+                            Text(LocalizedStringKey(patientData.rutherford.label))
                         }
                     })
                 }
