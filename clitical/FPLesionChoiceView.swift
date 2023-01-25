@@ -9,8 +9,28 @@ import SwiftUI
 import CLPatientData
 
 struct FPLesionChoiceView: View {
+    @EnvironmentObject var patientData: PatientData
     var body: some View {
-        Text("FPLesionQuestionDescription")
+        List{
+            Section(footer: Text("FPLesionQuestionDescription")){
+                ForEach(YesNo.allCases, id: \.self){item in
+                    HStack{
+                        Text(LocalizedStringKey(item.label))
+                        Spacer()
+                        if(patientData.hasFPLesion == item.toBool()){
+                            Image(systemName: "checkmark")
+                                .foregroundColor(jsvsColor)
+                        }
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        patientData.hasFPLesion = item.toBool()
+                    }
+                }
+            }
+        }
+        .navigationTitle("FPLesionQuestionTitle")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
