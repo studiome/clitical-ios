@@ -9,8 +9,28 @@ import SwiftUI
 import CLPatientData
 
 struct DLChoiceView: View {
+    @EnvironmentObject var patientData: PatientData
     var body: some View {
-        Text("DLQuestionDescription")
+        List{
+            Section(footer: Text("DLQuestionDescription")){
+                ForEach(YesNo.allCases, id: \.self){item in
+                    HStack{
+                        Text(LocalizedStringKey(item.label))
+                        Spacer()
+                        if(patientData.hasDyslipidemia == item.toBool()){
+                            Image(systemName: "checkmark")
+                                .foregroundColor(jsvsColor)
+                        }
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        patientData.hasDyslipidemia = item.toBool()
+                    }
+                }
+            }
+        }
+        .navigationTitle("DLQuestionTitle")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
