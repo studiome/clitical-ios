@@ -9,8 +9,28 @@ import SwiftUI
 import CLPatientData
 
 struct LocalInfectionChoiceView: View {
+    @EnvironmentObject var patientData: PatientData
     var body: some View {
-        Text("LocalInfectionQuestionDescription")
+        List{
+            Section(footer: Text("LocalInfectionQuestionDescription")){
+                ForEach(YesNo.allCases, id: \.self){item in
+                    HStack{
+                        Text(LocalizedStringKey(item.label))
+                        Spacer()
+                        if(patientData.hasLocalInfection == item.toBool()){
+                            Image(systemName: "checkmark")
+                                .foregroundColor(jsvsColor)
+                        }
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        patientData.hasLocalInfection = item.toBool()
+                    }
+                }
+            }
+        }
+        .navigationTitle("LocalInfectionQuestionTitle")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
