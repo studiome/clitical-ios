@@ -161,7 +161,7 @@ struct RootContentView: View {
                         HStack{
                             Text("MalignancyQuestionTitle")
                             Spacer()
-                            //Text(LocalizedStringKey(patientData.malignantNeoplasm.label))
+                            Text(LocalizedStringKey(patientData.malignantNeoplasm.label))
                         }
                     })
                 }

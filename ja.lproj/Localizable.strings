@@ -71,6 +71,9 @@
 "DLQuestionDescription" = "あり: LDL-C > 140 [mg/dl]";
 "MalignancyQuestionTitle" = "悪性新生物";
 "MalignancyQuestionDescription" = "なし, 既往歴あり, 治療中から選んでください。";
+"MalignancyNo" = "なし";
+"MalignancyPast" = "既往歴あり";
+"MalignancyTreatment" = "治療中";
 "DONE" = "完了";
 "PredictRisks" = "リスク予測 ...";
 "ErrorTitle"  = "エラー";

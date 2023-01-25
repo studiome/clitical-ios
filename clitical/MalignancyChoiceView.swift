@@ -9,8 +9,38 @@ import SwiftUI
 import CLPatientData
 
 struct MalignancyChoiceView: View {
+    @EnvironmentObject var patientData: PatientData
     var body: some View {
-        Text("MalignancyQuestionDescription")
+        List{
+            Section(footer: Text("MalignancyQuestionDescription")){
+                ForEach(MalignantNeoplasm.allCases, id: \.self){item in
+                    HStack{
+                        Text(LocalizedStringKey(item.label))
+                        Spacer()
+                        if(patientData.malignantNeoplasm == item){
+                            Image(systemName: "checkmark")
+                                .foregroundColor(jsvsColor)
+                        }
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        patientData.malignantNeoplasm = item
+                    }
+                }
+            }
+        }
+        .navigationTitle("MalignancyQuestionTitle")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+extension MalignantNeoplasm{
+    var label: String{
+        switch self{
+        case .no: return "MalignancyNo"
+        case .pastHistory: return "MalignancyPast"
+        case .underTreatment: return "MalignancyTreatment"
+        }
     }
 }
 
