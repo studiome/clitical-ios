@@ -34,6 +34,9 @@
 "AlbQuestionDescription" = "Enter Albumin [g/dl].";
 "ActivityQuestionTitle" = "Activity";
 "ActivityQuestionDescription" = "Ambulatory: able to walk, Wheelchair: unable to walk but could stand on their own legs during bed to wheelchair transfer, Immobile: full assistance is indispensable";
+"ActivityAmbulatory" = "Ambulatory";
+"ActivityWheelchair" = "Wheelchair";
+"ActivityImmobile" = "Immobile";
 "UrgencydQuestionTitle" = "Urgent revascularization";
 "UrgencyQuestionDescription" = "Indication for revascularization, No: elective or Yes";
 "CKDQuestionTitle" = "Chronic kidney disease";

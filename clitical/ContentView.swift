@@ -40,7 +40,7 @@ struct RootContentView: View {
                         HStack{
                             Text("ActivityQuestionTitle")
                             Spacer()
-                            //Text(LocalizedStringKey(patientData.activity.label))
+                            Text(LocalizedStringKey(patientData.activity.label))
                         }
                     })
                 }

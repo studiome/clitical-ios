@@ -56,7 +56,7 @@ public enum Sex: CaseIterable{
     case female
 }
 
-public enum Activity{
+public enum Activity: CaseIterable{
     case ambulatory
     case wheelchair
     case immobile

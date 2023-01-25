@@ -35,6 +35,9 @@
 "AlbQuestionDescription" = "アルブミン値 [g/dl]を入力してください。";
 "ActivityQuestionTitle" = "ADL";
 "ActivityQuestionDescription" = "独歩, 車いす, 寝たきりから選んでください。";
+"ActivityAmbulatory" = "独歩";
+"ActivityWheelchair" = "車いす";
+"ActivityImmobile" = "寝たきり";
 "UrgencydQuestionTitle" = "緊急血行再建の適応";
 "UrgencyQuestionDescription" = "あり：緊急手術, なし：待機手術";
 "CKDQuestionTitle" = "慢性腎臓病";
