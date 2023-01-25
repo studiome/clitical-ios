@@ -41,6 +41,11 @@
 "UrgencyQuestionDescription" = "Indication for revascularization, No: elective or Yes";
 "CKDQuestionTitle" = "Chronic kidney disease";
 "CKDQuestionDescription" = "eGFR* [mL/min/1.73m\U00B2], No: 60 or higher, G3: 30-59, G4: 15-29, G5: below 15, G5D: below 15 in haemodialysis.\n *eGFR: the estimated glomerular filtration rate";
+"CKDNormal" = "Normal";
+"CKDG3" = "G3";
+"CKDG4" = "G4";
+"CKDG5" = "G5";
+"CKDG5D" = "G5D";
 "FeverQuestionTitle" = "Fever";
 "FeverQuestionDescription" = "Body temperature is higher than 38\U2103";
 "WBCQuestionTitle" = "Abnormal WBC";

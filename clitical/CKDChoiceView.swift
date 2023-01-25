@@ -9,8 +9,40 @@ import SwiftUI
 import CLPatientData
 
 struct CKDChoiceView: View {
+    @EnvironmentObject var patientData: PatientData
     var body: some View {
-        Text("CKDQuestionDescription")
+        List{
+            Section(footer: Text("CKDQuestionDescription")){
+                ForEach(CKD.allCases, id: \.self){item in
+                    HStack{
+                        Text(LocalizedStringKey(item.label))
+                        Spacer()
+                        if(patientData.ckd == item){
+                            Image(systemName: "checkmark")
+                                .foregroundColor(jsvsColor)
+                        }
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        patientData.ckd = item
+                    }
+                }
+            }
+        }
+        .navigationTitle("CKDQuestionTitle")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+extension CKD {
+    var label: String{
+        switch self{
+        case .normal: return "CKDNormal"
+        case .g3: return "CKDG3"
+        case .g4: return "CKDG4"
+        case .g5: return "CKDG5"
+        case .g5D: return "CKDG5D"
+        }
     }
 }
 

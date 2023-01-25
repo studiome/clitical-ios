@@ -57,7 +57,7 @@ struct RootContentView: View {
                         HStack{
                             Text("CKDQuestionTitle")
                             Spacer()
-                            //Text(LocalizedStringKey(patientData.ckd.label))
+                            Text(LocalizedStringKey(patientData.ckd.label))
                         }
                     })
                     NavigationLink(destination: FeverChoiceView(), label:{

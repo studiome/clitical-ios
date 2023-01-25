@@ -62,7 +62,7 @@ public enum Activity: CaseIterable{
     case immobile
 }
 
-public enum CKD{
+public enum CKD: CaseIterable{
     case normal
     case g3
     case g4
