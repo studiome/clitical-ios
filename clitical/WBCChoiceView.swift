@@ -9,8 +9,28 @@ import SwiftUI
 import CLPatientData
 
 struct WBCChoiceView: View {
+    @EnvironmentObject var patientData: PatientData
     var body: some View {
-        Text("WBCQuestionDescription")
+        List{
+            Section(footer: Text("WBCQuestionDescription")){
+                ForEach(YesNo.allCases, id: \.self){item in
+                    HStack{
+                        Text(LocalizedStringKey(item.label))
+                        Spacer()
+                        if(patientData.hasAbnormalWBC == item.toBool()){
+                            Image(systemName: "checkmark")
+                                .foregroundColor(jsvsColor)
+                        }
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        patientData.hasAbnormalWBC = item.toBool()
+                    }
+                }
+            }
+        }
+        .navigationTitle("WBCQuestionTitle")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
