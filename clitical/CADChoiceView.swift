@@ -9,9 +9,28 @@ import SwiftUI
 import CLPatientData
 
 struct CADChoiceView: View {
-    
+    @EnvironmentObject var patientData: PatientData
     var body: some View {
-        Text("CADQuestionDescription")
+        List{
+            Section(footer: Text("CADQuestionDescription")){
+                ForEach(YesNo.allCases, id: \.self){item in
+                    HStack{
+                        Text(LocalizedStringKey(item.label))
+                        Spacer()
+                        if(patientData.hasCAD == item.toBool()){
+                            Image(systemName: "checkmark")
+                                .foregroundColor(jsvsColor)
+                        }
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        patientData.hasCAD = item.toBool()
+                    }
+                }
+            }
+        }
+        .navigationTitle("CADQuestionTitle")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
