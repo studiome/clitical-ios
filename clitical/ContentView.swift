@@ -83,7 +83,7 @@ struct RootContentView: View {
                     })
                     NavigationLink(destination: RutherfordClassChoiceView(), label:{
                         HStack{
-                            Text("RutherfordQuestionTitle")
+                            Text("RutherfordClassQuestionTitle")
                             Spacer()
                             //Text(LocalizedStringKey(patientData.rutherford.label))
                         }
@@ -159,7 +159,7 @@ struct RootContentView: View {
                     })
                     NavigationLink(destination: MalignancyChoiceView(), label:{
                         HStack{
-                            Text("MalicnancyQuestionTitle")
+                            Text("MalignancyQuestionTitle")
                             Spacer()
                             //Text(LocalizedStringKey(patientData.malignantNeoplasm.label))
                         }
