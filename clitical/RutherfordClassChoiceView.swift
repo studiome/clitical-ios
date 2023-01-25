@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CLPatientData
 
 struct RutherfordClassChoiceView: View {
     var body: some View {
@@ -15,6 +16,7 @@ struct RutherfordClassChoiceView: View {
 
 struct RutherfordClassChoiceView_Previews: PreviewProvider {
     static var previews: some View {
-        RutherfordClassChoiceView()
+        RutherfordClassChoiceView().environmentObject(PatientData())
+            .environment(\.locale, .init(identifier: "ja"))
     }
 }

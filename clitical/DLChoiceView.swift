@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CLPatientData
 
 struct DLChoiceView: View {
     var body: some View {
@@ -15,6 +16,7 @@ struct DLChoiceView: View {
 
 struct DLChoiceView_Previews: PreviewProvider {
     static var previews: some View {
-        DLChoiceView()
+        DLChoiceView().environmentObject(PatientData())
+            .environment(\.locale, .init(identifier: "ja"))
     }
 }

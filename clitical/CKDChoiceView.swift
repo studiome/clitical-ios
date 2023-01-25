@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CLPatientData
 
 struct CKDChoiceView: View {
     var body: some View {
@@ -15,6 +16,7 @@ struct CKDChoiceView: View {
 
 struct CKDChoiceView_Previews: PreviewProvider {
     static var previews: some View {
-        CKDChoiceView()
+        CKDChoiceView().environmentObject(PatientData())
+            .environment(\.locale, .init(identifier: "ja"))
     }
 }

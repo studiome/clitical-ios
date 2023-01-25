@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CLPatientData
 
 struct BKLesionChoiceView: View {
     var body: some View {
@@ -15,6 +16,7 @@ struct BKLesionChoiceView: View {
 
 struct BKLesionChoiceView_Previews: PreviewProvider {
     static var previews: some View {
-        BKLesionChoiceView()
+        BKLesionChoiceView().environmentObject(PatientData())
+            .environment(\.locale, .init(identifier: "ja"))
     }
 }

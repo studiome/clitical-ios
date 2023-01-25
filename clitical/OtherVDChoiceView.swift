@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CLPatientData
 
 struct OtherVDChoiceView: View {
     var body: some View {
@@ -15,6 +16,7 @@ struct OtherVDChoiceView: View {
 
 struct OthersChoiceView_Previews: PreviewProvider {
     static var previews: some View {
-        OtherVDChoiceView()
+        OtherVDChoiceView().environmentObject(PatientData())
+            .environment(\.locale, .init(identifier: "ja"))
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CLPatientData
 
 struct MalignancyChoiceView: View {
     var body: some View {
@@ -15,6 +16,7 @@ struct MalignancyChoiceView: View {
 
 struct MalignancyChoiceView_Previews: PreviewProvider {
     static var previews: some View {
-        MalignancyChoiceView()
+        MalignancyChoiceView().environmentObject(PatientData())
+            .environment(\.locale, .init(identifier: "ja"))
     }
 }

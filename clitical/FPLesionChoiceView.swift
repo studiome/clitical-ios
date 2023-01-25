@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CLPatientData
 
 struct FPLesionChoiceView: View {
     var body: some View {
@@ -15,6 +16,7 @@ struct FPLesionChoiceView: View {
 
 struct FPLesionChoiceView_Previews: PreviewProvider {
     static var previews: some View {
-        FPLesionChoiceView()
+        FPLesionChoiceView().environmentObject(PatientData())
+            .environment(\.locale, .init(identifier: "ja"))
     }
 }
