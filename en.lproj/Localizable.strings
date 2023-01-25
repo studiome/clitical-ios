@@ -35,7 +35,7 @@
 "ActivityQuestionTitle" = "Activity";
 "ActivityQuestionDescription" = "Ambulatory: able to walk, Wheelchair: unable to walk but could stand on their own legs during bed to wheelchair transfer, Immobile: full assistance is indispensable";
 "UrgencydQuestionTitle" = "Urgent revascularization";
-"UrgencydQuestionDescription" = "Indication for revascularization, No: elective or Yes";
+"UrgencyQuestionDescription" = "Indication for revascularization, No: elective or Yes";
 "CKDQuestionTitle" = "Chronic kidney disease";
 "CKDQuestionDescription" = "eGFR* [mL/min/1.73m\U00B2], No: 60 or higher, G3: 30-59, G4: 15-29, G5: below 15, G5D: below 15 in haemodialysis.\n *eGFR: the estimated glomerular filtration rate";
 "FeverQuestionTitle" = "Fever";
@@ -43,7 +43,7 @@
 "WBCQuestionTitle" = "Abnormal WBC";
 "WBCQuestionDescription" = "White blood cell count: abnormal: > 8000 [/\U00B5l] or absent";
 "LocalInfectionQuestionTitle" = "Local Infection";
-"LocalInfectionQuestionDescription" = "absent or present: the wound was suppurative or showed at least two of the following findings: heat, erythema, lymphangitis, lymph node swelling, oedema, and pain";
+"LocalInfectionQuestionDescription" = "Absent or present: the wound was suppurative or showed at least two of the following findings: heat, erythema, lymphangitis, lymph node swelling, oedema, and pain";
 "RutherfordClassQuestionTitle" = "Rutherford Classification";
 "RutherfordClassQuestionDescription" = "classes 4, 5, or 6";
 "FPLesionQuestionTitle" = "Femoro-Popliteal";
