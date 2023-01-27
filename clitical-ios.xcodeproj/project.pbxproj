@@ -37,6 +37,7 @@
 		212A1FE02951B38000508396 /* cliticalUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212A1FDF2951B38000508396 /* cliticalUITests.swift */; };
 		212A1FE22951B38000508396 /* cliticalUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212A1FE12951B38000508396 /* cliticalUITestsLaunchTests.swift */; };
 		21365624297F65E300BFDAFD /* AgeFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21365623297F65E300BFDAFD /* AgeFormView.swift */; };
+		218C5C232983BDEA006A4592 /* PredictedRiskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218C5C222983BDEA006A4592 /* PredictedRiskView.swift */; };
 		2196DF77296D62D900A9FF81 /* SexChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2196DF76296D62D900A9FF81 /* SexChoiceView.swift */; };
 		2196DF7A296DC20600A9FF81 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2196DF7C296DC20600A9FF81 /* Localizable.strings */; };
 		21C78F8E2951F4CF0054A045 /* CLPatientData in Frameworks */ = {isa = PBXBuildFile; productRef = 21C78F8D2951F4CF0054A045 /* CLPatientData */; };
@@ -95,6 +96,7 @@
 		212A1FDF2951B38000508396 /* cliticalUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cliticalUITests.swift; sourceTree = "<group>"; };
 		212A1FE12951B38000508396 /* cliticalUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cliticalUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		21365623297F65E300BFDAFD /* AgeFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeFormView.swift; sourceTree = "<group>"; };
+		218C5C222983BDEA006A4592 /* PredictedRiskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictedRiskView.swift; sourceTree = "<group>"; };
 		2196DF76296D62D900A9FF81 /* SexChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SexChoiceView.swift; sourceTree = "<group>"; };
 		2196DF7D296DC21400A9FF81 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		21C78F8B2951F4180054A045 /* CLPatientData */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CLPatientData; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 				2115F426297FBF350057C89C /* SmokingChoiceView.swift */,
 				21CA4E5F296E293900040C50 /* CHFChoiceView.swift */,
 				212A1FC62951B38000508396 /* ContentView.swift */,
+				218C5C222983BDEA006A4592 /* PredictedRiskView.swift */,
 				2115F42A298005270057C89C /* QuestionError.swift */,
 				2115F428297FC8AC0057C89C /* AILesionChoiceView.swift */,
 				2126FE18297D406300A23B18 /* WeightFormView.swift */,
@@ -366,6 +369,7 @@
 				2115F449298013180057C89C /* RutherfordClassChoiceView.swift in Sources */,
 				2115F441298012D60057C89C /* LocalInfectionChoiceView.swift in Sources */,
 				2115F427297FBF350057C89C /* SmokingChoiceView.swift in Sources */,
+				218C5C232983BDEA006A4592 /* PredictedRiskView.swift in Sources */,
 				2126FE19297D406300A23B18 /* WeightFormView.swift in Sources */,
 				2196DF77296D62D900A9FF81 /* SexChoiceView.swift in Sources */,
 				21365624297F65E300BFDAFD /* AgeFormView.swift in Sources */,
