@@ -17,59 +17,98 @@ struct PredictedRiskView: View {
             List{
                 Section(header: Text("GNRI")){
                     VStack{
-                        Text("GeriatricNutritionalRiskIndex").padding(4.0)
+                        HStack{
+                            Image(systemName: "flame")
+                            Text("GeriatricNutritionalRiskIndex")
+                                .padding(4.0)
+                                .font(.headline)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }.foregroundColor(.red)
                         if(risk!.gnri == nil){
-                            Text("---").padding(8.0)
+                            Text("---")
                         }else{
                             Text("\(risk!.gnri!, specifier: "%.1f")")
-                                .padding(8.0)
-                            
+                                .font(.title)
                         }
                         if(risk!.gnriRisk == nil){
-                            Text("---").padding(8.0)
+                            Text("---")
                         }else{
-                            Text(LocalizedStringKey(risk!.gnriRisk!.label)).padding(8.0)
+                            Text(LocalizedStringKey(risk!.gnriRisk!.label))
+                                .font(.title2)
                         }
                     }.frame(maxWidth: .infinity, alignment: .center)
                 }
-                Section(header: Text("30DayPrediction")){
+                Section(header: Text("30DayPrediction"), footer:Text("MALEDescription").font(.caption)){
                     VStack{
-                        Text("30DDeathOrAmputation").padding(4.0)
+                        HStack{
+                            Image(systemName: "staroflife")
+                            Text("30DDeathOrAmputation")
+                                .padding(4.0)
+                                .font(.headline)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }.foregroundColor(.blue)
                         if(risk!.predicted30DDeathOrAmputation == nil){
-                            Text("---").padding(8.0)
+                            Text("---")
                         }else{
-                            Text("\(risk!.predicted30DDeathOrAmputation! * 100.0, specifier: "%.1f")%").padding(8.0)
+                            Text("\(risk!.predicted30DDeathOrAmputation! * 100.0, specifier: "%.1f")%")
+                                .font(.title)
                         }
                     }.frame(maxWidth: .infinity, alignment: .center)
                     VStack{
-                        Text("30DMALE").padding(4.0)
+                        HStack{
+                            Image(systemName: "bed.double")
+                            Text("30DMALE")
+                                .padding(4.0)
+                                .font(.headline)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }.foregroundColor(.blue)
                         if(risk!.predicted30DMALE == nil){
-                            Text("---").padding(8.0)
+                            Text("---")
                         }else{
-                            Text("\(risk!.predicted30DMALE! * 100.0, specifier: "%.1f")%").padding(8.0)
+                            Text("\(risk!.predicted30DMALE! * 100.0, specifier: "%.1f")%").font(.title)
                         }
                     }.frame(maxWidth: .infinity, alignment: .center)
                 }
                 Section(header: Text("2YearPrediction")){
                     VStack{
-                        Text("2YOS").padding(4.0)
+                        HStack{
+                            Image(systemName: "staroflife")
+                            Text("2YOS")
+                                .padding(4.0)
+                                .font(.headline)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }.foregroundColor(.blue)
                         if(risk!.predicted2YOS == nil){
-                            Text("---").padding(8.0)
+                            Text("---")
                         }else{
-                            Text("\(risk!.predicted2YOS!*100.0, specifier: "%.0f")%").padding(8.0)
+                            Text("\(risk!.predicted2YOS!*100.0, specifier: "%.0f")%")
+                                .font(.title)
                         }
                         if(risk!.predicted2YOSRisk == nil){
-                            Text("---").padding(8.0)
+                            Text("---")
                         }else{
-                            Text(LocalizedStringKey(risk!.predicted2YOSRisk!.label)).padding(8.0)
+                            Text(LocalizedStringKey(risk!.predicted2YOSRisk!.label))
+                                .font(.title2)
                         }
                     }.frame(maxWidth: .infinity, alignment: .center)
                     VStack{
-                        Text("2YAFS").padding(4.0)
+                        HStack{
+                            Image(systemName: "figure.walk")
+                            Text("2YAFS")
+                                .padding(4.0)
+                                .font(.headline)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }.foregroundColor(.blue)
                         if(risk!.predicted2YAFS == nil){
-                            Text("---").padding(8.0)
+                            Text("---")
                         }else{
-                            Text("\(risk!.predicted2YAFS!*100.0, specifier: "%.0f")%").padding(8.0)
+                            Text("\(risk!.predicted2YAFS!*100.0, specifier: "%.0f")%")
+                                .font(.title)
                         }
                     }.frame(maxWidth: .infinity, alignment: .center)
                 }
@@ -101,7 +140,7 @@ extension TwoYearOSRisk{
 
 struct PredictedRiskView_Previews: PreviewProvider {
     static var previews: some View {
-        PredictedRiskView(risk:nil)
+        PredictedRiskView(risk:nil).environment(\.locale, .init(identifier: "ja"))
         PredictedRiskView(risk: PatientRisk(
             of: createTestData(patientData: PatientData())))
         .environment(\.locale, .init(identifier: "ja"));

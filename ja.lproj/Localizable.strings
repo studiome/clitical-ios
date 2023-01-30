@@ -97,7 +97,7 @@
 "2YearPrediction" = "術後2年リスク予測";
 "GeriatricNutritionalRiskIndex" = "Geriatric Nutritional Risk Index";
 "30DDeathOrAmputation" = "予測30日死亡・大切断率";
-"MALEDescriptin" = "主要有害下肢事故（大切断/新たな急性ないし慢性下肢虚血）";
+"MALEDescription" = "MALE (Major Adverse Limb Events): 主要有害下肢事故（大切断/新たな急性ないし慢性下肢虚血）";
 "30DMALE" = "予測30日MALE発生率";
 "2YOS" = "予測2年OS(全生存率)";
 "2YAFS" = "予測2年AFS(大切断回避生存率)";

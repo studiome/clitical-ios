@@ -96,8 +96,8 @@
 "2YearPrediction" = "2-year Risk Predction";
 "GeriatricNutritionalRiskIndex" = "Geriatric Nutritional Risk Index";
 "30DayPrediction" = "30-day Risk Prediction";
-"30DDeathOrAmputation" = "Predicted risk of major amputation and/or death 30 days after revascularization";
-"MALEDescriptin" = "major adverse limb events; above-ankle amputation of the index limb or major reintervention (new bypass graft, jump/ interposition graft revision, or thrombectomy/thrombolysis)";
-"30DMALE" = "Predicted risk of  major adverse limb event 30 days after revascularization";
-"2YOS" = "Predicted 2 year Overall Survival post-revascularisation";
-"2YAFS" = "Predicted 2 year Amputation Free Survival post-revascularisation";
+"30DDeathOrAmputation" = "Predicted risk of 30-day major amputation and/or death";
+"MALEDescription" = "MALE (Major Adverse Limb Events): above-ankle amputation of the index limb or major reintervention (new bypass graft, jump/ interposition graft revision, or thrombectomy/thrombolysis)";
+"30DMALE" = "Predicted risk of 30-day MALE";
+"2YOS" = "Predicted 2-year Overall Survival";
+"2YAFS" = "Predicted 2-year Amputation Free Survival";
