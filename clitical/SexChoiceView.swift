@@ -8,7 +8,7 @@
 import SwiftUI
 import CLPatientData
 
-struct SexChoiceViewBase: View {
+struct SexChoiceView: View {
     @EnvironmentObject var patientData: PatientData
     var body: some View {
         List{
@@ -31,16 +31,6 @@ struct SexChoiceViewBase: View {
         }
         .navigationTitle("SexQuestionTitle")
         .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
-struct SexChoiceView: View {
-    var body: some View {
-        if #available(iOS 15, *){
-            SexChoiceViewBase()
-        } else {
-            SexChoiceViewBase().listStyle(.grouped)
-        }
     }
 }
 
