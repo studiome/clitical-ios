@@ -113,6 +113,8 @@ struct PredictedRiskView: View {
                     }.frame(maxWidth: .infinity, alignment: .center)
                 }
             }
+            .navigationTitle("RiskViewTitle")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

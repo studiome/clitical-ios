@@ -101,3 +101,4 @@
 "30DMALE" = "Predicted risk of 30-day MALE";
 "2YOS" = "Predicted 2-year Overall Survival";
 "2YAFS" = "Predicted 2-year Amputation Free Survival";
+"RiskViewTitle"  = "Predicted Risks";
