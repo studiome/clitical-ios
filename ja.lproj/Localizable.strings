@@ -79,6 +79,13 @@
 "MalignancyTreatment" = "治療中";
 "DONE" = "完了";
 "PredictRisks" = "リスク予測 ...";
+"GNRINoRisk" = "リスクなし";
+"GNRILowRisk" = "軽度栄養リスク";
+"GNRIModerateRisk" = "中等度栄養リスク";
+"GNRIMajorRisk" = "高度栄養リスク";
+"2YOSLowRisk" = "低リスク";
+"2YOSMediumRisk" = "中等度リスク";
+"2YOSHighRisk" = "高リスク";
 "ErrorTitle"  = "エラー";
 "NumberFieldErrorMessage" = "数値入力を確認してください。";
 "IrrelevantLesionMessage" = "動脈病変部位の選択を確認してください。 少なくとも一つの部位が「あり」になる必要があります。";
