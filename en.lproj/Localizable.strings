@@ -89,4 +89,15 @@
 "NumberFieldErrorMessage" = "Check Number Field. ";
 "IrrelevantLesionMessage" = "Check artery lesion. At least 1 lesion should be YES";
 "RESET" = "Reset data";
-
+"AnErrorOccured" = "Something wrong occured. Check Patient Data.";
+"DefaultError" = "Unable to calculate risk. Check Patient Data.";
+"GNRI" = "GNRI";
+"30DayPrediction" = "30-Day Risk Prediction";
+"2YearPrediction" = "2-year Risk Predction";
+"GeriatricNutritionalRiskIndex" = "Geriatric Nutritional Risk Index";
+"30DayPrediction" = "30-day Risk Prediction";
+"30DDeathOrAmputation" = "Predicted risk of major amputation and/or death 30 days after revascularization";
+"MALEDescriptin" = "major adverse limb events; above-ankle amputation of the index limb or major reintervention (new bypass graft, jump/ interposition graft revision, or thrombectomy/thrombolysis)";
+"30DMALE" = "Predicted risk of  major adverse limb event 30 days after revascularization";
+"2YOS" = "Predicted 2 year Overall Survival post-revascularisation";
+"2YAFS" = "Predicted 2 year Amputation Free Survival post-revascularisation";

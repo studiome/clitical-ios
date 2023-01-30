@@ -11,19 +11,68 @@ import CLPatientData
 struct PredictedRiskView: View {
     @State var risk: PatientRisk?
     var body: some View {
-        List{
-            Section(header: Text("GNRI")){
-                Text(String(format: "%.1f", risk!.gnri!))
-                Text(LocalizedStringKey(risk!.gnriRisk!.label))
-            }
-            Section(header: Text("30 Day")){
-                Text(String(format: "%.1f", risk!.predicted30DDeathOrAmputation! * 100.0))
-                Text(String(format: "%.1f", risk!.predicted30DMALE! * 100.0))
-            }
-            Section(header: Text("2 Year")){
-                Text(String(format: "%.0f", risk!.predicted2YOS! * 100.0))
-                Text(LocalizedStringKey(risk!.predicted2YOSRisk!.label))
-                Text(String(format: "%.0f", risk!.predicted2YAFS! * 100.0))
+        if (risk == nil){
+            Text("AnErrorOccured")
+        }else{
+            List{
+                Section(header: Text("GNRI")){
+                    VStack{
+                        Text("GeriatricNutritionalRiskIndex").padding(4.0)
+                        if(risk!.gnri == nil){
+                            Text("---").padding(8.0)
+                        }else{
+                            Text("\(risk!.gnri!, specifier: "%.1f")")
+                                .padding(8.0)
+                            
+                        }
+                        if(risk!.gnriRisk == nil){
+                            Text("---").padding(8.0)
+                        }else{
+                            Text(LocalizedStringKey(risk!.gnriRisk!.label)).padding(8.0)
+                        }
+                    }.frame(maxWidth: .infinity, alignment: .center)
+                }
+                Section(header: Text("30DayPrediction")){
+                    VStack{
+                        Text("30DDeathOrAmputation").padding(4.0)
+                        if(risk!.predicted30DDeathOrAmputation == nil){
+                            Text("---").padding(8.0)
+                        }else{
+                            Text("\(risk!.predicted30DDeathOrAmputation! * 100.0, specifier: "%.1f")%").padding(8.0)
+                        }
+                    }.frame(maxWidth: .infinity, alignment: .center)
+                    VStack{
+                        Text("30DMALE").padding(4.0)
+                        if(risk!.predicted30DMALE == nil){
+                            Text("---").padding(8.0)
+                        }else{
+                            Text("\(risk!.predicted30DMALE! * 100.0, specifier: "%.1f")%").padding(8.0)
+                        }
+                    }.frame(maxWidth: .infinity, alignment: .center)
+                }
+                Section(header: Text("2YearPrediction")){
+                    VStack{
+                        Text("2YOS").padding(4.0)
+                        if(risk!.predicted2YOS == nil){
+                            Text("---").padding(8.0)
+                        }else{
+                            Text("\(risk!.predicted2YOS!*100.0, specifier: "%.0f")%").padding(8.0)
+                        }
+                        if(risk!.predicted2YOSRisk == nil){
+                            Text("---").padding(8.0)
+                        }else{
+                            Text(LocalizedStringKey(risk!.predicted2YOSRisk!.label)).padding(8.0)
+                        }
+                    }.frame(maxWidth: .infinity, alignment: .center)
+                    VStack{
+                        Text("2YAFS").padding(4.0)
+                        if(risk!.predicted2YAFS == nil){
+                            Text("---").padding(8.0)
+                        }else{
+                            Text("\(risk!.predicted2YAFS!*100.0, specifier: "%.0f")%").padding(8.0)
+                        }
+                    }.frame(maxWidth: .infinity, alignment: .center)
+                }
             }
         }
     }
@@ -52,6 +101,7 @@ extension TwoYearOSRisk{
 
 struct PredictedRiskView_Previews: PreviewProvider {
     static var previews: some View {
+        PredictedRiskView(risk:nil)
         PredictedRiskView(risk: PatientRisk(
             of: createTestData(patientData: PatientData())))
         .environment(\.locale, .init(identifier: "ja"));

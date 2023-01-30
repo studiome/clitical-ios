@@ -196,6 +196,7 @@ struct RootContentView: View {
                             risk!.predicted2YAFS == nil){
                             riskCalculated = false
                             failure = true
+                            errorMessage  = QuestionError.DefaultError.message
                             return
                         }
                         riskCalculated = true

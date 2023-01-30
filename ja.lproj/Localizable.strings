@@ -90,3 +90,14 @@
 "NumberFieldErrorMessage" = "数値入力を確認してください。";
 "IrrelevantLesionMessage" = "動脈病変部位の選択を確認してください。 少なくとも一つの部位が「あり」になる必要があります。";
 "RESET" = "データをリセット";
+"AnErrorOccured" = "適切な予測リスクが算出されませんでした。患者データを確認してください。";
+"DefaultError" = "リスク予測ができませんでした。各入力を確認してください。";
+"GNRI" = "栄養リスク指標";
+"30DayPrediction" = "術後30日リスク予測";
+"2YearPrediction" = "術後2年リスク予測";
+"GeriatricNutritionalRiskIndex" = "Geriatric Nutritional Risk Index";
+"30DDeathOrAmputation" = "予測30日死亡・大切断率";
+"MALEDescriptin" = "主要有害下肢事故（大切断/新たな急性ないし慢性下肢虚血）";
+"30DMALE" = "予測30日MALE発生率";
+"2YOS" = "予測2年OS(全生存率)";
+"2YAFS" = "予測2年AFS(大切断回避生存率)";
