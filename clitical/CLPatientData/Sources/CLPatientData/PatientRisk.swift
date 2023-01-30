@@ -36,18 +36,30 @@ public struct PatientRisk {
         return calcGNRI()
     }
     
-    public lazy var gnriRisk: GNRIRisk? = classifyGNRI()
+    public  var gnriRisk: GNRIRisk? {
+        return classifyGNRI()
+    }
     
-    public lazy var predicted30DDeathOrAmputation: Double? = calcPredicted30DDA()
+    public  var predicted30DDeathOrAmputation: Double?{
+        return  calcPredicted30DDA()
+    }
     // 0.0 ... 1.0
     
-    public lazy var predicted30DMALE: Double? = calcPredicted30DMALE()// 0.0 ... 1.0
+    public  var predicted30DMALE: Double? {
+        return calcPredicted30DMALE()
+    }// 0.0 ... 1.0
     
-    public lazy var predicted2YOS: Double? = calcPredicted2YOS()// 0.0 ... 1.0
+    public  var predicted2YOS: Double? {
+        return calcPredicted2YOS()
+    } // 0.0 ... 1.0
     
-    public lazy var predicted2YOSRisk: TwoYearOSRisk? = classifyOS()
+    public  var predicted2YOSRisk: TwoYearOSRisk? {
+        return classifyOS()
+    }
     
-    public lazy var predicted2YAFS: Double? = calcPredicted2YAFS() // 0.0 ... 1.0
+    public  var predicted2YAFS: Double? {
+        return calcPredicted2YAFS()
+    }// 0.0 ... 1.0
     
     var patientData: PatientData
     
@@ -76,7 +88,7 @@ public struct PatientRisk {
         return 14.89 * alb + 41.7 * wi
     }
     
-    private mutating func calcPredicted30DDA() -> Double? {
+    private  func calcPredicted30DDA() -> Double? {
         guard let gr = self.gnriRisk else{
             return nil
         }
@@ -160,7 +172,7 @@ public struct PatientRisk {
         return 1.0 / (1.0 + exp(sigma))
     }
     
-    private mutating func calcPredicted30DMALE() -> Double? {
+    private  func calcPredicted30DMALE() -> Double? {
         guard  let age = self.patientData.age else{
             return nil
         }
@@ -292,7 +304,7 @@ public struct PatientRisk {
         return 1.0 / (1.0 + exp(sigma))
     }
     
-    private mutating func calcPredicted2YOS() -> Double? {
+    private  func calcPredicted2YOS() -> Double? {
         guard  let age = self.patientData.age else{
             return nil
         }
@@ -400,7 +412,7 @@ public struct PatientRisk {
         return pow(twoYearOSH0Coeff, exp(sigma))
     }
     
-    private mutating func calcPredicted2YAFS()->Double? {
+    private  func calcPredicted2YAFS()->Double? {
         guard  let age = self.patientData.age else{
             return nil
         }
@@ -549,7 +561,7 @@ public struct PatientRisk {
         }
     }
     
-    private mutating func classifyOS() -> TwoYearOSRisk? {
+    private  func classifyOS() -> TwoYearOSRisk? {
         guard let os = self.predicted2YOS else {
             return nil
         }
