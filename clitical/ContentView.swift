@@ -225,9 +225,8 @@ struct RootContentView: View {
                 }
             }
             .listStyle(.insetGrouped)
-            .accentColor(.teal)
         }
-        
+        .accentColor(.teal)
     }
 }
 
