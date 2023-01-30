@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
+import CLPatientData
 
 @main
-struct cliticalApp: App {
+struct CliticalApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootContentView().environmentObject(PatientData())
         }
     }
 }
