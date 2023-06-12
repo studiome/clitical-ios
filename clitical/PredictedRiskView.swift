@@ -15,30 +15,7 @@ struct PredictedRiskView: View {
             Text("AnErrorOccured")
         }else{
             List{
-                Section(header: Text("GNRI")){
-                    VStack{
-                        HStack{
-                            Image(systemName: "flame")
-                            Text("GeriatricNutritionalRiskIndex")
-                                .padding(4.0)
-                                .font(.headline)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }.foregroundColor(.red)
-                        if(risk!.gnri == nil){
-                            Text("---")
-                        }else{
-                            Text("\(risk!.gnri!, specifier: "%.1f")")
-                                .font(.title)
-                        }
-                        if(risk!.gnriRisk == nil){
-                            Text("---")
-                        }else{
-                            Text(LocalizedStringKey(risk!.gnriRisk!.label))
-                                .font(.title2)
-                        }
-                    }.frame(maxWidth: .infinity, alignment: .center)
-                }
+                
                 Section(header: Text("30DayPrediction"), footer:Text("MALEDescription").font(.caption)){
                     VStack{
                         HStack{
@@ -112,6 +89,30 @@ struct PredictedRiskView: View {
                         }
                     }.frame(maxWidth: .infinity, alignment: .center)
                 }
+                Section(header: Text("GNRI")){
+                    VStack{
+                        HStack{
+                            Image(systemName: "flame")
+                            Text("GeriatricNutritionalRiskIndex")
+                                .padding(4.0)
+                                .font(.headline)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }.foregroundColor(.red)
+                        if(risk!.gnri == nil){
+                            Text("---")
+                        }else{
+                            Text("\(risk!.gnri!, specifier: "%.1f")")
+                                .font(.title)
+                        }
+                        if(risk!.gnriRisk == nil){
+                            Text("---")
+                        }else{
+                            Text(LocalizedStringKey(risk!.gnriRisk!.label))
+                                .font(.title2)
+                        }
+                    }.frame(maxWidth: .infinity, alignment: .center)
+            }
             }
             .navigationTitle("RiskViewTitle")
             .navigationBarTitleDisplayMode(.inline)
