@@ -14,7 +14,7 @@ final class PatientRiskTests: XCTestCase {
     
     func testInit() throws {
         let pd = PatientData()
-        var risk = PatientRisk(of: pd)
+        let risk = PatientRisk(of: pd)
         XCTAssertNil(risk.gnri)
         XCTAssertNil(risk.gnriRisk)
         XCTAssertNil(risk.predicted30DDeathOrAmputation)
@@ -27,7 +27,7 @@ final class PatientRiskTests: XCTestCase {
     func testErrorCase() throws{
         let pd = PatientData()
         pd.height = 0.0
-        var risk = PatientRisk(of: pd)
+        let risk = PatientRisk(of: pd)
         XCTAssertNil(risk.gnri)
         XCTAssertNil(risk.gnriRisk)
         XCTAssertNil(risk.predicted30DDeathOrAmputation)
@@ -46,7 +46,7 @@ final class PatientRiskTests: XCTestCase {
         pd.hasAILesion = true
         //Others are all false
         
-        var risk = PatientRisk(of: pd)
+        let risk = PatientRisk(of: pd)
         XCTAssertEqual(String(format: "%.1f", risk.gnri!), "101.3")
         XCTAssertEqual(risk.gnriRisk, .noRisk)
         XCTAssertEqual(String(format: "%.3f", risk.predicted30DDeathOrAmputation!), "0.013")
@@ -82,7 +82,7 @@ final class PatientRiskTests: XCTestCase {
         pd.hasOtherVD = true
         pd.rutherford = .class4
         
-        var risk = PatientRisk(of: pd)
+        let risk = PatientRisk(of: pd)
         XCTAssertEqual(String(format: "%.1f", risk.gnri!), "101.3")
         XCTAssertEqual(risk.gnriRisk, .noRisk)
         XCTAssertEqual(String(format: "%.3f", risk.predicted30DDeathOrAmputation!), "0.088")
@@ -118,7 +118,7 @@ final class PatientRiskTests: XCTestCase {
         pd.hasOtherVD = false
         pd.rutherford = .class5
         
-        var risk = PatientRisk(of: pd)
+        let risk = PatientRisk(of: pd)
         XCTAssertEqual(String(format: "%.1f", risk.gnri!), "93.8")
         XCTAssertEqual(risk.gnriRisk, .low)
         XCTAssertEqual(String(format: "%.3f", risk.predicted30DDeathOrAmputation!), "0.170")
@@ -154,7 +154,7 @@ final class PatientRiskTests: XCTestCase {
         pd.hasOtherVD = false
         pd.rutherford = .class5
         
-        var risk = PatientRisk(of: pd)
+        let risk = PatientRisk(of: pd)
         XCTAssertEqual(String(format: "%.1f", risk.gnri!), "86.2")
         XCTAssertEqual(risk.gnriRisk!, .moderate)
         XCTAssertEqual(String(format: "%.3f", risk.predicted30DDeathOrAmputation!), "0.100")
@@ -190,7 +190,7 @@ final class PatientRiskTests: XCTestCase {
         pd.hasOtherVD = true
         pd.rutherford = .class6
         
-        var risk = PatientRisk(of: pd)
+        let risk = PatientRisk(of: pd)
         XCTAssertEqual(String(format: "%.1f", risk.gnri!), "71.3")
         XCTAssertEqual(risk.gnriRisk!, .major)
         XCTAssertEqual(String(format: "%.3f", risk.predicted30DDeathOrAmputation!), "0.370")
