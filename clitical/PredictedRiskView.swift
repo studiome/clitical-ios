@@ -112,7 +112,7 @@ struct PredictedRiskView: View {
                                 .font(.title2)
                         }
                     }.frame(maxWidth: .infinity, alignment: .center)
-            }
+                }
             }
             .navigationTitle("RiskViewTitle")
             .navigationBarTitleDisplayMode(.inline)
