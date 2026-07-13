@@ -10,9 +10,16 @@ import CLPatientData
 
 @main
 struct CliticalApp: App {
+    @StateObject private var localization = LocalizationManager()
+    @StateObject private var patientData = PatientData()
+
     var body: some Scene {
         WindowGroup {
-            RootContentView().environmentObject(PatientData())
+            MainTabView()
+                .environmentObject(patientData)
+                .environmentObject(localization)
+                .environment(\.locale, localization.locale)
+                .id(localization.language)
         }
     }
 }

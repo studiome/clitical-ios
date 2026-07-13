@@ -102,3 +102,12 @@
 "2YOS" = "Predicted 2-year Overall Survival";
 "2YAFS" = "Predicted 2-year Amputation Free Survival";
 "RiskViewTitle"  = "Predicted Risks";
+
+/* Bottom tab menu */
+"RiskCalculationTab" = "Risk Assessment";
+"Language" = "Language";
+"References" = "References";
+"About" = "About";
+"AppTerms" = "Terms of service";
+"TapToOpenLink" = "Tap to open link.";
+"AppLegalese" = "2022 Kazuhiro Miyahara, JSVS, JCLIMB";
