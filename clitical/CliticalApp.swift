@@ -19,7 +19,6 @@ struct CliticalApp: App {
                 .environmentObject(patientData)
                 .environmentObject(localization)
                 .environment(\.locale, localization.locale)
-                .id(localization.language)
         }
     }
 }

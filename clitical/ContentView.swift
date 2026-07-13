@@ -115,20 +115,34 @@ struct RootContentView: View {
                         patientData.clear()
                     }
                     .tint(.red)
+                    // Hidden programmatic-navigation link.  Placed inside the
+                    // List so SwiftUI can measure its EmptyView in a proper
+                    // list-cell context; a bare VStack sibling produces a
+                    // zero-height frame and the "Invalid frame dimension"
+                    // runtime warning/crash seen in UI tests.
+                    NavigationLink(destination: PredictedRiskView(risk: risk),
+                                   isActive: $riskCalculated) {
+                        EmptyView()
+                    }
+                    .listRowInsets(.init())
+                    .listRowBackground(EmptyView())
+                    .frame(height: 0)
+                    .hidden()
                 }
                 .toolbar {
-                    ToolbarItemGroup(placement: .keyboard) {
-                        Spacer()
-                        Button("DONE") {
-                            isActive = false
+                    // A bare Spacer as a keyboard toolbar item makes SwiftUI log
+                    // "Invalid frame dimension (negative or non-finite)"; laying
+                    // out inside a single HStack item avoids it.
+                    ToolbarItem(placement: .keyboard) {
+                        HStack {
+                            Spacer()
+                            Button("DONE") {
+                                isActive = false
+                            }
                         }
                     }
                 }
                 .navigationTitle("PatientDataTitle")
-                NavigationLink(destination: PredictedRiskView(risk: risk),
-                               isActive: $riskCalculated) {
-                    EmptyView()
-                }
             }
             .listStyle(.insetGrouped)
         }

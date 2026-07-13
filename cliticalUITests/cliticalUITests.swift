@@ -98,6 +98,102 @@ final class cliticalUITests: XCTestCase {
                       "Validation alert did not appear")
     }
 
+    /// Happy path: filling every required field and marking one artery lesion
+    /// pushes the predicted-risk screen with the 30-day, 2-year, and GNRI results.
+    func testPredictWithValidDataShowsRiskResults() throws {
+        let app = XCUIApplication()
+        app.launchArguments += ["-app_language", "en"]
+        app.launch()
+
+        fillRequiredNumberFields(in: app)
+        setChoice(row: "Infrapopliteal", to: "Yes", in: app)
+
+        tapPredictButton(in: app)
+
+        XCTAssertTrue(app.navigationBars["Predicted Risks"].waitForExistence(timeout: 5),
+                      "Predicted risk screen did not appear")
+        XCTAssertTrue(app.staticTexts["Predicted 2-year Overall Survival"].exists)
+        XCTAssertTrue(app.staticTexts["Geriatric Nutritional Risk Index"].exists)
+    }
+
+    /// With valid numbers but no artery lesion selected, predicting must show
+    /// the lesion-specific validation alert instead of the risk screen.
+    func testPredictWithoutLesionShowsLesionAlert() throws {
+        let app = XCUIApplication()
+        app.launchArguments += ["-app_language", "en"]
+        app.launch()
+
+        fillRequiredNumberFields(in: app)
+        tapPredictButton(in: app)
+
+        let alert = app.alerts.firstMatch
+        XCTAssertTrue(alert.waitForExistence(timeout: 5), "Validation alert did not appear")
+        XCTAssertTrue(alert.staticTexts["Check artery lesion. At least 1 lesion should be YES"].exists,
+                      "Alert should explain that at least one lesion is required")
+        XCTAssertFalse(app.navigationBars["Predicted Risks"].exists)
+    }
+
+    // MARK: - Helpers
+
+    /// Swipes up until the element is on screen and tappable.
+    private func scrollTo(_ element: XCUIElement, in app: XCUIApplication, maxSwipes: Int = 12) {
+        var swipes = 0
+        while !(element.exists && element.isHittable) && swipes < maxSwipes {
+            app.swipeUp()
+            swipes += 1
+        }
+    }
+
+    /// Enters age, height, weight, and albumin, then dismisses the keyboard.
+    private func fillRequiredNumberFields(in app: XCUIApplication) {
+        let values = [
+            ("Enter Age [year-old].", "70"),
+            ("Enter Body Height [cm].", "160"),
+            ("Enter Body Weight [kg].", "55"),
+            ("Enter Albumin [g/dl].", "4"),
+        ]
+        for (placeholder, value) in values {
+            let field = app.textFields[placeholder]
+            scrollTo(field, in: app)
+            XCTAssertTrue(field.waitForExistence(timeout: 5), "Missing field: \(placeholder)")
+            field.tap()
+            field.typeText(value)
+        }
+        let done = app.buttons["Done"]
+        if done.exists {
+            done.tap()
+        }
+    }
+
+    /// Opens a question row, picks an option on the pushed screen, and goes back.
+    private func setChoice(row title: String, to option: String, in app: XCUIApplication) {
+        // A list row is exposed as a button labelled "<title>, <current selection>".
+        let row = app.buttons
+            .matching(NSPredicate(format: "label BEGINSWITH %@", title))
+            .firstMatch
+        scrollTo(row, in: app)
+        XCTAssertTrue(row.waitForExistence(timeout: 5), "Missing question row: \(title)")
+        row.tap()
+
+        XCTAssertTrue(app.navigationBars[title].waitForExistence(timeout: 5),
+                      "Choice screen for \(title) did not open")
+        let optionElement = app.descendants(matching: .any)
+            .matching(NSPredicate(format: "label == %@", option))
+            .firstMatch
+        XCTAssertTrue(optionElement.waitForExistence(timeout: 5),
+                      "Missing option \(option) for \(title)")
+        optionElement.tap()
+        app.navigationBars.buttons.firstMatch.tap()
+    }
+
+    /// Scrolls to the Predict button at the bottom of the form and taps it.
+    private func tapPredictButton(in app: XCUIApplication) {
+        let predict = app.buttons["Predict Risk ..."]
+        scrollTo(predict, in: app)
+        XCTAssertTrue(predict.waitForExistence(timeout: 5), "Predict button missing")
+        predict.tap()
+    }
+
     func testLaunchPerformance() throws {
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
             // This measures how long it takes to launch your application.
