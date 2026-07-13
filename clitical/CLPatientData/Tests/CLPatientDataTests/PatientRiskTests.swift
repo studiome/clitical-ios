@@ -7,8 +7,6 @@
 
 import XCTest
 @testable import CLPatientData
-@available(macOS 10.15, *)
-@available(iOS 13.0, *)
 
 final class PatientRiskTests: XCTestCase {
     
@@ -164,6 +162,43 @@ final class PatientRiskTests: XCTestCase {
         XCTAssertEqual(String(format: "%.2f", risk.predicted2YAFS!), "0.03")
     }
     
+    // Regression: isUrgent and hasAbnormalWBC must be counted independently.
+    // Same base as testExtremelyLowRiskCase, with only isUrgent set.
+    func testUrgentWithNormalWBC() throws{
+        let pd = PatientData()
+        pd.age = 65
+        pd.weight = 50.0
+        pd.height = 150.0
+        pd.alb = 4.0
+        pd.hasAILesion = true
+        pd.isUrgent = true
+        pd.hasAbnormalWBC = false
+
+        let risk = PatientRisk(of: pd)
+        XCTAssertEqual(String(format: "%.3f", risk.predicted30DDeathOrAmputation!), "0.024")
+        XCTAssertEqual(String(format: "%.3f", risk.predicted30DMALE!), "0.040")
+        XCTAssertEqual(String(format: "%.2f", risk.predicted2YOS!), "0.92")
+        XCTAssertEqual(String(format: "%.2f", risk.predicted2YAFS!), "0.83")
+    }
+
+    // Same base, with only hasAbnormalWBC set.
+    func testNonUrgentWithAbnormalWBC() throws{
+        let pd = PatientData()
+        pd.age = 65
+        pd.weight = 50.0
+        pd.height = 150.0
+        pd.alb = 4.0
+        pd.hasAILesion = true
+        pd.isUrgent = false
+        pd.hasAbnormalWBC = true
+
+        let risk = PatientRisk(of: pd)
+        XCTAssertEqual(String(format: "%.3f", risk.predicted30DDeathOrAmputation!), "0.023")
+        XCTAssertEqual(String(format: "%.3f", risk.predicted30DMALE!), "0.053")
+        XCTAssertEqual(String(format: "%.2f", risk.predicted2YOS!), "0.92")
+        XCTAssertEqual(String(format: "%.2f", risk.predicted2YAFS!), "0.85")
+    }
+
     func testHighRiskCase2() throws{
         let pd = PatientData()
         pd.sex = .female

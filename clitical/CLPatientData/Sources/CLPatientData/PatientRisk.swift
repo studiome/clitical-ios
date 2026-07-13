@@ -1,6 +1,6 @@
 //
 //  PatientRisk.swift
-//  
+//
 //
 //  Created by kmiyahara on 2023/01/02.
 //
@@ -25,553 +25,135 @@
 
 import Foundation
 
-@available(macOS 10.15, *)
-@available(iOS 13.0, *)
-
 public struct PatientRisk {
     private let twoYearOSH0Coeff = 0.922
     private let twoYearAFSH0Coeff = 0.876
-    
+
     public var gnri: Double? {
-        return calcGNRI()
+        calcGNRI()
     }
-    
-    public  var gnriRisk: GNRIRisk? {
-        return classifyGNRI()
+
+    public var gnriRisk: GNRIRisk? {
+        classifyGNRI()
     }
-    
-    public  var predicted30DDeathOrAmputation: Double?{
-        return  calcPredicted30DDA()
-    }
+
     // 0.0 ... 1.0
-    
-    public  var predicted30DMALE: Double? {
-        return calcPredicted30DMALE()
-    }// 0.0 ... 1.0
-    
-    public  var predicted2YOS: Double? {
-        return calcPredicted2YOS()
-    } // 0.0 ... 1.0
-    
-    public  var predicted2YOSRisk: TwoYearOSRisk? {
-        return classifyOS()
+    public var predicted30DDeathOrAmputation: Double? {
+        calcPredicted30DDA()
     }
-    
-    public  var predicted2YAFS: Double? {
-        return calcPredicted2YAFS()
-    }// 0.0 ... 1.0
-    
+
+    // 0.0 ... 1.0
+    public var predicted30DMALE: Double? {
+        calcPredicted30DMALE()
+    }
+
+    // 0.0 ... 1.0
+    public var predicted2YOS: Double? {
+        calcPredicted2YOS()
+    }
+
+    public var predicted2YOSRisk: TwoYearOSRisk? {
+        classifyOS()
+    }
+
+    // 0.0 ... 1.0
+    public var predicted2YAFS: Double? {
+        calcPredicted2YAFS()
+    }
+
     var patientData: PatientData
-    
-    public init(of patientData: PatientData){
-        self.patientData = patientData;
+
+    public init(of patientData: PatientData) {
+        self.patientData = patientData
     }
-    
+
     private func calcGNRI() -> Double? {
-        guard let heightCM = patientData.height else {
-            return nil
-        }
-        guard let weight = patientData.weight else {
-            return nil
-        }
-        guard let alb = patientData.alb else {
-            return nil
-        }
-        guard heightCM != 0.0 else {
+        guard let heightCM = patientData.height,
+              let weight = patientData.weight,
+              let alb = patientData.alb,
+              heightCM != 0.0 else {
             return nil
         }
         let heightM = heightCM / 100.0
-        var wi:Double = weight / (22.0 * pow(heightM, 2))
-        if (wi >= 1.0){
-            wi = 1.0
-        }
-        return 14.89 * alb + 41.7 * wi
+        let weightIndex = min(weight / (22.0 * pow(heightM, 2)), 1.0)
+        return 14.89 * alb + 41.7 * weightIndex
     }
-    
-    private  func calcPredicted30DDA() -> Double? {
-        guard let gr = self.gnriRisk else{
+
+    private func calcPredicted30DDA() -> Double? {
+        guard let gnriRisk else {
             return nil
         }
-        //questions
-        let q = ThirtyDayDeathOrAmputationQuestions.allCases
-        var  sigma = 0.0
-        
-        q.forEach({
-            switch $0{
-            case .intercept:
-                sigma += $0.coefficient
-                break
-            case .hasAbnormalWBC:
-                sigma += (patientData.hasAbnormalWBC ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .isUrgent:
-                sigma += (patientData.hasAbnormalWBC ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasCHF:
-                sigma += (patientData.hasCHF ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasFever:
-                sigma += (patientData.hasFever ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasCKD5D:
-                sigma += (patientData.ckd == .g5D ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasNoAILesion:
-                sigma += (!patientData.hasAILesion ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasNoFPLesion:
-                sigma += (!patientData.hasFPLesion ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasCVD:
-                sigma += (patientData.hasCVD ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasDL:
-                sigma += (patientData.hasDyslipidemia ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasRutherford5:
-                sigma += (patientData.rutherford == .class5 ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasNoOrLowGNRIRisk:
-                sigma += ((gr == .noRisk || gr == .low) ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasModerateGNRIRisk:
-                sigma += (gr == .moderate ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .isAmbulatory:
-                sigma += (patientData.activity == .ambulatory ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            }
-        })
-        
+        let sigma = ThirtyDayDeathOrAmputationQuestions.allCases
+            .filter { $0.applies(to: patientData, gnriRisk: gnriRisk) }
+            .map(\.coefficient)
+            .reduce(0.0, +)
         return 1.0 / (1.0 + exp(sigma))
     }
-    
-    private  func calcPredicted30DMALE() -> Double? {
-        guard  let age = self.patientData.age else{
+
+    private func calcPredicted30DMALE() -> Double? {
+        guard let age = patientData.age, let gnriRisk else {
             return nil
         }
-        guard let gr = self.gnriRisk else{
-            return nil
-        }
-        //questions
-        let q = ThirtyDayMALEQuestions.allCases
-        var  sigma = 0.0
-        
-        q.forEach({
-            switch $0{
-            case .intercept:
-                sigma += $0.coefficient
-                break
-            case .isFemale:
-                sigma += (patientData.sex == .female ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .age75To84:
-                sigma += ((age >= 75 && age <= 84) ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .ageOver85:
-                sigma += (age >= 85 ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasAbnormalWBC:
-                sigma += (patientData.hasAbnormalWBC ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .isUrgent:
-                sigma += (patientData.hasAbnormalWBC ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasCHF:
-                sigma += (patientData.hasCHF ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasFever:
-                sigma += (patientData.hasFever ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasCKD5D:
-                sigma += (patientData.ckd == .g5D ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasNoFPLesion:
-                sigma += (!patientData.hasFPLesion ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasCVD:
-                sigma += (patientData.hasCVD ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasDL:
-                sigma += (patientData.hasDyslipidemia ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasRutherford5:
-                sigma += (patientData.rutherford == .class5 ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasRutherford6:
-                sigma += (patientData.rutherford == .class6 ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasNoOrLowGNRIRisk:
-                sigma += ((gr == .noRisk || gr == .low) ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasModerateGNRIRisk:
-                sigma += (gr == .moderate ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .isAmbulatory:
-                sigma += (patientData.activity == .ambulatory ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasLocalInfection:
-                sigma += (patientData.hasLocalInfection ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .isWheelChair:
-                sigma += (patientData.activity == .wheelchair ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasCAD:
-                sigma += (patientData.hasCAD ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasOthers:
-                sigma += (patientData.hasOtherVD ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .isSmoking:
-                sigma += (patientData.isSmoking ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasNoContraLateral:
-                sigma += (!patientData.hasContraLateralLesion ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            }
-        })
-        
+        let sigma = ThirtyDayMALEQuestions.allCases
+            .filter { $0.applies(to: patientData, age: age, gnriRisk: gnriRisk) }
+            .map(\.coefficient)
+            .reduce(0.0, +)
         return 1.0 / (1.0 + exp(sigma))
     }
-    
-    private  func calcPredicted2YOS() -> Double? {
-        guard  let age = self.patientData.age else{
+
+    private func calcPredicted2YOS() -> Double? {
+        guard let age = patientData.age, let gnriRisk else {
             return nil
         }
-        guard let gr = self.gnriRisk else{
-            return nil
-        }
-        
-        //questions
-        let q = TwoYearOSQuestions.allCases
-        
-        var sigma = 0.0;
-        
-        q.forEach({
-            switch $0{
-            case .isFemale:
-                sigma += (patientData.sex == .female ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .age65To74:
-                sigma += ((age >= 65 && age <= 74) ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .age75To84:
-                sigma += ((age >= 75 && age <= 84) ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .ageOver85:
-                sigma += (age >= 85 ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasCHF:
-                sigma += (patientData.hasCHF ?
-                          $0.coefficient
-                          : 0.0 )
-                break
-            case .hasCKDG3:
-                sigma += (patientData.ckd == .g3 ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasCKDG4:
-                sigma += (patientData.ckd == .g4 ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasCKDG5:
-                sigma += (patientData.ckd == .g5 ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasCKDG5D:
-                sigma += (patientData.ckd == .g5D ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasModerateGNRIRisk:
-                sigma += (gr == .moderate ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasMajorGNRIRisk:
-                sigma += (gr == .major ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .isWheelchair:
-                sigma += (patientData.activity == .wheelchair ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .isImmobile:
-                sigma += (patientData.activity == .immobile ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasPastMalignancy:
-                sigma += (patientData.malignantNeoplasm == .pastHistory ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasTreatingMalignancy:
-                sigma += (patientData.malignantNeoplasm == .underTreatment ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasFPLesionWithoutAI:
-                sigma += ((!patientData.hasAILesion && patientData.hasFPLesion) ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasOnlyBKLesion:
-                sigma += ((!patientData.hasAILesion
-                           && !patientData.hasFPLesion
-                           && patientData.hasBKLesion) ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            }
-        })
-        
+        let sigma = TwoYearOSQuestions.allCases
+            .filter { $0.applies(to: patientData, age: age, gnriRisk: gnriRisk) }
+            .map(\.coefficient)
+            .reduce(0.0, +)
         return pow(twoYearOSH0Coeff, exp(sigma))
     }
-    
-    private  func calcPredicted2YAFS()->Double? {
-        guard  let age = self.patientData.age else{
+
+    private func calcPredicted2YAFS() -> Double? {
+        guard let age = patientData.age, let gnriRisk else {
             return nil
         }
-        guard let gr = self.gnriRisk else{
-            return nil
-        }
-        
-        //questions
-        let q = TwoYearAFSQuestions.allCases
-        
-        var sigma = 0.0;
-        
-        q.forEach({
-            switch $0{
-            case .isFemale:
-                sigma += (patientData.sex == .female ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .age65To74:
-                sigma += ((age >= 65 && age <= 74) ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .age75To84:
-                sigma += ((age >= 75 && age <= 84) ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .ageOver85:
-                sigma += (age >= 85 ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasCHF:
-                sigma += (patientData.hasCHF ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasCVD:
-                sigma += (patientData.hasCVD ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasCKDG3:
-                sigma += (patientData.ckd == .g3 ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasCKDG4:
-                sigma += (patientData.ckd == .g4 ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasCKDG5:
-                sigma += (patientData.ckd == .g5 ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasCKDG5D:
-                sigma += (patientData.ckd == .g5D ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasModerateGNRIRisk:
-                sigma += (gr == .moderate ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasMajorGNRIRisk:
-                sigma += (gr == .major ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .isWheelchair:
-                sigma += (patientData.activity == .wheelchair ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .isImmobile:
-                sigma += (patientData.activity == .immobile ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasPastMalignancy:
-                sigma += (patientData.malignantNeoplasm == .pastHistory ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasTreatingMalignancy:
-                sigma += (patientData.malignantNeoplasm == .underTreatment ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .isUrgent:
-                sigma += (patientData.isUrgent ?
-                          $0.coefficient : 0.0)
-                break
-            case .hasFever:
-                sigma += (patientData.hasFever ?
-                          $0.coefficient : 0.0)
-                break
-            case .hasAbnormalWBC:
-                sigma += (patientData.hasAbnormalWBC ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasLocalInfetion:
-                sigma += (patientData.hasLocalInfection ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasFPLesionWithoutAI:
-                sigma += ((!patientData.hasAILesion
-                           && patientData.hasFPLesion) ?
-                          $0.coefficient
-                          : 0.0)
-                break
-            case .hasOnlyBKLesion:
-                sigma += ((!patientData.hasAILesion
-                           && !patientData.hasFPLesion
-                           && patientData.hasBKLesion) ?
-                          $0.coefficient : 0.0)
-                break
-            }
-        })
-        
+        let sigma = TwoYearAFSQuestions.allCases
+            .filter { $0.applies(to: patientData, age: age, gnriRisk: gnriRisk) }
+            .map(\.coefficient)
+            .reduce(0.0, +)
         return pow(twoYearAFSH0Coeff, exp(sigma))
     }
-    
+
     private func classifyGNRI() -> GNRIRisk? {
-        guard let gnri = self.gnri else {
+        guard let gnri else {
             return nil
         }
-        switch gnri{
+        // Per the reference papers (Miyata et al.):
+        // no risk >=98, low 92..<98, moderate 82..<92, major <82
+        switch gnri {
         case 98.0...Double.infinity:
-            return GNRIRisk.noRisk
+            return .noRisk
         case 92.0..<98.0:
-            return GNRIRisk.low
+            return .low
         case 82.0..<92.0:
-            return GNRIRisk.moderate
+            return .moderate
         case 0.0..<82.0:
-            return GNRIRisk.major
+            return .major
         default:
             return nil
         }
     }
-    
-    private  func classifyOS() -> TwoYearOSRisk? {
-        guard let os = self.predicted2YOS else {
+
+    private func classifyOS() -> TwoYearOSRisk? {
+        guard let os = predicted2YOS else {
             return nil
         }
-        switch os{
+        switch os {
         case 0.70...1.0:
-            return TwoYearOSRisk.low
+            return .low
         case 0.50..<0.70:
-            return TwoYearOSRisk.medium
+            return .medium
         case 0.0..<0.50:
-            return TwoYearOSRisk.high
+            return .high
         default:
             return nil
         }

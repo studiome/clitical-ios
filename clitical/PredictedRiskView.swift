@@ -9,148 +9,121 @@ import SwiftUI
 import CLPatientData
 
 struct PredictedRiskView: View {
-    @State var risk: PatientRisk?
+    let risk: PatientRisk?
+
     var body: some View {
-        if (risk == nil){
-            Text("AnErrorOccured")
-        }else{
-            List{
-                
-                Section(header: Text("30DayPrediction"), footer:Text("MALEDescription").font(.caption)){
-                    VStack{
-                        HStack{
-                            Image(systemName: "staroflife")
-                            Text("30DDeathOrAmputation")
-                                .padding(4.0)
-                                .font(.headline)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }.foregroundColor(.blue)
-                        if(risk!.predicted30DDeathOrAmputation == nil){
-                            Text("---")
-                        }else{
-                            Text("\(risk!.predicted30DDeathOrAmputation! * 100.0, specifier: "%.1f")%")
-                                .font(.title)
-                        }
-                    }.frame(maxWidth: .infinity, alignment: .center)
-                    VStack{
-                        HStack{
-                            Image(systemName: "bed.double")
-                            Text("30DMALE")
-                                .padding(4.0)
-                                .font(.headline)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }.foregroundColor(.blue)
-                        if(risk!.predicted30DMALE == nil){
-                            Text("---")
-                        }else{
-                            Text("\(risk!.predicted30DMALE! * 100.0, specifier: "%.1f")%").font(.title)
-                        }
-                    }.frame(maxWidth: .infinity, alignment: .center)
+        if let risk {
+            List {
+                Section(header: Text("30DayPrediction"),
+                        footer: Text("MALEDescription").font(.caption)) {
+                    RiskRow(icon: "staroflife",
+                            title: "30DDeathOrAmputation",
+                            color: .blue) {
+                        percentText(risk.predicted30DDeathOrAmputation,
+                                    fractionDigits: 1)
+                    }
+                    RiskRow(icon: "bed.double",
+                            title: "30DMALE",
+                            color: .blue) {
+                        percentText(risk.predicted30DMALE, fractionDigits: 1)
+                    }
                 }
-                Section(header: Text("2YearPrediction")){
-                    VStack{
-                        HStack{
-                            Image(systemName: "staroflife")
-                            Text("2YOS")
-                                .padding(4.0)
-                                .font(.headline)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }.foregroundColor(.blue)
-                        if(risk!.predicted2YOS == nil){
-                            Text("---")
-                        }else{
-                            Text("\(risk!.predicted2YOS!*100.0, specifier: "%.0f")%")
-                                .font(.title)
-                        }
-                        if(risk!.predicted2YOSRisk == nil){
-                            Text("---")
-                        }else{
-                            Text(LocalizedStringKey(risk!.predicted2YOSRisk!.label))
-                                .font(.title2)
-                        }
-                    }.frame(maxWidth: .infinity, alignment: .center)
-                    VStack{
-                        HStack{
-                            Image(systemName: "figure.walk")
-                            Text("2YAFS")
-                                .padding(4.0)
-                                .font(.headline)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }.foregroundColor(.blue)
-                        if(risk!.predicted2YAFS == nil){
-                            Text("---")
-                        }else{
-                            Text("\(risk!.predicted2YAFS!*100.0, specifier: "%.0f")%")
-                                .font(.title)
-                        }
-                    }.frame(maxWidth: .infinity, alignment: .center)
+                Section(header: Text("2YearPrediction")) {
+                    RiskRow(icon: "staroflife",
+                            title: "2YOS",
+                            color: .blue) {
+                        percentText(risk.predicted2YOS, fractionDigits: 0)
+                        riskLabelText(risk.predicted2YOSRisk?.label)
+                    }
+                    RiskRow(icon: "figure.walk",
+                            title: "2YAFS",
+                            color: .blue) {
+                        percentText(risk.predicted2YAFS, fractionDigits: 0)
+                    }
                 }
-                Section(header: Text("GNRI")){
-                    VStack{
-                        HStack{
-                            Image(systemName: "flame")
-                            Text("GeriatricNutritionalRiskIndex")
-                                .padding(4.0)
-                                .font(.headline)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }.foregroundColor(.red)
-                        if(risk!.gnri == nil){
-                            Text("---")
-                        }else{
-                            Text("\(risk!.gnri!, specifier: "%.1f")")
-                                .font(.title)
-                        }
-                        if(risk!.gnriRisk == nil){
-                            Text("---")
-                        }else{
-                            Text(LocalizedStringKey(risk!.gnriRisk!.label))
-                                .font(.title2)
-                        }
-                    }.frame(maxWidth: .infinity, alignment: .center)
+                Section(header: Text("GNRI")) {
+                    RiskRow(icon: "flame",
+                            title: "GeriatricNutritionalRiskIndex",
+                            color: .red) {
+                        valueText(risk.gnri, fractionDigits: 1)
+                        riskLabelText(risk.gnriRisk?.label)
+                    }
                 }
             }
             .navigationTitle("RiskViewTitle")
             .navigationBarTitleDisplayMode(.inline)
+        } else {
+            Text("AnErrorOccured")
+        }
+    }
+
+    @ViewBuilder
+    private func percentText(_ value: Double?, fractionDigits: Int) -> some View {
+        if let value {
+            Text(value, format: .percent.precision(.fractionLength(fractionDigits)))
+                .font(.title)
+        } else {
+            Text("---")
+        }
+    }
+
+    @ViewBuilder
+    private func valueText(_ value: Double?, fractionDigits: Int) -> some View {
+        if let value {
+            Text(value, format: .number.precision(.fractionLength(fractionDigits)))
+                .font(.title)
+        } else {
+            Text("---")
+        }
+    }
+
+    @ViewBuilder
+    private func riskLabelText(_ label: String?) -> some View {
+        if let label {
+            Text(LocalizedStringKey(label))
+                .font(.title2)
+        } else {
+            Text("---")
         }
     }
 }
 
-extension GNRIRisk{
-    var label: String{
-        switch self{
-        case .noRisk: return "GNRINoRisk"
-        case .low: return "GNRILowRisk"
-        case .moderate: return "GNRIModerateRisk"
-        case .major: return "GNRIMajorRisk"
+/// A titled risk item: an icon with a headline, followed by the value views.
+private struct RiskRow<Content: View>: View {
+    let icon: String
+    let title: LocalizedStringKey
+    let color: Color
+    @ViewBuilder let content: Content
+
+    var body: some View {
+        VStack {
+            HStack {
+                Image(systemName: icon)
+                Text(title)
+                    .padding(4.0)
+                    .font(.headline)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .foregroundColor(color)
+            content
         }
+        .frame(maxWidth: .infinity, alignment: .center)
     }
 }
 
-extension TwoYearOSRisk{
-    var label: String{
-        switch self{
-        case .low: return "2YOSLowRisk"
-        case .medium: return "2YOSMediumRisk"
-        case .high: return "2YOSHighRisk"
-        }
-    }
+#Preview("Error") {
+    PredictedRiskView(risk: nil)
+        .environment(\.locale, .init(identifier: "ja"))
 }
 
-struct PredictedRiskView_Previews: PreviewProvider {
-    static var previews: some View {
-        PredictedRiskView(risk:nil).environment(\.locale, .init(identifier: "ja"))
-        PredictedRiskView(risk: PatientRisk(
-            of: createTestData(patientData: PatientData())))
-        .environment(\.locale, .init(identifier: "ja"));
-    }
+#Preview("Result") {
+    PredictedRiskView(risk: PatientRisk(of: previewPatientData()))
+        .environment(\.locale, .init(identifier: "ja"))
 }
 
-private func createTestData(patientData: PatientData) -> PatientData {
+private func previewPatientData() -> PatientData {
+    let patientData = PatientData()
     patientData.age = 65
     patientData.height = 150.0
     patientData.weight = 50.0

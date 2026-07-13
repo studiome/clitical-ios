@@ -1,8 +1,5 @@
 import Combine
 
-@available(macOS 10.15, *)
-@available(iOS 13.0, *)
-
 public class PatientData: ObservableObject {
     @Published public var sex: Sex
     @Published public var age: Int?
@@ -30,10 +27,13 @@ public class PatientData: ObservableObject {
     
     public init(){
         sex = .female
+        age = nil
+        height = nil
+        weight = nil
         alb = nil
         activity = .ambulatory
         hasCHF = false
-        hasCAD  = false
+        hasCAD = false
         hasCVD = false
         ckd = .normal
         malignantNeoplasm = .no
@@ -59,7 +59,7 @@ public class PatientData: ObservableObject {
         alb = nil
         activity = .ambulatory
         hasCHF = false
-        hasCAD  = false
+        hasCAD = false
         hasCVD = false
         ckd = .normal
         malignantNeoplasm = .no

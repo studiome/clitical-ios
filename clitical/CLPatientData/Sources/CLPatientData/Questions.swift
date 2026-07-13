@@ -1,37 +1,11 @@
 //
 //  Questions.swift
-//  
+//
 //
 //  Created by kmiyahara on 2023/01/04.
 //
 
-public enum AllQuestions:  CaseIterable{
-    case sex
-    case age
-    case height
-    case weigth
-    case albumin
-    case activity
-    case chf
-    case cad
-    case cvd
-    case ckd
-    case malignancy
-    case lesionAI
-    case lesionFP
-    case lesionBK
-    case urgency
-    case fever
-    case wbc
-    case infection
-    case dl
-    case smoking
-    case contralateral
-    case others
-    case rutherford
-}
-
-enum ThirtyDayDeathOrAmputationQuestions:  CaseIterable{
+enum ThirtyDayDeathOrAmputationQuestions: CaseIterable {
     case intercept
     case hasAbnormalWBC
     case isUrgent
@@ -46,31 +20,47 @@ enum ThirtyDayDeathOrAmputationQuestions:  CaseIterable{
     case hasModerateGNRIRisk
     case hasNoOrLowGNRIRisk
     case isAmbulatory
-    
-    var coefficient:Double {
-        switch self{
+
+    var coefficient: Double {
+        switch self {
         case .intercept: return 2.86452
-        case .hasAbnormalWBC: return  -0.59896
-        case .isUrgent: return  -0.64861
+        case .hasAbnormalWBC: return -0.59896
+        case .isUrgent: return -0.64861
         case .hasCHF: return -0.39326
         case .hasFever: return -0.3888
-        case .hasCKD5D: return  -0.33797
+        case .hasCKD5D: return -0.33797
         case .hasNoAILesion: return -0.14474
         case .hasNoFPLesion: return 0.17229
         case .hasCVD: return -0.05239
-        case .hasDL: return  0.05969
-        case .hasRutherford5: return  0.12638
-        case .hasModerateGNRIRisk: return  0.36795
-        case .hasNoOrLowGNRIRisk: return  0.76479
-        case .isAmbulatory: return  0.54391
+        case .hasDL: return 0.05969
+        case .hasRutherford5: return 0.12638
+        case .hasModerateGNRIRisk: return 0.36795
+        case .hasNoOrLowGNRIRisk: return 0.76479
+        case .isAmbulatory: return 0.54391
+        }
+    }
+
+    func applies(to patient: PatientData, gnriRisk: GNRIRisk) -> Bool {
+        switch self {
+        case .intercept: return true
+        case .hasAbnormalWBC: return patient.hasAbnormalWBC
+        case .isUrgent: return patient.isUrgent
+        case .hasCHF: return patient.hasCHF
+        case .hasFever: return patient.hasFever
+        case .hasCKD5D: return patient.ckd == .g5D
+        case .hasNoAILesion: return !patient.hasAILesion
+        case .hasNoFPLesion: return !patient.hasFPLesion
+        case .hasCVD: return patient.hasCVD
+        case .hasDL: return patient.hasDyslipidemia
+        case .hasRutherford5: return patient.rutherford == .class5
+        case .hasModerateGNRIRisk: return gnriRisk == .moderate
+        case .hasNoOrLowGNRIRisk: return gnriRisk == .noRisk || gnriRisk == .low
+        case .isAmbulatory: return patient.activity == .ambulatory
         }
     }
 }
 
-let ThirtyDayDeathOrAmputationCoeffs: [Double]
-= ThirtyDayDeathOrAmputationQuestions.allCases.map{$0.coefficient}
-
-enum ThirtyDayMALEQuestions: CaseIterable{
+enum ThirtyDayMALEQuestions: CaseIterable {
     case intercept
     case isFemale
     case age75To84
@@ -94,9 +84,9 @@ enum ThirtyDayMALEQuestions: CaseIterable{
     case hasDL
     case hasNoOrLowGNRIRisk
     case hasModerateGNRIRisk
-    
-    var coefficient:Double {
-        switch self{
+
+    var coefficient: Double {
+        switch self {
         case .intercept: return 2.2575
         case .isFemale: return 0.24023
         case .age75To84: return 0.16816
@@ -122,12 +112,37 @@ enum ThirtyDayMALEQuestions: CaseIterable{
         case .hasModerateGNRIRisk: return 0.46838
         }
     }
+
+    func applies(to patient: PatientData, age: Int, gnriRisk: GNRIRisk) -> Bool {
+        switch self {
+        case .intercept: return true
+        case .isFemale: return patient.sex == .female
+        case .age75To84: return (75...84).contains(age)
+        case .ageOver85: return age >= 85
+        case .hasAbnormalWBC: return patient.hasAbnormalWBC
+        case .hasFever: return patient.hasFever
+        case .hasLocalInfection: return patient.hasLocalInfection
+        case .hasRutherford5: return patient.rutherford == .class5
+        case .hasRutherford6: return patient.rutherford == .class6
+        case .isAmbulatory: return patient.activity == .ambulatory
+        case .isWheelChair: return patient.activity == .wheelchair
+        case .isUrgent: return patient.isUrgent
+        case .hasCHF: return patient.hasCHF
+        case .hasCAD: return patient.hasCAD
+        case .hasCKD5D: return patient.ckd == .g5D
+        case .hasCVD: return patient.hasCVD
+        case .hasOthers: return patient.hasOtherVD
+        case .isSmoking: return patient.isSmoking
+        case .hasNoContraLateral: return !patient.hasContraLateralLesion
+        case .hasNoFPLesion: return !patient.hasFPLesion
+        case .hasDL: return patient.hasDyslipidemia
+        case .hasNoOrLowGNRIRisk: return gnriRisk == .noRisk || gnriRisk == .low
+        case .hasModerateGNRIRisk: return gnriRisk == .moderate
+        }
+    }
 }
 
-let ThirtyDayMALECoeffs: [Double]
-= ThirtyDayMALEQuestions.allCases.map{$0.coefficient}
-
-enum TwoYearOSQuestions: Int, CaseIterable{
+enum TwoYearOSQuestions: CaseIterable {
     case isFemale
     case age65To74
     case age75To84
@@ -145,9 +160,9 @@ enum TwoYearOSQuestions: Int, CaseIterable{
     case hasTreatingMalignancy
     case hasFPLesionWithoutAI
     case hasOnlyBKLesion
-    
-    var coefficient: Double{
-        switch self{
+
+    var coefficient: Double {
+        switch self {
         case .isFemale: return -0.25
         case .age65To74: return 0.31
         case .age75To84: return 0.76
@@ -167,12 +182,32 @@ enum TwoYearOSQuestions: Int, CaseIterable{
         case .hasOnlyBKLesion: return 0.16
         }
     }
+
+    func applies(to patient: PatientData, age: Int, gnriRisk: GNRIRisk) -> Bool {
+        switch self {
+        case .isFemale: return patient.sex == .female
+        case .age65To74: return (65...74).contains(age)
+        case .age75To84: return (75...84).contains(age)
+        case .ageOver85: return age >= 85
+        case .hasCHF: return patient.hasCHF
+        case .hasCKDG3: return patient.ckd == .g3
+        case .hasCKDG4: return patient.ckd == .g4
+        case .hasCKDG5: return patient.ckd == .g5
+        case .hasCKDG5D: return patient.ckd == .g5D
+        case .hasModerateGNRIRisk: return gnriRisk == .moderate
+        case .hasMajorGNRIRisk: return gnriRisk == .major
+        case .isWheelchair: return patient.activity == .wheelchair
+        case .isImmobile: return patient.activity == .immobile
+        case .hasPastMalignancy: return patient.malignantNeoplasm == .pastHistory
+        case .hasTreatingMalignancy: return patient.malignantNeoplasm == .underTreatment
+        case .hasFPLesionWithoutAI: return !patient.hasAILesion && patient.hasFPLesion
+        case .hasOnlyBKLesion:
+            return !patient.hasAILesion && !patient.hasFPLesion && patient.hasBKLesion
+        }
+    }
 }
 
-let TwoYearOSCoeffs: [Double]
-= TwoYearOSQuestions.allCases.map{$0.coefficient}
-
-enum TwoYearAFSQuestions: CaseIterable{
+enum TwoYearAFSQuestions: CaseIterable {
     case isFemale
     case age65To74
     case age75To84
@@ -192,12 +227,12 @@ enum TwoYearAFSQuestions: CaseIterable{
     case isUrgent
     case hasFever
     case hasAbnormalWBC
-    case hasLocalInfetion
+    case hasLocalInfection
     case hasFPLesionWithoutAI
     case hasOnlyBKLesion
-    
-    var coefficient:Double {
-        switch self{
+
+    var coefficient: Double {
+        switch self {
         case .isFemale: return -0.21
         case .age65To74: return 0.19
         case .age75To84: return 0.42
@@ -217,12 +252,37 @@ enum TwoYearAFSQuestions: CaseIterable{
         case .isUrgent: return 0.34
         case .hasFever: return 0.36
         case .hasAbnormalWBC: return 0.19
-        case .hasLocalInfetion: return 0.15
+        case .hasLocalInfection: return 0.15
         case .hasFPLesionWithoutAI: return -0.07
         case .hasOnlyBKLesion: return 0.15
         }
     }
-}
 
-let TwoYearAFSCoeffs: [Double]
-= TwoYearAFSQuestions.allCases.map{$0.coefficient}
+    func applies(to patient: PatientData, age: Int, gnriRisk: GNRIRisk) -> Bool {
+        switch self {
+        case .isFemale: return patient.sex == .female
+        case .age65To74: return (65...74).contains(age)
+        case .age75To84: return (75...84).contains(age)
+        case .ageOver85: return age >= 85
+        case .hasCHF: return patient.hasCHF
+        case .hasCVD: return patient.hasCVD
+        case .hasCKDG3: return patient.ckd == .g3
+        case .hasCKDG4: return patient.ckd == .g4
+        case .hasCKDG5: return patient.ckd == .g5
+        case .hasCKDG5D: return patient.ckd == .g5D
+        case .hasModerateGNRIRisk: return gnriRisk == .moderate
+        case .hasMajorGNRIRisk: return gnriRisk == .major
+        case .isWheelchair: return patient.activity == .wheelchair
+        case .isImmobile: return patient.activity == .immobile
+        case .hasPastMalignancy: return patient.malignantNeoplasm == .pastHistory
+        case .hasTreatingMalignancy: return patient.malignantNeoplasm == .underTreatment
+        case .isUrgent: return patient.isUrgent
+        case .hasFever: return patient.hasFever
+        case .hasAbnormalWBC: return patient.hasAbnormalWBC
+        case .hasLocalInfection: return patient.hasLocalInfection
+        case .hasFPLesionWithoutAI: return !patient.hasAILesion && patient.hasFPLesion
+        case .hasOnlyBKLesion:
+            return !patient.hasAILesion && !patient.hasFPLesion && patient.hasBKLesion
+        }
+    }
+}

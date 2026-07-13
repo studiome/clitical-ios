@@ -7,26 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		210381F4296E2DC400DA318A /* YesNo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210381F3296E2DC400DA318A /* YesNo.swift */; };
 		2115F425297FB4860057C89C /* AlbFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F424297FB4860057C89C /* AlbFormView.swift */; };
-		2115F427297FBF350057C89C /* SmokingChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F426297FBF350057C89C /* SmokingChoiceView.swift */; };
-		2115F429297FC8AC0057C89C /* AILesionChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F428297FC8AC0057C89C /* AILesionChoiceView.swift */; };
 		2115F42B298005270057C89C /* QuestionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F42A298005270057C89C /* QuestionError.swift */; };
-		2115F42D298012510057C89C /* ActivityChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F42C298012510057C89C /* ActivityChoiceView.swift */; };
-		2115F42F298012630057C89C /* CADChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F42E298012630057C89C /* CADChoiceView.swift */; };
-		2115F431298012710057C89C /* CVDChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F430298012710057C89C /* CVDChoiceView.swift */; };
-		2115F4332980127B0057C89C /* CKDChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F4322980127B0057C89C /* CKDChoiceView.swift */; };
-		2115F435298012880057C89C /* MalignancyChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F434298012880057C89C /* MalignancyChoiceView.swift */; };
-		2115F4372980129A0057C89C /* BKLesionChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F4362980129A0057C89C /* BKLesionChoiceView.swift */; };
-		2115F439298012A80057C89C /* FPLesionChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F438298012A80057C89C /* FPLesionChoiceView.swift */; };
-		2115F43B298012B40057C89C /* UrgencyChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F43A298012B40057C89C /* UrgencyChoiceView.swift */; };
-		2115F43D298012BE0057C89C /* FeverChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F43C298012BE0057C89C /* FeverChoiceView.swift */; };
-		2115F43F298012CB0057C89C /* WBCChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F43E298012CB0057C89C /* WBCChoiceView.swift */; };
-		2115F441298012D60057C89C /* LocalInfectionChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F440298012D60057C89C /* LocalInfectionChoiceView.swift */; };
-		2115F443298012DF0057C89C /* DLChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F442298012DF0057C89C /* DLChoiceView.swift */; };
-		2115F445298013000057C89C /* ContralateralChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F444298013000057C89C /* ContralateralChoiceView.swift */; };
-		2115F447298013090057C89C /* OtherVDChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F446298013090057C89C /* OtherVDChoiceView.swift */; };
-		2115F449298013180057C89C /* RutherfordClassChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115F448298013180057C89C /* RutherfordClassChoiceView.swift */; };
 		2126FE19297D406300A23B18 /* WeightFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2126FE18297D406300A23B18 /* WeightFormView.swift */; };
 		2126FE1B297D673400A23B18 /* HeightFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2126FE1A297D673400A23B18 /* HeightFormView.swift */; };
 		212A1FC52951B38000508396 /* CliticalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212A1FC42951B38000508396 /* CliticalApp.swift */; };
@@ -37,11 +19,11 @@
 		212A1FE02951B38000508396 /* cliticalUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212A1FDF2951B38000508396 /* cliticalUITests.swift */; };
 		212A1FE22951B38000508396 /* cliticalUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212A1FE12951B38000508396 /* cliticalUITestsLaunchTests.swift */; };
 		21365624297F65E300BFDAFD /* AgeFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21365623297F65E300BFDAFD /* AgeFormView.swift */; };
+		2189A24D3004AE240002AA14 /* ChoiceListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2189A24C3004AE240002AA14 /* ChoiceListView.swift */; };
+		2189A24F3004AE2A0002AA14 /* Labels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2189A24E3004AE2A0002AA14 /* Labels.swift */; };
 		218C5C232983BDEA006A4592 /* PredictedRiskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218C5C222983BDEA006A4592 /* PredictedRiskView.swift */; };
-		2196DF77296D62D900A9FF81 /* SexChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2196DF76296D62D900A9FF81 /* SexChoiceView.swift */; };
 		2196DF7A296DC20600A9FF81 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2196DF7C296DC20600A9FF81 /* Localizable.strings */; };
 		21C78F8E2951F4CF0054A045 /* CLPatientData in Frameworks */ = {isa = PBXBuildFile; productRef = 21C78F8D2951F4CF0054A045 /* CLPatientData */; };
-		21CA4E60296E293900040C50 /* CHFChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CA4E5F296E293900040C50 /* CHFChoiceView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,26 +44,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		210381F3296E2DC400DA318A /* YesNo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YesNo.swift; sourceTree = "<group>"; };
 		2115F424297FB4860057C89C /* AlbFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbFormView.swift; sourceTree = "<group>"; };
-		2115F426297FBF350057C89C /* SmokingChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmokingChoiceView.swift; sourceTree = "<group>"; };
-		2115F428297FC8AC0057C89C /* AILesionChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AILesionChoiceView.swift; sourceTree = "<group>"; };
 		2115F42A298005270057C89C /* QuestionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionError.swift; sourceTree = "<group>"; };
-		2115F42C298012510057C89C /* ActivityChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityChoiceView.swift; sourceTree = "<group>"; };
-		2115F42E298012630057C89C /* CADChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CADChoiceView.swift; sourceTree = "<group>"; };
-		2115F430298012710057C89C /* CVDChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CVDChoiceView.swift; sourceTree = "<group>"; };
-		2115F4322980127B0057C89C /* CKDChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKDChoiceView.swift; sourceTree = "<group>"; };
-		2115F434298012880057C89C /* MalignancyChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MalignancyChoiceView.swift; sourceTree = "<group>"; };
-		2115F4362980129A0057C89C /* BKLesionChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BKLesionChoiceView.swift; sourceTree = "<group>"; };
-		2115F438298012A80057C89C /* FPLesionChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FPLesionChoiceView.swift; sourceTree = "<group>"; };
-		2115F43A298012B40057C89C /* UrgencyChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrgencyChoiceView.swift; sourceTree = "<group>"; };
-		2115F43C298012BE0057C89C /* FeverChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeverChoiceView.swift; sourceTree = "<group>"; };
-		2115F43E298012CB0057C89C /* WBCChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WBCChoiceView.swift; sourceTree = "<group>"; };
-		2115F440298012D60057C89C /* LocalInfectionChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalInfectionChoiceView.swift; sourceTree = "<group>"; };
-		2115F442298012DF0057C89C /* DLChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DLChoiceView.swift; sourceTree = "<group>"; };
-		2115F444298013000057C89C /* ContralateralChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContralateralChoiceView.swift; sourceTree = "<group>"; };
-		2115F446298013090057C89C /* OtherVDChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherVDChoiceView.swift; sourceTree = "<group>"; };
-		2115F448298013180057C89C /* RutherfordClassChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RutherfordClassChoiceView.swift; sourceTree = "<group>"; };
 		2126FE18297D406300A23B18 /* WeightFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightFormView.swift; sourceTree = "<group>"; };
 		2126FE1A297D673400A23B18 /* HeightFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeightFormView.swift; sourceTree = "<group>"; };
 		2126FE1C297E02C400A23B18 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -96,11 +60,11 @@
 		212A1FDF2951B38000508396 /* cliticalUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cliticalUITests.swift; sourceTree = "<group>"; };
 		212A1FE12951B38000508396 /* cliticalUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cliticalUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		21365623297F65E300BFDAFD /* AgeFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeFormView.swift; sourceTree = "<group>"; };
+		2189A24C3004AE240002AA14 /* ChoiceListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoiceListView.swift; sourceTree = "<group>"; };
+		2189A24E3004AE2A0002AA14 /* Labels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Labels.swift; sourceTree = "<group>"; };
 		218C5C222983BDEA006A4592 /* PredictedRiskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictedRiskView.swift; sourceTree = "<group>"; };
-		2196DF76296D62D900A9FF81 /* SexChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SexChoiceView.swift; sourceTree = "<group>"; };
 		2196DF7D296DC21400A9FF81 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		21C78F8B2951F4180054A045 /* CLPatientData */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CLPatientData; sourceTree = "<group>"; };
-		21CA4E5F296E293900040C50 /* CHFChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CHFChoiceView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,35 +120,17 @@
 			children = (
 				21C78F8B2951F4180054A045 /* CLPatientData */,
 				212A1FC42951B38000508396 /* CliticalApp.swift */,
-				2115F42C298012510057C89C /* ActivityChoiceView.swift */,
-				2115F42E298012630057C89C /* CADChoiceView.swift */,
-				2115F430298012710057C89C /* CVDChoiceView.swift */,
-				2115F4322980127B0057C89C /* CKDChoiceView.swift */,
-				2115F434298012880057C89C /* MalignancyChoiceView.swift */,
-				2115F4362980129A0057C89C /* BKLesionChoiceView.swift */,
-				2115F438298012A80057C89C /* FPLesionChoiceView.swift */,
-				2115F43A298012B40057C89C /* UrgencyChoiceView.swift */,
-				2115F43C298012BE0057C89C /* FeverChoiceView.swift */,
-				2115F43E298012CB0057C89C /* WBCChoiceView.swift */,
-				2115F440298012D60057C89C /* LocalInfectionChoiceView.swift */,
-				2115F442298012DF0057C89C /* DLChoiceView.swift */,
-				2115F444298013000057C89C /* ContralateralChoiceView.swift */,
-				2115F446298013090057C89C /* OtherVDChoiceView.swift */,
-				2115F448298013180057C89C /* RutherfordClassChoiceView.swift */,
-				2196DF76296D62D900A9FF81 /* SexChoiceView.swift */,
-				2115F426297FBF350057C89C /* SmokingChoiceView.swift */,
-				21CA4E5F296E293900040C50 /* CHFChoiceView.swift */,
 				212A1FC62951B38000508396 /* ContentView.swift */,
 				218C5C222983BDEA006A4592 /* PredictedRiskView.swift */,
 				2115F42A298005270057C89C /* QuestionError.swift */,
-				2115F428297FC8AC0057C89C /* AILesionChoiceView.swift */,
 				2126FE18297D406300A23B18 /* WeightFormView.swift */,
 				2115F424297FB4860057C89C /* AlbFormView.swift */,
 				21365623297F65E300BFDAFD /* AgeFormView.swift */,
 				2126FE1A297D673400A23B18 /* HeightFormView.swift */,
-				210381F3296E2DC400DA318A /* YesNo.swift */,
 				212A1FC82951B38000508396 /* Assets.xcassets */,
 				212A1FCA2951B38000508396 /* Preview Content */,
+				2189A24C3004AE240002AA14 /* ChoiceListView.swift */,
+				2189A24E3004AE2A0002AA14 /* Labels.swift */,
 			);
 			path = clitical;
 			sourceTree = "<group>";
@@ -355,34 +301,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2115F43D298012BE0057C89C /* FeverChoiceView.swift in Sources */,
-				210381F4296E2DC400DA318A /* YesNo.swift in Sources */,
-				2115F431298012710057C89C /* CVDChoiceView.swift in Sources */,
-				2115F429297FC8AC0057C89C /* AILesionChoiceView.swift in Sources */,
-				2115F445298013000057C89C /* ContralateralChoiceView.swift in Sources */,
-				2115F42D298012510057C89C /* ActivityChoiceView.swift in Sources */,
 				212A1FC72951B38000508396 /* ContentView.swift in Sources */,
-				2115F447298013090057C89C /* OtherVDChoiceView.swift in Sources */,
 				2115F425297FB4860057C89C /* AlbFormView.swift in Sources */,
-				21CA4E60296E293900040C50 /* CHFChoiceView.swift in Sources */,
-				2115F43F298012CB0057C89C /* WBCChoiceView.swift in Sources */,
-				2115F449298013180057C89C /* RutherfordClassChoiceView.swift in Sources */,
-				2115F441298012D60057C89C /* LocalInfectionChoiceView.swift in Sources */,
-				2115F427297FBF350057C89C /* SmokingChoiceView.swift in Sources */,
 				218C5C232983BDEA006A4592 /* PredictedRiskView.swift in Sources */,
 				2126FE19297D406300A23B18 /* WeightFormView.swift in Sources */,
-				2196DF77296D62D900A9FF81 /* SexChoiceView.swift in Sources */,
 				21365624297F65E300BFDAFD /* AgeFormView.swift in Sources */,
-				2115F435298012880057C89C /* MalignancyChoiceView.swift in Sources */,
-				2115F43B298012B40057C89C /* UrgencyChoiceView.swift in Sources */,
-				2115F439298012A80057C89C /* FPLesionChoiceView.swift in Sources */,
-				2115F42F298012630057C89C /* CADChoiceView.swift in Sources */,
-				2115F4372980129A0057C89C /* BKLesionChoiceView.swift in Sources */,
+				2189A24D3004AE240002AA14 /* ChoiceListView.swift in Sources */,
 				212A1FC52951B38000508396 /* CliticalApp.swift in Sources */,
-				2115F4332980127B0057C89C /* CKDChoiceView.swift in Sources */,
+				2189A24F3004AE2A0002AA14 /* Labels.swift in Sources */,
 				2115F42B298005270057C89C /* QuestionError.swift in Sources */,
 				2126FE1B297D673400A23B18 /* HeightFormView.swift in Sources */,
-				2115F443298012DF0057C89C /* DLChoiceView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -669,7 +597,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7XT4A4J2HC;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.studiomexx.cliticalUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -691,7 +619,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7XT4A4J2HC;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.studiomexx.cliticalUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
