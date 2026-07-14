@@ -31,7 +31,7 @@
 "WeightQuestionDescription" = "体重 [kg]を入力してください。";
 "HeightQuestionTitle" = "身長 [cm]";
 "HeightQuestionDescription" = "身長 [cm]を入力してください。";
-"AlbQuestionTitle" = "アルミン値 [g/dl]";
+"AlbQuestionTitle" = "アルブミン値 [g/dl]";
 "AlbQuestionDescription" = "アルブミン値 [g/dl]を入力してください。";
 "ActivityQuestionTitle" = "ADL";
 "ActivityQuestionDescription" = "独歩, 車いす, 寝たきりから選んでください。";

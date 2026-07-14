@@ -81,7 +81,7 @@
 "GNRINoRisk" = "No Risk";
 "GNRILowRisk" = "Low Risk";
 "GNRIModerateRisk" = "Moderate Risk";
-"GNRIMajorRisk" = "Major Riks";
+"GNRIMajorRisk" = "Major Risk";
 "2YOSLowRisk" = "Low Risk";
 "2YOSMediumRisk" = "Medium Risk";
 "2YOSHighRisk" = "High Risk";
@@ -92,10 +92,9 @@
 "AnErrorOccured" = "Something wrong occured. Check Patient Data.";
 "DefaultError" = "Unable to calculate risk. Check Patient Data.";
 "GNRI" = "GNRI";
-"30DayPrediction" = "30-Day Risk Prediction";
+"30DayPrediction" = "30-day Risk Prediction";
 "2YearPrediction" = "2-year Risk Predction";
 "GeriatricNutritionalRiskIndex" = "Geriatric Nutritional Risk Index";
-"30DayPrediction" = "30-day Risk Prediction";
 "30DDeathOrAmputation" = "Predicted risk of 30-day major amputation and/or death";
 "MALEDescription" = "MALE (Major Adverse Limb Events): above-ankle amputation of the index limb or major reintervention (new bypass graft, jump/ interposition graft revision, or thrombectomy/thrombolysis)";
 "30DMALE" = "Predicted risk of 30-day MALE";
