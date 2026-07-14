@@ -175,8 +175,15 @@ struct RootContentView: View {
             return
         }
         risk = newRisk
-        riskCalculated = true
         failure = false
+        // Deferred to the next run loop turn: if a ChoiceListView pop just
+        // completed, UINavigationController's transition-coordinator
+        // transaction for that pop may not have settled yet. Flipping
+        // isActive synchronously in that window can be silently dropped by
+        // SwiftUI's NavigationLink(isActive:), so the push never happens.
+        DispatchQueue.main.async {
+            riskCalculated = true
+        }
     }
 
     private func fail(with error: QuestionError) {
