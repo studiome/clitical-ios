@@ -117,9 +117,9 @@ struct RootContentView: View {
                     .tint(.red)
                     // Hidden programmatic-navigation link.  Placed inside the
                     // List so SwiftUI can measure its EmptyView in a proper
-                    // list-cell context; a bare VStack sibling produces a
+                    // list-cell context; a bare ZStack sibling produces a
                     // zero-height frame and the "Invalid frame dimension"
-                    // runtime warning/crash seen in UI tests.
+                    // runtime warning seen in UI tests.
                     NavigationLink(destination: PredictedRiskView(risk: risk),
                                    isActive: $riskCalculated) {
                         EmptyView()
