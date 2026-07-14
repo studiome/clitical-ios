@@ -158,10 +158,19 @@ final class cliticalUITests: XCTestCase {
             XCTAssertTrue(field.waitForExistence(timeout: 5), "Missing field: \(placeholder)")
             field.tap()
             field.typeText(value)
+            let done = app.buttons["Done"]
+            if done.exists { done.tap() }
         }
-        let done = app.buttons["Done"]
-        if done.exists {
-            done.tap()
+        // After the last field, the keyboard dismiss animation can still be in
+        // progress. Without this wait, scrollTo() sees isHittable==false on the
+        // Predict button (keyboard covers it) and over-scrolls past it.
+        let keyboard = app.keyboards.firstMatch
+        if keyboard.exists {
+            let keyboardGone = XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "exists == false"),
+                object: keyboard
+            )
+            _ = XCTWaiter().wait(for: [keyboardGone], timeout: 3)
         }
     }
 
@@ -184,6 +193,16 @@ final class cliticalUITests: XCTestCase {
                       "Missing option \(option) for \(title)")
         optionElement.tap()
         app.navigationBars.buttons.firstMatch.tap()
+        // Wait for the pop animation to fully complete before returning.
+        // Without this, tapPredictButton's scrollTo runs while the ChoiceListView
+        // is still animating out: it burns all 12 swipes on an unstable tree,
+        // over-scrolls past the Predict button, and leaves SwiftUI's NavigationView
+        // in a state where the programmatic isActive NavigationLink won't fire.
+        let dismissed = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"),
+            object: app.navigationBars[title]
+        )
+        _ = XCTWaiter().wait(for: [dismissed], timeout: 5)
     }
 
     /// Scrolls to the Predict button at the bottom of the form and taps it.
