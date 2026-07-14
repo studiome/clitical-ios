@@ -113,7 +113,13 @@ final class cliticalUITests: XCTestCase {
         XCTAssertTrue(app.navigationBars["Predicted Risks"].waitForExistence(timeout: 5),
                       "Predicted risk screen did not appear")
         XCTAssertTrue(app.staticTexts["Predicted 2-year Overall Survival"].exists)
-        XCTAssertTrue(app.staticTexts["Geriatric Nutritional Risk Index"].exists)
+        // The GNRI section sits at the bottom of the results List; on short
+        // screens (e.g. iPhone SE) SwiftUI doesn't materialize it until it's
+        // scrolled into view, so it's absent from the accessibility tree
+        // until then.
+        let gnriTitle = app.staticTexts["Geriatric Nutritional Risk Index"]
+        scrollTo(gnriTitle, in: app)
+        XCTAssertTrue(gnriTitle.waitForExistence(timeout: 5))
     }
 
     /// With valid numbers but no artery lesion selected, predicting must show
@@ -135,11 +141,21 @@ final class cliticalUITests: XCTestCase {
 
     // MARK: - Helpers
 
-    /// Swipes up until the element is on screen and tappable.
-    private func scrollTo(_ element: XCUIElement, in app: XCUIApplication, maxSwipes: Int = 12) {
+    /// Scrolls up in small increments until the element is on screen and
+    /// tappable.
+    ///
+    /// app.swipeUp() drags nearly the full screen height in one gesture. On
+    /// a short screen (e.g. iPhone SE) that single jump can skip clean over
+    /// a target row's position between the before/after existence checks, so
+    /// the loop never observes it as hittable and scrolls all the way to the
+    /// bottom of the list. A short, fixed-distance drag lands more precisely
+    /// at the cost of needing more iterations, which the higher cap covers.
+    private func scrollTo(_ element: XCUIElement, in app: XCUIApplication, maxSwipes: Int = 40) {
         var swipes = 0
         while !(element.exists && element.isHittable) && swipes < maxSwipes {
-            app.swipeUp()
+            let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.7))
+            let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.55))
+            start.press(forDuration: 0.05, thenDragTo: end)
             swipes += 1
         }
     }
