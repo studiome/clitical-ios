@@ -11,7 +11,7 @@ import XCTest
 final class PatientRiskTests: XCTestCase {
     
     func testInit() throws {
-        var pd = PatientData()
+        let pd = PatientData()
         let risk = PatientRisk(of: pd)
         XCTAssertNil(risk.gnri)
         XCTAssertNil(risk.gnriRisk)
