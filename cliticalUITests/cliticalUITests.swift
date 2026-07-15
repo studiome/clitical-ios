@@ -22,14 +22,6 @@ final class cliticalUITests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
-        app.launch()
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
     /// Verifies the bottom tab menu exists and that selecting English in the
     /// Language tab re-localizes the whole UI live (no relaunch).
     func testLanguageTabSwitchesLocaleLive() throws {
@@ -99,7 +91,7 @@ final class cliticalUITests: XCTestCase {
     }
 
     /// Happy path: filling every required field and marking one artery lesion
-    /// pushes the predicted-risk screen with the 30-day, 2-year, and GNRI results.
+    /// pushes the predicted-risk screen with the 2-year and GNRI results.
     func testPredictWithValidDataShowsRiskResults() throws {
         let app = XCUIApplication()
         app.launchArguments += ["-app_language", "en"]
