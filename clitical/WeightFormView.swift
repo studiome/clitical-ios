@@ -9,7 +9,7 @@ import SwiftUI
 import CLPatientData
 
 struct WeightFormView: View {
-    @EnvironmentObject var patientData: PatientData
+    @Binding var patientData: PatientData
 
     var body: some View {
         HStack {
@@ -24,7 +24,6 @@ struct WeightFormView: View {
 }
 
 #Preview {
-    WeightFormView()
-        .environmentObject(PatientData())
+    WeightFormView(patientData: .constant(PatientData()))
         .environment(\.locale, .init(identifier: "ja"))
 }

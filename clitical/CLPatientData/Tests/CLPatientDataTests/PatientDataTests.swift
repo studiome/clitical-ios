@@ -28,4 +28,25 @@ final class PatientDataTests: XCTestCase {
         XCTAssertFalse(pd.hasOtherVD)
         XCTAssertEqual(pd.rutherford, .class4)
     }
+
+    func testValueSemantics() throws {
+        var original = PatientData()
+        original.age = 70
+        var copy = original
+        copy.age = 80
+        XCTAssertEqual(original.age, 70)
+        XCTAssertEqual(copy.age, 80)
+    }
+
+    func testClearResetsToInitialState() throws {
+        var pd = PatientData()
+        pd.age = 70
+        pd.height = 160.0
+        pd.hasCHF = true
+        pd.clear()
+        XCTAssertNil(pd.age)
+        XCTAssertNil(pd.height)
+        XCTAssertFalse(pd.hasCHF)
+        XCTAssertEqual(pd.sex, .female)
+    }
 }

@@ -123,7 +123,7 @@ private struct RiskRow<Content: View>: View {
 }
 
 private func previewPatientData() -> PatientData {
-    let patientData = PatientData()
+    var patientData = PatientData()
     patientData.age = 65
     patientData.height = 150.0
     patientData.weight = 50.0

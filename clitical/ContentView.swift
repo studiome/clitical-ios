@@ -9,7 +9,7 @@ import SwiftUI
 import CLPatientData
 
 struct RootContentView: View {
-    @EnvironmentObject var patientData: PatientData
+    @State private var patientData = PatientData()
     @FocusState var isActive: Bool
     @State private var failure = false
     @State private var riskCalculated = false
@@ -21,14 +21,14 @@ struct RootContentView: View {
             VStack {
                 List {
                     Section(header: Text("BasicInfo")) {
-                        AgeFormView().focused($isActive)
+                        AgeFormView(patientData: $patientData).focused($isActive)
                         ChoiceRow(title: "SexQuestionTitle",
                                   footer: "SexQuestionDescription",
                                   options: Sex.allCases,
                                   label: \.label,
                                   selection: $patientData.sex)
-                        HeightFormView().focused($isActive)
-                        WeightFormView().focused($isActive)
+                        HeightFormView(patientData: $patientData).focused($isActive)
+                        WeightFormView(patientData: $patientData).focused($isActive)
                     }
                     Section(header: Text("SocialHistory")) {
                         ChoiceRow(title: "SmokingQuestionTitle",
@@ -41,7 +41,7 @@ struct RootContentView: View {
                                   selection: $patientData.activity)
                     }
                     Section(header: Text("ClinicalInfo")) {
-                        AlbFormView().focused($isActive)
+                        AlbFormView(patientData: $patientData).focused($isActive)
                         ChoiceRow(title: "CKDQuestionTitle",
                                   footer: "CKDQuestionDescription",
                                   options: CKD.allCases,
@@ -195,6 +195,5 @@ struct RootContentView: View {
 
 #Preview {
     RootContentView()
-        .environmentObject(PatientData())
         .environment(\.locale, .init(identifier: "ja"))
 }

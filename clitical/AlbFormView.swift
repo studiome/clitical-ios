@@ -9,7 +9,7 @@ import SwiftUI
 import CLPatientData
 
 struct AlbFormView: View {
-    @EnvironmentObject var patientData: PatientData
+    @Binding var patientData: PatientData
 
     var body: some View {
         HStack {
@@ -24,7 +24,6 @@ struct AlbFormView: View {
 }
 
 #Preview {
-    AlbFormView()
-        .environmentObject(PatientData())
+    AlbFormView(patientData: .constant(PatientData()))
         .environment(\.locale, .init(identifier: "ja"))
 }

@@ -22,9 +22,9 @@
 		2189A24D3004AE240002AA14 /* ChoiceListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2189A24C3004AE240002AA14 /* ChoiceListView.swift */; };
 		2189A24F3004AE2A0002AA14 /* Labels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2189A24E3004AE2A0002AA14 /* Labels.swift */; };
 		218C5C232983BDEA006A4592 /* PredictedRiskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218C5C222983BDEA006A4592 /* PredictedRiskView.swift */; };
+		2196DF7A296DC20600A9FF81 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2196DF7C296DC20600A9FF81 /* Localizable.strings */; };
 		21AA010000000000000000A2 /* LocalizationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AA010000000000000000A1 /* LocalizationManager.swift */; };
 		21AA010000000000000000B2 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AA010000000000000000B1 /* MainTabView.swift */; };
-		2196DF7A296DC20600A9FF81 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2196DF7C296DC20600A9FF81 /* Localizable.strings */; };
 		21C78F8E2951F4CF0054A045 /* CLPatientData in Frameworks */ = {isa = PBXBuildFile; productRef = 21C78F8D2951F4CF0054A045 /* CLPatientData */; };
 /* End PBXBuildFile section */
 
@@ -65,9 +65,9 @@
 		2189A24C3004AE240002AA14 /* ChoiceListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoiceListView.swift; sourceTree = "<group>"; };
 		2189A24E3004AE2A0002AA14 /* Labels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Labels.swift; sourceTree = "<group>"; };
 		218C5C222983BDEA006A4592 /* PredictedRiskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictedRiskView.swift; sourceTree = "<group>"; };
+		2196DF7D296DC21400A9FF81 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		21AA010000000000000000A1 /* LocalizationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationManager.swift; sourceTree = "<group>"; };
 		21AA010000000000000000B1 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
-		2196DF7D296DC21400A9FF81 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		21C78F8B2951F4180054A045 /* CLPatientData */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CLPatientData; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 

@@ -11,7 +11,7 @@ import XCTest
 final class PatientRiskTests: XCTestCase {
     
     func testInit() throws {
-        let pd = PatientData()
+        var pd = PatientData()
         let risk = PatientRisk(of: pd)
         XCTAssertNil(risk.gnri)
         XCTAssertNil(risk.gnriRisk)
@@ -23,7 +23,7 @@ final class PatientRiskTests: XCTestCase {
     }
     
     func testErrorCase() throws{
-        let pd = PatientData()
+        var pd = PatientData()
         pd.height = 0.0
         let risk = PatientRisk(of: pd)
         XCTAssertNil(risk.gnri)
@@ -36,7 +36,7 @@ final class PatientRiskTests: XCTestCase {
     }
     
     func testExtremelyLowRiskCase() throws{
-        let pd = PatientData()
+        var pd = PatientData()
         pd.age = 65
         pd.weight = 50.0
         pd.height = 150.0
@@ -55,7 +55,7 @@ final class PatientRiskTests: XCTestCase {
     }
     
     func testLowRiskCase() throws{
-        let pd = PatientData()
+        var pd = PatientData()
         pd.sex = .male
         pd.age = 50
         pd.weight = 60.0
@@ -91,7 +91,7 @@ final class PatientRiskTests: XCTestCase {
     }
     
     func testMediumRiskCase() throws{
-        let pd = PatientData()
+        var pd = PatientData()
         pd.sex = .female
         pd.age = 70
         pd.weight = 55.0
@@ -127,7 +127,7 @@ final class PatientRiskTests: XCTestCase {
     }
     
     func testHighRiskCase1() throws{
-        let pd = PatientData()
+        var pd = PatientData()
         pd.sex = .male
         pd.age = 85
         pd.weight = 55.1
@@ -165,7 +165,7 @@ final class PatientRiskTests: XCTestCase {
     // Regression: isUrgent and hasAbnormalWBC must be counted independently.
     // Same base as testExtremelyLowRiskCase, with only isUrgent set.
     func testUrgentWithNormalWBC() throws{
-        let pd = PatientData()
+        var pd = PatientData()
         pd.age = 65
         pd.weight = 50.0
         pd.height = 150.0
@@ -183,7 +183,7 @@ final class PatientRiskTests: XCTestCase {
 
     // Same base, with only hasAbnormalWBC set.
     func testNonUrgentWithAbnormalWBC() throws{
-        let pd = PatientData()
+        var pd = PatientData()
         pd.age = 65
         pd.weight = 50.0
         pd.height = 150.0
@@ -200,7 +200,7 @@ final class PatientRiskTests: XCTestCase {
     }
 
     func testHighRiskCase2() throws{
-        let pd = PatientData()
+        var pd = PatientData()
         pd.sex = .female
         pd.age = 90
         pd.weight = 30.0

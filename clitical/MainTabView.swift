@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import CLPatientData
 
 struct MainTabView: View {
     var body: some View {
@@ -133,7 +132,6 @@ struct AboutView: View {
 
 #Preview {
     MainTabView()
-        .environmentObject(PatientData())
         .environmentObject(LocalizationManager())
         .environment(\.locale, .init(identifier: "ja"))
 }
