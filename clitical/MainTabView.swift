@@ -7,6 +7,21 @@
 //
 
 import SwiftUI
+import SafariServices
+
+// MARK: - SafariView
+
+private struct SafariView: UIViewControllerRepresentable {
+    let url: URL
+
+    func makeUIViewController(context: Context) -> SFSafariViewController {
+        SFSafariViewController(url: url)
+    }
+
+    func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) {}
+}
+
+// MARK: - MainTabView
 
 struct MainTabView: View {
     var body: some View {
@@ -73,12 +88,16 @@ struct ReferencesView: View {
         ),
     ]
 
+    @State private var selectedReference: Reference?
+
     var body: some View {
         NavigationView {
             List {
                 Section(footer: Text("TapToOpenLink")) {
                     ForEach(references) { reference in
-                        Link(destination: reference.url) {
+                        Button {
+                            selectedReference = reference
+                        } label: {
                             Text(reference.text)
                                 .font(.callout)
                                 .foregroundStyle(.primary)
@@ -87,6 +106,10 @@ struct ReferencesView: View {
                 }
             }
             .navigationTitle("References")
+            .sheet(item: $selectedReference) { reference in
+                SafariView(url: reference.url)
+                    .ignoresSafeArea()
+            }
         }
         .tint(.teal)
     }
@@ -100,6 +123,8 @@ struct AboutView: View {
     private var appVersion: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—"
     }
+
+    @State private var isShowingTerms = false
 
     var body: some View {
         NavigationView {
@@ -119,12 +144,18 @@ struct AboutView: View {
                     .padding(.vertical, 4.0)
                 }
                 Section {
-                    Link(destination: termsURL) {
+                    Button {
+                        isShowingTerms = true
+                    } label: {
                         Label("AppTerms", systemImage: "hand.raised")
                     }
                 }
             }
             .navigationTitle("About")
+            .sheet(isPresented: $isShowingTerms) {
+                SafariView(url: termsURL)
+                    .ignoresSafeArea()
+            }
         }
         .tint(.teal)
     }
