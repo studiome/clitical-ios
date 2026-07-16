@@ -31,14 +31,14 @@
 "WeightQuestionDescription" = "体重 [kg]を入力してください。";
 "HeightQuestionTitle" = "身長 [cm]";
 "HeightQuestionDescription" = "身長 [cm]を入力してください。";
-"AlbQuestionTitle" = "アルミン値 [g/dl]";
+"AlbQuestionTitle" = "アルブミン値 [g/dl]";
 "AlbQuestionDescription" = "アルブミン値 [g/dl]を入力してください。";
 "ActivityQuestionTitle" = "ADL";
 "ActivityQuestionDescription" = "独歩, 車いす, 寝たきりから選んでください。";
 "ActivityAmbulatory" = "独歩";
 "ActivityWheelchair" = "車いす";
 "ActivityImmobile" = "寝たきり";
-"UrgencydQuestionTitle" = "緊急血行再建の適応";
+"UrgencyQuestionTitle" = "緊急血行再建の適応";
 "UrgencyQuestionDescription" = "あり：緊急手術, なし：待機手術";
 "CKDQuestionTitle" = "慢性腎臓病";
 "CKDQuestionDescription" = "eGFR(推定糸球体濾過量) [mL/min/1.73m\U00B2], 正常: 60以上, G3: 30-59, G4: 15-29, G5: 15以下, G5D: 透析";
@@ -102,3 +102,12 @@
 "2YOS" = "予測2年OS(全生存率)";
 "2YAFS" = "予測2年AFS(大切断回避生存率)";
 "RiskViewTitle"  = "予測リスク";
+
+/* Bottom tab menu */
+"RiskCalculationTab" = "リスク計算";
+"Language" = "言語";
+"References" = "参考文献";
+"About" = "このアプリについて";
+"AppTerms" = "利用規約";
+"TapToOpenLink" = "論文サイトを開きます。";
+"AppLegalese" = "2022 発行: 特定非営利法人日本血管外科学会、JCLIMB委員会、ソフトウェア制作: 宮原和洋";

@@ -9,23 +9,21 @@ import SwiftUI
 import CLPatientData
 
 struct AgeFormView: View {
-    @EnvironmentObject var patientData: PatientData
+    @Binding var patientData: PatientData
+
     var body: some View {
-        HStack{
+        HStack {
             Text("AgeQuestionTitle")
             TextField("AgeQuestionDescription",
                       value: $patientData.age,
-                      format: .number
-            )
+                      format: .number)
             .multilineTextAlignment(.trailing)
             .keyboardType(.numberPad)
         }
     }
 }
 
-struct AgeFormView_Previews: PreviewProvider {
-    static var previews: some View {
-        AgeFormView().environmentObject(PatientData())
-            .environment(\.locale, .init(identifier: "ja"))
-    }
+#Preview {
+    AgeFormView(patientData: .constant(PatientData()))
+        .environment(\.locale, .init(identifier: "ja"))
 }

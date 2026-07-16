@@ -6,13 +6,16 @@
 //
 
 import SwiftUI
-import CLPatientData
 
 @main
 struct CliticalApp: App {
+    @StateObject private var localization = LocalizationManager()
+
     var body: some Scene {
         WindowGroup {
-            RootContentView().environmentObject(PatientData())
+            MainTabView()
+                .environmentObject(localization)
+                .environment(\.locale, localization.locale)
         }
     }
 }

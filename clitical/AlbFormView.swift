@@ -9,23 +9,21 @@ import SwiftUI
 import CLPatientData
 
 struct AlbFormView: View {
-    @EnvironmentObject var patientData: PatientData
+    @Binding var patientData: PatientData
+
     var body: some View {
-        HStack{
+        HStack {
             Text("AlbQuestionTitle")
             TextField("AlbQuestionDescription",
                       value: $patientData.alb,
-                      format: .number
-            )
+                      format: .number)
             .multilineTextAlignment(.trailing)
             .keyboardType(.decimalPad)
         }
     }
 }
 
-struct AlbFormView_Previews: PreviewProvider {
-    static var previews: some View {
-        AlbFormView().environmentObject(PatientData())
-            .environment(\.locale, .init(identifier: "ja"))
-    }
+#Preview {
+    AlbFormView(patientData: .constant(PatientData()))
+        .environment(\.locale, .init(identifier: "ja"))
 }

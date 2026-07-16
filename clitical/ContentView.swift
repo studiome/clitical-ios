@@ -9,230 +9,191 @@ import SwiftUI
 import CLPatientData
 
 struct RootContentView: View {
-    @EnvironmentObject var patientData: PatientData
+    @State private var patientData = PatientData()
     @FocusState var isActive: Bool
-    @State var failure: Bool = false
-    @State var riskCalculated: Bool = false
-    @State var errorMessage: String  = ""
-    @State var risk: PatientRisk?
+    @State private var failure = false
+    @State private var riskCalculated = false
+    @State private var errorMessage = ""
+    @State private var risk: PatientRisk?
+
     var body: some View {
-        NavigationView{
-            VStack{
-                List{
-                    Section(header: Text("BasicInfo")){
-                        AgeFormView().focused($isActive)
-                        NavigationLink(destination: SexChoiceView(), label:{
-                            HStack{
-                                Text("SexQuestionTitle")
-                                Spacer()
-                                Text(LocalizedStringKey(patientData.sex.label))
-                            }
-                        })
-                        HeightFormView().focused($isActive)
-                        WeightFormView().focused($isActive)
+        NavigationView {
+            VStack {
+                List {
+                    Section(header: Text("BasicInfo")) {
+                        AgeFormView(patientData: $patientData).focused($isActive)
+                        ChoiceRow(title: "SexQuestionTitle",
+                                  footer: "SexQuestionDescription",
+                                  options: Sex.allCases,
+                                  label: \.label,
+                                  selection: $patientData.sex)
+                        HeightFormView(patientData: $patientData).focused($isActive)
+                        WeightFormView(patientData: $patientData).focused($isActive)
                     }
-                    Section(header: Text("SocialHistory")){
-                        NavigationLink(destination: SmokingChoiceView(), label:{
-                            HStack{
-                                Text("SmokingQuestionTitle")
-                                Spacer()
-                                Text(LocalizedStringKey(patientData.isSmoking.label))
-                            }
-                        })
-                        NavigationLink(destination: ActivityChoiceView(), label:{
-                            HStack{
-                                Text("ActivityQuestionTitle")
-                                Spacer()
-                                Text(LocalizedStringKey(patientData.activity.label))
-                            }
-                        })
+                    Section(header: Text("SocialHistory")) {
+                        ChoiceRow(title: "SmokingQuestionTitle",
+                                  footer: "SmokingQuestionDescription",
+                                  selection: $patientData.isSmoking)
+                        ChoiceRow(title: "ActivityQuestionTitle",
+                                  footer: "ActivityQuestionDescription",
+                                  options: Activity.allCases,
+                                  label: \.label,
+                                  selection: $patientData.activity)
                     }
-                    Section(header: Text("ClinicalInfo")){
-                        AlbFormView().focused($isActive)
-                        NavigationLink(destination: CKDChoiceView(), label:{
-                            HStack{
-                                Text("CKDQuestionTitle")
-                                Spacer()
-                                Text(LocalizedStringKey(patientData.ckd.label))
-                            }
-                        })
-                        NavigationLink(destination: UrgencyChoiceView(), label:{
-                            HStack{
-                                Text("UrgencydQuestionTitle")
-                                Spacer()
-                                Text(LocalizedStringKey(patientData.isUrgent.label))
-                            }
-                        })
-                        NavigationLink(destination: FeverChoiceView(), label:{
-                            HStack{
-                                Text("FeverQuestionTitle")
-                                Spacer()
-                                Text(LocalizedStringKey(patientData.hasFever.label))
-                            }
-                        })
-                        NavigationLink(destination: WBCChoiceView(), label:{
-                            HStack{
-                                Text("WBCQuestionTitle")
-                                Spacer()
-                                Text(LocalizedStringKey(patientData.hasAbnormalWBC.label))
-                            }
-                        })
-                        NavigationLink(destination: LocalInfectionChoiceView(), label:{
-                            HStack{
-                                Text("LocalInfectionQuestionTitle")
-                                Spacer()
-                                Text(LocalizedStringKey(patientData.hasLocalInfection.label))
-                            }
-                        })
-                        NavigationLink(destination: RutherfordClassChoiceView(), label:{
-                            HStack{
-                                Text("RutherfordClassQuestionTitle")
-                                Spacer()
-                                Text(LocalizedStringKey(patientData.rutherford.label))
-                            }
-                        })
+                    Section(header: Text("ClinicalInfo")) {
+                        AlbFormView(patientData: $patientData).focused($isActive)
+                        ChoiceRow(title: "CKDQuestionTitle",
+                                  footer: "CKDQuestionDescription",
+                                  options: CKD.allCases,
+                                  label: \.label,
+                                  selection: $patientData.ckd)
+                        ChoiceRow(title: "UrgencyQuestionTitle",
+                                  footer: "UrgencyQuestionDescription",
+                                  selection: $patientData.isUrgent)
+                        ChoiceRow(title: "FeverQuestionTitle",
+                                  footer: "FeverQuestionDescription",
+                                  selection: $patientData.hasFever)
+                        ChoiceRow(title: "WBCQuestionTitle",
+                                  footer: "WBCQuestionDescription",
+                                  selection: $patientData.hasAbnormalWBC)
+                        ChoiceRow(title: "LocalInfectionQuestionTitle",
+                                  footer: "LocalInfectionQuestionDescription",
+                                  selection: $patientData.hasLocalInfection)
+                        ChoiceRow(title: "RutherfordClassQuestionTitle",
+                                  footer: "RutherfordClassQuestionDescription",
+                                  options: RutherfordClassification.allCases,
+                                  label: \.label,
+                                  selection: $patientData.rutherford)
                     }
-                    Section(header: Text("LesionInfo")){
-                        NavigationLink(destination: AILesionChoiceView(), label:{
-                            HStack{
-                                Text("AILesionQuestionTitle")
-                                Spacer()
-                                Text(LocalizedStringKey(patientData.hasAILesion.label))
-                            }
-                        })
-                        NavigationLink(destination: FPLesionChoiceView(), label:{
-                            HStack{
-                                Text("FPLesionQuestionTitle")
-                                Spacer()
-                                Text(LocalizedStringKey(patientData.hasFPLesion.label))
-                            }
-                        })
-                        NavigationLink(destination: BKLesionChoiceView(), label:{
-                            HStack{
-                                Text("BKLesionQuestionTitle")
-                                Spacer()
-                                Text(LocalizedStringKey(patientData.hasBKLesion.label))
-                            }
-                        })
+                    Section(header: Text("LesionInfo")) {
+                        ChoiceRow(title: "AILesionQuestionTitle",
+                                  footer: "AILesionQuestionDescription",
+                                  selection: $patientData.hasAILesion)
+                        ChoiceRow(title: "FPLesionQuestionTitle",
+                                  footer: "FPLesionQuestionDescription",
+                                  selection: $patientData.hasFPLesion)
+                        ChoiceRow(title: "BKLesionQuestionTitle",
+                                  footer: "BKLesionQuestionDescription",
+                                  selection: $patientData.hasBKLesion)
                     }
-                    Section(header: Text("OtherLesionInfo")){
-                        NavigationLink(destination: ContralateralChoiceView(), label:{
-                            HStack{
-                                Text("ContralateralQuestionTitle")
-                                Spacer()
-                                Text(LocalizedStringKey(patientData.hasContraLateralLesion.label))
-                            }
-                        })
-                        NavigationLink(destination: OtherVDChoiceView(), label:{
-                            HStack{
-                                Text("OtherVDQuestionTitle")
-                                Spacer()
-                                Text(LocalizedStringKey(patientData.hasOtherVD.label))
-                            }
-                        })
+                    Section(header: Text("OtherLesionInfo")) {
+                        ChoiceRow(title: "ContralateralQuestionTitle",
+                                  footer: "ContralateralQuestionDescription",
+                                  selection: $patientData.hasContraLateralLesion)
+                        ChoiceRow(title: "OtherVDQuestionTitle",
+                                  footer: "OtherVDQuestionDescription",
+                                  selection: $patientData.hasOtherVD)
                     }
-                    Section(header: Text("Complications")){
-                        NavigationLink(destination: CHFChoiceView(), label:{
-                            HStack{
-                                Text("CHFQuestionTitle")
-                                Spacer()
-                                Text(LocalizedStringKey(patientData.hasCHF.label))
-                            }
-                        })
-                        NavigationLink(destination: CADChoiceView(), label:{
-                            HStack{
-                                Text("CADQuestionTitle")
-                                Spacer()
-                                Text(LocalizedStringKey(patientData.hasCAD.label))
-                            }
-                        })
-                        NavigationLink(destination: CVDChoiceView(), label:{
-                            HStack{
-                                Text("CVDQuestionTitle")
-                                Spacer()
-                                Text(LocalizedStringKey(patientData.hasCVD.label))
-                            }
-                        })
-                        NavigationLink(destination: DLChoiceView(), label:{
-                            HStack{
-                                Text("DLQuestionTitle")
-                                Spacer()
-                                Text(LocalizedStringKey(patientData.hasDyslipidemia.label))
-                            }
-                        })
-                        NavigationLink(destination: MalignancyChoiceView(), label:{
-                            HStack{
-                                Text("MalignancyQuestionTitle")
-                                Spacer()
-                                Text(LocalizedStringKey(patientData.malignantNeoplasm.label))
-                            }
-                        })
+                    Section(header: Text("Complications")) {
+                        ChoiceRow(title: "CHFQuestionTitle",
+                                  footer: "CHFQuestionDescription",
+                                  selection: $patientData.hasCHF)
+                        ChoiceRow(title: "CADQuestionTitle",
+                                  footer: "CADQuestionDescription",
+                                  selection: $patientData.hasCAD)
+                        ChoiceRow(title: "CVDQuestionTitle",
+                                  footer: "CVDQuestionDescription",
+                                  selection: $patientData.hasCVD)
+                        ChoiceRow(title: "DLQuestionTitle",
+                                  footer: "DLQuestionDescription",
+                                  selection: $patientData.hasDyslipidemia)
+                        ChoiceRow(title: "MalignancyQuestionTitle",
+                                  footer: "MalignancyQuestionDescription",
+                                  options: MalignantNeoplasm.allCases,
+                                  label: \.label,
+                                  selection: $patientData.malignantNeoplasm)
                     }
-                    Button("PredictRisks"){
-                        if(patientData.age == nil ||
-                           patientData.height == nil ||
-                           patientData.weight == nil ||
-                           patientData.alb == nil){
-                            errorMessage = QuestionError.NumberFormIsNil.message
-                            failure = true
-                            riskCalculated = false
-                            return
-                        }
-                        if (patientData.hasAILesion == false &&
-                            patientData.hasFPLesion == false &&
-                            patientData.hasBKLesion == false){
-                            errorMessage = QuestionError.IrrelevantLesion.message
-                            failure = true
-                            riskCalculated = false
-                            return
-                        }
-                        risk = PatientRisk(of:patientData)
-                        if (risk!.gnri == nil ||
-                            risk!.gnriRisk == nil ||
-                            risk!.predicted2YOS == nil ||
-                            risk!.predicted30DDeathOrAmputation == nil ||
-                            risk!.predicted30DMALE == nil ||
-                            risk!.predicted2YOSRisk == nil ||
-                            risk!.predicted2YAFS == nil){
-                            riskCalculated = false
-                            failure = true
-                            errorMessage  = QuestionError.DefaultError.message
-                            return
-                        }
-                        riskCalculated = true
-                        failure = false
-                        
-                    }.alert("ErrorTitle", isPresented: $failure){
-                        
+                    Button("PredictRisks") {
+                        predictRisks()
+                    }
+                    .alert("ErrorTitle", isPresented: $failure) {
                     } message: {
                         Text(LocalizedStringKey(errorMessage))
-                    }.accentColor(.teal)
-                    Button("RESET"){
+                    }
+                    .tint(.teal)
+                    Button("RESET") {
                         patientData.clear()
-                    }.accentColor(.red)
+                    }
+                    .tint(.red)
+                    // Hidden programmatic-navigation link.  Placed inside the
+                    // List so SwiftUI can measure its EmptyView in a proper
+                    // list-cell context; a bare ZStack sibling produces a
+                    // zero-height frame and the "Invalid frame dimension"
+                    // runtime warning seen in UI tests.
+                    NavigationLink(destination: PredictedRiskView(risk: risk),
+                                   isActive: $riskCalculated) {
+                        EmptyView()
+                    }
+                    .listRowInsets(.init())
+                    .listRowBackground(EmptyView())
+                    .frame(height: 0)
+                    .hidden()
                 }
-                .toolbar{
-                    ToolbarItemGroup(placement: .keyboard){
-                        Spacer()
-                        Button("DONE"){
-                            isActive = false
+                .toolbar {
+                    // A bare Spacer as a keyboard toolbar item makes SwiftUI log
+                    // "Invalid frame dimension (negative or non-finite)"; laying
+                    // out inside a single HStack item avoids it.
+                    ToolbarItem(placement: .keyboard) {
+                        HStack {
+                            Spacer()
+                            Button("DONE") {
+                                isActive = false
+                            }
                         }
                     }
                 }
                 .navigationTitle("PatientDataTitle")
-                NavigationLink(destination: PredictedRiskView(risk: risk), isActive: $riskCalculated){
-                    EmptyView()
-                }
             }
             .listStyle(.insetGrouped)
         }
-        .accentColor(.teal)
+        .tint(.teal)
+    }
+
+    private func predictRisks() {
+        guard patientData.age != nil,
+              patientData.height != nil,
+              patientData.weight != nil,
+              patientData.alb != nil else {
+            fail(with: .numberFormIsNil)
+            return
+        }
+        guard patientData.hasAILesion
+                || patientData.hasFPLesion
+                || patientData.hasBKLesion else {
+            fail(with: .irrelevantLesion)
+            return
+        }
+        let newRisk = PatientRisk(of: patientData)
+        guard newRisk.gnri != nil,
+              newRisk.gnriRisk != nil,
+              newRisk.predicted2YOS != nil,
+              newRisk.predicted30DDeathOrAmputation != nil,
+              newRisk.predicted30DMALE != nil,
+              newRisk.predicted2YOSRisk != nil,
+              newRisk.predicted2YAFS != nil else {
+            fail(with: .defaultError)
+            return
+        }
+        risk = newRisk
+        failure = false
+        // Deferred to the next run loop turn: if a ChoiceListView pop just
+        // completed, UINavigationController's transition-coordinator
+        // transaction for that pop may not have settled yet. Flipping
+        // isActive synchronously in that window can be silently dropped by
+        // SwiftUI's NavigationLink(isActive:), so the push never happens.
+        DispatchQueue.main.async {
+            riskCalculated = true
+        }
+    }
+
+    private func fail(with error: QuestionError) {
+        errorMessage = error.message
+        failure = true
+        riskCalculated = false
     }
 }
 
-struct RootContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        RootContentView().environmentObject(PatientData())
-            .environment(\.locale, .init(identifier:"ja"))
-    }
+#Preview {
+    RootContentView()
+        .environment(\.locale, .init(identifier: "ja"))
 }

@@ -1,80 +1,32 @@
-import Combine
+public struct PatientData {
+    public var sex: Sex = .female
+    public var age: Int?
+    public var height: Double? //cm
+    public var weight: Double? //kg
+    public var alb: Double?
+    public var activity: Activity = .ambulatory
+    public var hasCHF = false
+    public var hasCAD = false
+    public var hasCVD = false
+    public var ckd: CKD = .normal
+    public var malignantNeoplasm: MalignantNeoplasm = .no
+    public var hasAILesion = false
+    public var hasFPLesion = false
+    public var hasBKLesion = false
+    public var isUrgent = false
+    public var hasFever = false
+    public var hasAbnormalWBC = false
+    public var hasLocalInfection = false
+    public var hasDyslipidemia = false
+    public var isSmoking = false
+    public var hasContraLateralLesion = false
+    public var hasOtherVD = false
+    public var rutherford: RutherfordClassification = .class4
 
-@available(macOS 10.15, *)
-@available(iOS 13.0, *)
+    public init() {}
 
-public class PatientData: ObservableObject {
-    @Published public var sex: Sex
-    @Published public var age: Int?
-    @Published public var height:Double? //cm
-    @Published public var weight:Double? //kg
-    @Published public var alb:Double?
-    @Published public var activity:Activity
-    @Published public var hasCHF: Bool
-    @Published public var hasCAD: Bool
-    @Published public var hasCVD: Bool
-    @Published public var ckd: CKD = .normal
-    @Published public var malignantNeoplasm: MalignantNeoplasm
-    @Published public var hasAILesion: Bool
-    @Published public var hasFPLesion: Bool
-    @Published public var hasBKLesion: Bool
-    @Published public var isUrgent: Bool
-    @Published public var hasFever: Bool
-    @Published public var hasAbnormalWBC: Bool
-    @Published public var hasLocalInfection: Bool
-    @Published public var hasDyslipidemia: Bool
-    @Published public var isSmoking: Bool
-    @Published public var hasContraLateralLesion: Bool
-    @Published public var hasOtherVD: Bool
-    @Published public var rutherford: RutherfordClassification
-    
-    public init(){
-        sex = .female
-        alb = nil
-        activity = .ambulatory
-        hasCHF = false
-        hasCAD  = false
-        hasCVD = false
-        ckd = .normal
-        malignantNeoplasm = .no
-        hasAILesion = false
-        hasFPLesion = false
-        hasBKLesion = false
-        isUrgent = false
-        hasFever = false
-        hasAbnormalWBC = false
-        hasLocalInfection = false
-        hasDyslipidemia = false
-        isSmoking = false
-        hasContraLateralLesion = false
-        hasOtherVD = false
-        rutherford = .class4
-    }
-    
-    public func clear(){
-        sex = .female
-        age = nil
-        height = nil
-        weight = nil
-        alb = nil
-        activity = .ambulatory
-        hasCHF = false
-        hasCAD  = false
-        hasCVD = false
-        ckd = .normal
-        malignantNeoplasm = .no
-        hasAILesion = false
-        hasFPLesion = false
-        hasBKLesion = false
-        isUrgent = false
-        hasFever = false
-        hasAbnormalWBC = false
-        hasLocalInfection = false
-        hasDyslipidemia = false
-        isSmoking = false
-        hasContraLateralLesion = false
-        hasOtherVD = false
-        rutherford = .class4
+    public mutating func clear() {
+        self = PatientData()
     }
 }
 

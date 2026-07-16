@@ -9,23 +9,21 @@ import SwiftUI
 import CLPatientData
 
 struct WeightFormView: View {
-    @EnvironmentObject var patientData: PatientData
+    @Binding var patientData: PatientData
+
     var body: some View {
-        HStack{
+        HStack {
             Text("WeightQuestionTitle")
             TextField("WeightQuestionDescription",
                       value: $patientData.weight,
-                      format: .number
-            )
+                      format: .number)
             .multilineTextAlignment(.trailing)
             .keyboardType(.decimalPad)
         }
     }
 }
 
-struct WeightFormView_Previews: PreviewProvider {
-    static var previews: some View {
-        WeightFormView().environmentObject(PatientData())
-            .environment(\.locale, .init(identifier: "ja"))
-    }
+#Preview {
+    WeightFormView(patientData: .constant(PatientData()))
+        .environment(\.locale, .init(identifier: "ja"))
 }
