@@ -30,7 +30,7 @@ final class cliticalUITests: XCTestCase {
         app.launch()
 
         // Four tabs from the former hamburger menu, starting in Japanese.
-        let jaTabs = ["リスク計算", "言語", "参考文献", "このアプリについて"]
+        let jaTabs = ["リスク計算", "言語", "参考文献", "アプリ情報"]
         for label in jaTabs {
             XCTAssertTrue(app.tabBars.buttons[label].waitForExistence(timeout: 5),
                           "Missing tab: \(label)")
