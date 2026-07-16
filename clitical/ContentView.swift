@@ -112,7 +112,6 @@ struct RootContentView: View {
                         } message: {
                             Text(LocalizedStringKey(errorMessage))
                         }
-                        .tint(.teal)
                         // Hidden programmatic-navigation link.  Attached as the
                         // button's background so it lives inside a list cell
                         // (measuring it outside one triggers the "Invalid frame
@@ -163,7 +162,6 @@ struct RootContentView: View {
             }
             .listStyle(.insetGrouped)
         }
-        .tint(.teal)
     }
 
     private func predictRisks() {

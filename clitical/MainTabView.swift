@@ -41,7 +41,6 @@ struct MainTabView: View {
                     Label("Settings", systemImage: "gearshape")
                 }
         }
-        .tint(.teal)
     }
 }
 
@@ -92,7 +91,6 @@ struct SettingsView: View {
                     .ignoresSafeArea()
             }
         }
-        .tint(.teal)
     }
 }
 
@@ -148,7 +146,6 @@ struct ReferencesView: View {
                     .ignoresSafeArea()
             }
         }
-        .tint(.teal)
     }
 }
 
