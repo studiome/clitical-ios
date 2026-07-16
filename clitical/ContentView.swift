@@ -103,31 +103,33 @@ struct RootContentView: View {
                                   label: \.label,
                                   selection: $patientData.malignantNeoplasm)
                     }
-                    Button("PredictRisks") {
-                        predictRisks()
+                    Section {
+                        Button("PredictRisks") {
+                            predictRisks()
+                        }
+                        .alert("ErrorTitle", isPresented: $failure) {
+                        } message: {
+                            Text(LocalizedStringKey(errorMessage))
+                        }
+                        .tint(.teal)
+                        // Hidden programmatic-navigation link.  Attached as the
+                        // button's background so it lives inside a list cell
+                        // (measuring it outside one triggers the "Invalid frame
+                        // dimension" runtime warning) without occupying a row of
+                        // its own, which would leave a dangling separator and an
+                        // empty sliver at the bottom of the section.
+                        .background(
+                            NavigationLink(destination: PredictedRiskView(risk: risk),
+                                           isActive: $riskCalculated) {
+                                EmptyView()
+                            }
+                            .opacity(0)
+                        )
+                        Button("RESET") {
+                            patientData.clear()
+                        }
+                        .tint(.red)
                     }
-                    .alert("ErrorTitle", isPresented: $failure) {
-                    } message: {
-                        Text(LocalizedStringKey(errorMessage))
-                    }
-                    .tint(.teal)
-                    Button("RESET") {
-                        patientData.clear()
-                    }
-                    .tint(.red)
-                    // Hidden programmatic-navigation link.  Placed inside the
-                    // List so SwiftUI can measure its EmptyView in a proper
-                    // list-cell context; a bare ZStack sibling produces a
-                    // zero-height frame and the "Invalid frame dimension"
-                    // runtime warning seen in UI tests.
-                    NavigationLink(destination: PredictedRiskView(risk: risk),
-                                   isActive: $riskCalculated) {
-                        EmptyView()
-                    }
-                    .listRowInsets(.init())
-                    .listRowBackground(EmptyView())
-                    .frame(height: 0)
-                    .hidden()
                 }
                 .toolbar {
                     // A bare Spacer as a keyboard toolbar item makes SwiftUI log
