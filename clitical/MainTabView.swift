@@ -3,7 +3,9 @@
 //  clitical-ios
 //
 //  Bottom tab navigation that replaces the Flutter/Android hamburger menu:
-//  Risk calculation, Language, References, and About.
+//  Risk calculation, References, and Settings. Per the HIG, tabs are for
+//  content areas, so settings-like items (language, terms, app info) are
+//  grouped in a single Settings tab instead of holding tabs of their own.
 //
 
 import SwiftUI
@@ -30,39 +32,65 @@ struct MainTabView: View {
                 .tabItem {
                     Label("RiskCalculationTab", systemImage: "chart.line.uptrend.xyaxis")
                 }
-            LanguageView()
-                .tabItem {
-                    Label("Language", systemImage: "globe")
-                }
             ReferencesView()
                 .tabItem {
                     Label("References", systemImage: "doc.text")
                 }
-            AboutView()
+            SettingsView()
                 .tabItem {
-                    Label("About", systemImage: "info.circle")
+                    Label("Settings", systemImage: "gearshape")
                 }
         }
         .tint(.teal)
     }
 }
 
-// MARK: - Language
+// MARK: - Settings
 
-struct LanguageView: View {
+struct SettingsView: View {
     @EnvironmentObject var localization: LocalizationManager
+
+    private let termsURL = URL(string: "https://studiome.github.io/clti_risk/")!
+
+    private var appVersion: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—"
+    }
+
+    @State private var isShowingTerms = false
 
     var body: some View {
         NavigationView {
             Form {
-                Picker("Language", selection: $localization.language) {
-                    ForEach(AppLanguage.allCases) { language in
-                        Text(language.displayName).tag(language)
+                Section(header: Text("Language")) {
+                    Picker("Language", selection: $localization.language) {
+                        ForEach(AppLanguage.allCases) { language in
+                            Text(language.displayName).tag(language)
+                        }
+                    }
+                    .pickerStyle(.inline)
+                    .labelsHidden()
+                }
+                Section {
+                    Button {
+                        isShowingTerms = true
+                    } label: {
+                        Label("AppTerms", systemImage: "hand.raised")
                     }
                 }
-                .pickerStyle(.inline)
+                Section(header: Text("About"), footer: Text("AppLegalese")) {
+                    HStack {
+                        Text(verbatim: "CLiTICAL")
+                        Spacer()
+                        Text(verbatim: appVersion)
+                            .foregroundStyle(.secondary)
+                    }
+                }
             }
-            .navigationTitle("Language")
+            .navigationTitle("Settings")
+            .sheet(isPresented: $isShowingTerms) {
+                SafariView(url: termsURL)
+                    .ignoresSafeArea()
+            }
         }
         .tint(.teal)
     }
@@ -98,9 +126,18 @@ struct ReferencesView: View {
                         Button {
                             selectedReference = reference
                         } label: {
-                            Text(reference.text)
-                                .font(.callout)
-                                .foregroundStyle(.primary)
+                            // Keep the citation body in primary for
+                            // readability; the accent-colored external-link
+                            // symbol is what marks the row as tappable.
+                            HStack(alignment: .firstTextBaseline) {
+                                Text(reference.text)
+                                    .font(.callout)
+                                    .foregroundStyle(.primary)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                Image(systemName: "arrow.up.right.square")
+                                    .foregroundColor(.accentColor)
+                                    .accessibilityHidden(true)
+                            }
                         }
                     }
                 }
@@ -108,52 +145,6 @@ struct ReferencesView: View {
             .navigationTitle("References")
             .sheet(item: $selectedReference) { reference in
                 SafariView(url: reference.url)
-                    .ignoresSafeArea()
-            }
-        }
-        .tint(.teal)
-    }
-}
-
-// MARK: - About
-
-struct AboutView: View {
-    private let termsURL = URL(string: "https://studiome.github.io/clti_risk/")!
-
-    private var appVersion: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—"
-    }
-
-    @State private var isShowingTerms = false
-
-    var body: some View {
-        NavigationView {
-            List {
-                Section {
-                    VStack(alignment: .leading, spacing: 8.0) {
-                        Text(verbatim: "CLiTICAL")
-                            .font(.largeTitle.bold())
-                        Text(verbatim: "Version: \(appVersion)")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                        Text("AppLegalese")
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                            .padding(.top, 8.0)
-                    }
-                    .padding(.vertical, 4.0)
-                }
-                Section {
-                    Button {
-                        isShowingTerms = true
-                    } label: {
-                        Label("AppTerms", systemImage: "hand.raised")
-                    }
-                }
-            }
-            .navigationTitle("About")
-            .sheet(isPresented: $isShowingTerms) {
-                SafariView(url: termsURL)
                     .ignoresSafeArea()
             }
         }

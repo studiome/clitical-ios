@@ -53,7 +53,15 @@ struct PredictedRiskView: View {
             .navigationTitle("RiskViewTitle")
             .navigationBarTitleDisplayMode(.inline)
         } else {
-            Text("AnErrorOccured")
+            VStack(spacing: 12.0) {
+                Image(systemName: "exclamationmark.triangle")
+                    .font(.largeTitle)
+                    .accessibilityHidden(true)
+                Text("AnErrorOccured")
+                    .multilineTextAlignment(.center)
+            }
+            .foregroundStyle(.secondary)
+            .padding()
         }
     }
 
@@ -99,6 +107,7 @@ private struct RiskRow<Content: View>: View {
         VStack {
             HStack {
                 Image(systemName: icon)
+                    .accessibilityHidden(true)
                 Text(title)
                     .padding(4.0)
                     .font(.headline)
@@ -109,6 +118,9 @@ private struct RiskRow<Content: View>: View {
             content
         }
         .frame(maxWidth: .infinity, alignment: .center)
+        // One VoiceOver stop per risk item: title then value, instead of
+        // the decorative icon, title, and value as separate elements.
+        .accessibilityElement(children: .combine)
     }
 }
 
