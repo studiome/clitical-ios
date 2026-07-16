@@ -11,7 +11,7 @@
 "ClinicalInfo" = "臨床情報";
 "SocialHistory" = "生活歴";
 "LesionInfo" = "動脈病変部位";
-"OtherLesionInfo" = "随伴病変"; 
+"OtherLesionInfo" = "その他血管病変";
 "Complications" = "合併症";
 "Yes" = "あり";
 "No" = "なし";
@@ -69,7 +69,7 @@
 "CADQuestionTitle" = "冠動脈疾患";
 "CADQuestionDescription" = "「あり」には、心筋梗塞、狭心症の既往・PCI歴あり・CABG歴ありを含む。";
 "CVDQuestionTitle" = "脳血管障害";
-"CVDQuestionDescription" = "あり」には、脳梗塞・一過性脳虚血発作を含む。";
+"CVDQuestionDescription" = "「あり」には、脳梗塞・一過性脳虚血発作を含む。";
 "DLQuestionTitle" = "脂質異常症";
 "DLQuestionDescription" = "あり: LDL-C > 140 [mg/dl]";
 "MalignancyQuestionTitle" = "悪性新生物";
@@ -78,7 +78,7 @@
 "MalignancyPast" = "既往歴あり";
 "MalignancyTreatment" = "治療中";
 "DONE" = "完了";
-"PredictRisks" = "リスク予測 ...";
+"PredictRisks" = "リスクを予測";
 "GNRINoRisk" = "リスクなし";
 "GNRILowRisk" = "軽度栄養リスク";
 "GNRIModerateRisk" = "中等度栄養リスク";
@@ -86,10 +86,12 @@
 "2YOSLowRisk" = "低リスク";
 "2YOSMediumRisk" = "中等度リスク";
 "2YOSHighRisk" = "高リスク";
-"ErrorTitle"  = "エラー";
+"ErrorTitle"  = "リスクを予測できません";
 "NumberFieldErrorMessage" = "数値入力を確認してください。";
 "IrrelevantLesionMessage" = "動脈病変部位の選択を確認してください。 少なくとも一つの部位が「あり」になる必要があります。";
 "RESET" = "データをリセット";
+"ResetConfirmationTitle" = "入力したデータをすべてリセットしますか？";
+"CANCEL" = "キャンセル";
 "AnErrorOccured" = "適切な予測リスクが算出されませんでした。患者データを確認してください。";
 "DefaultError" = "リスク予測ができませんでした。各入力を確認してください。";
 "GNRI" = "栄養リスク指標";
@@ -105,6 +107,7 @@
 
 /* Bottom tab menu */
 "RiskCalculationTab" = "リスク計算";
+"Settings" = "設定";
 "Language" = "言語";
 "References" = "参考文献";
 "About" = "アプリ情報";

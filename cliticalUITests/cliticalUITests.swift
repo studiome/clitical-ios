@@ -29,15 +29,15 @@ final class cliticalUITests: XCTestCase {
         app.launchArguments += ["-app_language", "ja"]
         app.launch()
 
-        // Four tabs from the former hamburger menu, starting in Japanese.
-        let jaTabs = ["リスク計算", "言語", "参考文献", "アプリ情報"]
+        // Three content tabs, starting in Japanese.
+        let jaTabs = ["リスク計算", "参考文献", "設定"]
         for label in jaTabs {
             XCTAssertTrue(app.tabBars.buttons[label].waitForExistence(timeout: 5),
                           "Missing tab: \(label)")
         }
 
-        // Open the Language tab and choose English.
-        app.tabBars.buttons["言語"].tap()
+        // Open the Settings tab and choose English in the language picker.
+        app.tabBars.buttons["設定"].tap()
         let englishOption = app.buttons["English"].firstMatch
         XCTAssertTrue(englishOption.waitForExistence(timeout: 5), "English option not found")
         englishOption.tap()
@@ -46,11 +46,12 @@ final class cliticalUITests: XCTestCase {
         XCTAssertTrue(app.tabBars.buttons["Risk Assessment"].waitForExistence(timeout: 5),
                       "UI did not switch to English live")
         XCTAssertTrue(app.tabBars.buttons["References"].exists)
+        XCTAssertTrue(app.tabBars.buttons["Settings"].exists)
         XCTAssertFalse(app.tabBars.buttons["リスク計算"].exists)
     }
 
-    /// Verifies the References and About tabs render their content and links.
-    func testReferencesAndAboutTabsRenderContent() throws {
+    /// Verifies the References and Settings tabs render their content and links.
+    func testReferencesAndSettingsTabsRenderContent() throws {
         let app = XCUIApplication()
         app.launchArguments += ["-app_language", "en"]
         app.launch()
@@ -61,8 +62,10 @@ final class cliticalUITests: XCTestCase {
             .containing(NSPredicate(format: "label BEGINSWITH %@", "1. Miyata")).firstMatch
         XCTAssertTrue(citation.waitForExistence(timeout: 5), "Reference citation missing")
 
-        app.tabBars.buttons["About"].tap()
+        app.tabBars.buttons["Settings"].tap()
         XCTAssertTrue(app.staticTexts["CLiTICAL"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["English"].exists,
+                      "Language picker missing from Settings")
         XCTAssertTrue(app.buttons["Terms of service"].exists
                       || app.links["Terms of service"].exists,
                       "Terms of service link missing")
@@ -91,13 +94,13 @@ final class cliticalUITests: XCTestCase {
                       "References view did not reappear after closing the browser")
     }
 
-    /// Tapping the Terms of service button in the About tab opens SFSafariViewController.
-    func testAboutTabTermsOpensInAppBrowser() throws {
+    /// Tapping the Terms of service button in the Settings tab opens SFSafariViewController.
+    func testSettingsTabTermsOpensInAppBrowser() throws {
         let app = XCUIApplication()
         app.launchArguments += ["-app_language", "en"]
         app.launch()
 
-        app.tabBars.buttons["About"].tap()
+        app.tabBars.buttons["Settings"].tap()
 
         let terms = app.buttons["Terms of service"]
         XCTAssertTrue(terms.waitForExistence(timeout: 5), "Terms of service button not found")
@@ -108,8 +111,8 @@ final class cliticalUITests: XCTestCase {
         XCTAssertTrue(done.waitForExistence(timeout: 10), "In-app browser did not open")
         done.tap()
 
-        XCTAssertTrue(app.navigationBars["About"].waitForExistence(timeout: 5),
-                      "About view did not reappear after closing the browser")
+        XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 5),
+                      "Settings view did not reappear after closing the browser")
     }
 
     /// Smoke test that the risk-calculation tab's form is interactive inside the
@@ -121,7 +124,7 @@ final class cliticalUITests: XCTestCase {
 
         app.tabBars.buttons["Risk Assessment"].tap()
         // The Predict button sits at the bottom of a long scrolling form.
-        let predict = app.buttons["Predict Risk ..."]
+        let predict = app.buttons["Predict Risk"]
         var swipes = 0
         while !predict.exists && swipes < 12 {
             app.swipeUp()
@@ -170,9 +173,53 @@ final class cliticalUITests: XCTestCase {
 
         let alert = app.alerts.firstMatch
         XCTAssertTrue(alert.waitForExistence(timeout: 5), "Validation alert did not appear")
-        XCTAssertTrue(alert.staticTexts["Check artery lesion. At least 1 lesion should be YES"].exists,
+        XCTAssertTrue(alert.staticTexts["Check the artery lesion sites. At least one lesion must be Yes."].exists,
                       "Alert should explain that at least one lesion is required")
         XCTAssertFalse(app.navigationBars["Predicted Risks"].exists)
+    }
+
+    /// Reset is destructive, so it must ask for confirmation first: cancelling
+    /// keeps the entered data, confirming clears it.
+    func testResetAsksForConfirmationBeforeClearingData() throws {
+        let app = XCUIApplication()
+        app.launchArguments += ["-app_language", "en"]
+        app.launch()
+
+        fillRequiredNumberFields(in: app)
+
+        let reset = app.buttons["Reset data"]
+        scrollTo(reset, in: app)
+        XCTAssertTrue(reset.waitForExistence(timeout: 5), "Reset button missing")
+        reset.tap()
+
+        // Dismissing the confirmation without confirming must keep the data.
+        // On this OS the dialog presents as a popover, where the cancel-role
+        // button is omitted and tapping outside dismisses (per HIG).
+        let dialog = app.sheets.firstMatch
+        XCTAssertTrue(dialog.waitForExistence(timeout: 5),
+                      "Reset confirmation dialog did not appear")
+        app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.15)).tap()
+        let dialogGone = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"),
+            object: dialog
+        )
+        _ = XCTWaiter().wait(for: [dialogGone], timeout: 5)
+
+        let ageField = app.textFields["Enter Age [year-old]."]
+        scrollToTop(until: ageField, in: app)
+        XCTAssertEqual(ageField.value as? String, "70",
+                       "Dismissing the confirmation must not clear the data")
+
+        // Confirming must clear the data (the placeholder shows again).
+        scrollTo(reset, in: app)
+        reset.tap()
+        XCTAssertTrue(dialog.waitForExistence(timeout: 5),
+                      "Reset confirmation dialog did not appear")
+        dialog.buttons["Reset data"].tap()
+
+        scrollToTop(until: ageField, in: app)
+        XCTAssertEqual(ageField.value as? String, "Enter Age [year-old].",
+                       "Confirming the dialog must clear the data")
     }
 
     // MARK: - Helpers
@@ -257,9 +304,21 @@ final class cliticalUITests: XCTestCase {
         _ = XCTWaiter().wait(for: [dismissed], timeout: 5)
     }
 
+    /// Scrolls back towards the top of the list in small increments until the
+    /// element is on screen and tappable. Mirror image of scrollTo().
+    private func scrollToTop(until element: XCUIElement, in app: XCUIApplication, maxSwipes: Int = 40) {
+        var swipes = 0
+        while !(element.exists && element.isHittable) && swipes < maxSwipes {
+            let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.3))
+            let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.45))
+            start.press(forDuration: 0.05, thenDragTo: end)
+            swipes += 1
+        }
+    }
+
     /// Scrolls to the Predict button at the bottom of the form and taps it.
     private func tapPredictButton(in app: XCUIApplication) {
-        let predict = app.buttons["Predict Risk ..."]
+        let predict = app.buttons["Predict Risk"]
         scrollTo(predict, in: app)
         XCTAssertTrue(predict.waitForExistence(timeout: 5), "Predict button missing")
         predict.tap()

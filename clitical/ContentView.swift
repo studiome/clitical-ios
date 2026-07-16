@@ -15,6 +15,7 @@ struct RootContentView: View {
     @State private var riskCalculated = false
     @State private var errorMessage = ""
     @State private var risk: PatientRisk?
+    @State private var confirmingReset = false
 
     var body: some View {
         NavigationView {
@@ -111,7 +112,6 @@ struct RootContentView: View {
                         } message: {
                             Text(LocalizedStringKey(errorMessage))
                         }
-                        .tint(.teal)
                         // Hidden programmatic-navigation link.  Attached as the
                         // button's background so it lives inside a list cell
                         // (measuring it outside one triggers the "Invalid frame
@@ -125,10 +125,24 @@ struct RootContentView: View {
                             }
                             .opacity(0)
                         )
-                        Button("RESET") {
-                            patientData.clear()
+                        // Destructive role (not a bare red tint) so VoiceOver
+                        // announces it as destructive, and a confirmation
+                        // dialog because the wipe cannot be undone.
+                        Button("RESET", role: .destructive) {
+                            confirmingReset = true
                         }
-                        .tint(.red)
+                        .confirmationDialog("ResetConfirmationTitle",
+                                            isPresented: $confirmingReset,
+                                            titleVisibility: .visible) {
+                            Button("RESET", role: .destructive) {
+                                patientData.clear()
+                            }
+                            // Explicit cancel: the automatic one resolves its
+                            // label through the overridden Bundle.main (see
+                            // LocalizationManager) and comes out unlabeled,
+                            // and this also keeps it in the app's language.
+                            Button("CANCEL", role: .cancel) {}
+                        }
                     }
                 }
                 .toolbar {
@@ -148,7 +162,6 @@ struct RootContentView: View {
             }
             .listStyle(.insetGrouped)
         }
-        .tint(.teal)
     }
 
     private func predictRisks() {

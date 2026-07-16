@@ -8,9 +8,9 @@
 "PatientDataTitle" = "Patient Data";
 "BasicInfo" = "Basic Information";
 "ClinicalInfo" = "Clinical Information";
-"SocialHistory" = "Socail History";
+"SocialHistory" = "Social History";
 "LesionInfo" = "Sites of Artery Occlusive Lesions";
-"OtherLesionInfo" = "Concomitant Lesions";
+"OtherLesionInfo" = "Concomitant Vascular Lesions";
 "Complications" = "Complications";
 "Yes" = "Yes";
 "No" = "No";
@@ -77,7 +77,7 @@
 "MalignancyPast" = "Past history";
 "MalignancyTreatment" = "Under treatment";
 "DONE" = "Done";
-"PredictRisks" = "Predict Risk ...";
+"PredictRisks" = "Predict Risk";
 "GNRINoRisk" = "No Risk";
 "GNRILowRisk" = "Low Risk";
 "GNRIModerateRisk" = "Moderate Risk";
@@ -85,15 +85,17 @@
 "2YOSLowRisk" = "Low Risk";
 "2YOSMediumRisk" = "Medium Risk";
 "2YOSHighRisk" = "High Risk";
-"ErrorTitle"  = "Error";
-"NumberFieldErrorMessage" = "Check Number Field. ";
-"IrrelevantLesionMessage" = "Check artery lesion. At least 1 lesion should be YES";
+"ErrorTitle"  = "Cannot Predict Risk";
+"NumberFieldErrorMessage" = "Check the number fields.";
+"IrrelevantLesionMessage" = "Check the artery lesion sites. At least one lesion must be Yes.";
 "RESET" = "Reset data";
-"AnErrorOccured" = "Something wrong occured. Check Patient Data.";
-"DefaultError" = "Unable to calculate risk. Check Patient Data.";
+"ResetConfirmationTitle" = "Reset all entered data?";
+"CANCEL" = "Cancel";
+"AnErrorOccured" = "Something went wrong. Check the patient data.";
+"DefaultError" = "Unable to calculate risk. Check the patient data.";
 "GNRI" = "GNRI";
 "30DayPrediction" = "30-day Risk Prediction";
-"2YearPrediction" = "2-year Risk Predction";
+"2YearPrediction" = "2-year Risk Prediction";
 "GeriatricNutritionalRiskIndex" = "Geriatric Nutritional Risk Index";
 "30DDeathOrAmputation" = "Predicted risk of 30-day major amputation and/or death";
 "MALEDescription" = "MALE (Major Adverse Limb Events): above-ankle amputation of the index limb or major reintervention (new bypass graft, jump/ interposition graft revision, or thrombectomy/thrombolysis)";
@@ -104,6 +106,7 @@
 
 /* Bottom tab menu */
 "RiskCalculationTab" = "Risk Assessment";
+"Settings" = "Settings";
 "Language" = "Language";
 "References" = "References";
 "About" = "About";
