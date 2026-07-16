@@ -17,36 +17,33 @@ struct PredictedRiskView: View {
                 Section(header: Text("30DayPrediction"),
                         footer: Text("MALEDescription").font(.caption)) {
                     RiskRow(icon: "staroflife",
-                            title: "30DDeathOrAmputation",
-                            color: .blue) {
+                            title: "30DDeathOrAmputation") {
                         percentText(risk.predicted30DDeathOrAmputation,
                                     fractionDigits: 1)
                     }
                     RiskRow(icon: "bed.double",
-                            title: "30DMALE",
-                            color: .blue) {
+                            title: "30DMALE") {
                         percentText(risk.predicted30DMALE, fractionDigits: 1)
                     }
                 }
                 Section(header: Text("2YearPrediction")) {
                     RiskRow(icon: "staroflife",
-                            title: "2YOS",
-                            color: .blue) {
+                            title: "2YOS") {
                         percentText(risk.predicted2YOS, fractionDigits: 0)
-                        riskLabelText(risk.predicted2YOSRisk?.label)
+                        riskLabelText(risk.predicted2YOSRisk?.label,
+                                      color: risk.predicted2YOSRisk?.color)
                     }
                     RiskRow(icon: "figure.walk",
-                            title: "2YAFS",
-                            color: .blue) {
+                            title: "2YAFS") {
                         percentText(risk.predicted2YAFS, fractionDigits: 0)
                     }
                 }
                 Section(header: Text("GNRI")) {
                     RiskRow(icon: "flame",
-                            title: "GeriatricNutritionalRiskIndex",
-                            color: .red) {
+                            title: "GeriatricNutritionalRiskIndex") {
                         valueText(risk.gnri, fractionDigits: 1)
-                        riskLabelText(risk.gnriRisk?.label)
+                        riskLabelText(risk.gnriRisk?.label,
+                                      color: risk.gnriRisk?.color)
                     }
                 }
             }
@@ -86,27 +83,52 @@ struct PredictedRiskView: View {
     }
 
     @ViewBuilder
-    private func riskLabelText(_ label: String?) -> some View {
+    private func riskLabelText(_ label: String?, color: Color?) -> some View {
         if let label {
+            // The severity color is supplementary: the label text itself
+            // states the risk level, so color is never the sole indicator.
             Text(LocalizedStringKey(label))
                 .font(.title2)
+                .foregroundColor(color ?? .primary)
         } else {
             Text("---")
         }
     }
 }
 
+private extension TwoYearOSRisk {
+    var color: Color {
+        switch self {
+        case .low: return .green
+        case .medium: return .orange
+        case .high: return .red
+        }
+    }
+}
+
+private extension GNRIRisk {
+    var color: Color {
+        switch self {
+        case .noRisk: return .green
+        case .low, .moderate: return .orange
+        case .major: return .red
+        }
+    }
+}
+
 /// A titled risk item: an icon with a headline, followed by the value views.
+/// The headline stays in the primary label color — colored text on iOS reads
+/// as interactive — and only the decorative icon carries the accent color.
 private struct RiskRow<Content: View>: View {
     let icon: String
     let title: LocalizedStringKey
-    let color: Color
     @ViewBuilder let content: Content
 
     var body: some View {
         VStack {
             HStack {
                 Image(systemName: icon)
+                    .foregroundColor(.accentColor)
                     .accessibilityHidden(true)
                 Text(title)
                     .padding(4.0)
@@ -114,7 +136,6 @@ private struct RiskRow<Content: View>: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .fixedSize(horizontal: false, vertical: true)
             }
-            .foregroundColor(color)
             content
         }
         .frame(maxWidth: .infinity, alignment: .center)
