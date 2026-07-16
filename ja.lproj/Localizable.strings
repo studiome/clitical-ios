@@ -11,7 +11,7 @@
 "ClinicalInfo" = "臨床情報";
 "SocialHistory" = "生活歴";
 "LesionInfo" = "動脈病変部位";
-"OtherLesionInfo" = "随伴病変"; 
+"OtherLesionInfo" = "その他血管病変";
 "Complications" = "合併症";
 "Yes" = "あり";
 "No" = "なし";
