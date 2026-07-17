@@ -48,6 +48,30 @@ final class cliticalUITests: XCTestCase {
         XCTAssertTrue(app.tabBars.buttons["References"].exists)
         XCTAssertTrue(app.tabBars.buttons["Settings"].exists)
         XCTAssertFalse(app.tabBars.buttons["リスク計算"].exists)
+
+        // Navigation bar titles must also re-localize live, not just tab labels.
+        app.tabBars.buttons["Risk Assessment"].tap()
+        XCTAssertTrue(app.staticTexts["Basic Information"].waitForExistence(timeout: 5),
+                      "In-body section header did not switch to English live")
+        XCTAssertTrue(app.navigationBars["Patient Data"].waitForExistence(timeout: 5),
+                      "Risk calculation nav title did not switch to English live")
+        XCTAssertFalse(app.navigationBars["患者データ"].exists)
+
+        // A pushed question screen's nav title must re-localize live too.
+        let sexRow = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Sex")).firstMatch
+        XCTAssertTrue(sexRow.waitForExistence(timeout: 5), "Sex question row missing")
+        sexRow.tap()
+        XCTAssertTrue(app.navigationBars["Sex"].waitForExistence(timeout: 5),
+                      "Choice screen nav title did not switch to English live")
+        app.navigationBars.buttons.firstMatch.tap()
+
+        app.tabBars.buttons["References"].tap()
+        XCTAssertTrue(app.navigationBars["References"].waitForExistence(timeout: 5),
+                      "References nav title did not switch to English live")
+
+        app.tabBars.buttons["Settings"].tap()
+        XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 5),
+                      "Settings nav title did not switch to English live")
     }
 
     /// Verifies the References and Settings tabs render their content and links.

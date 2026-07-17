@@ -11,7 +11,10 @@ import CLPatientData
 /// A selection screen for a single question: lists every option and marks
 /// the current selection with a checkmark.
 struct ChoiceListView<Value: Hashable>: View {
-    let title: LocalizedStringKey
+    @EnvironmentObject var localization: LocalizationManager
+    /// Raw localization key (not `LocalizedStringKey`) so the navigation
+    /// title can be resolved explicitly; see `LocalizationManager.string(forKey:)`.
+    let title: String
     let footer: LocalizedStringKey
     let options: [Value]
     let label: (Value) -> String
@@ -20,7 +23,7 @@ struct ChoiceListView<Value: Hashable>: View {
     var body: some View {
         List {
             Section(footer: Text(footer)) {
-                Picker(title, selection: $selection) {
+                Picker(LocalizedStringKey(title), selection: $selection) {
                     ForEach(options, id: \.self) { option in
                         Text(LocalizedStringKey(label(option)))
                             .tag(option)
@@ -30,7 +33,7 @@ struct ChoiceListView<Value: Hashable>: View {
                 .labelsHidden()
             }
         }
-        .navigationTitle(title)
+        .navigationTitle(Text(verbatim: localization.string(forKey: title)))
         .navigationBarTitleDisplayMode(.inline)
     }
 }
@@ -38,7 +41,7 @@ struct ChoiceListView<Value: Hashable>: View {
 /// A row in the question list: shows the question title with the current
 /// selection, and pushes a ChoiceListView on tap.
 struct ChoiceRow<Value: Hashable>: View {
-    let title: LocalizedStringKey
+    let title: String
     let footer: LocalizedStringKey
     let options: [Value]
     let label: (Value) -> String
@@ -53,7 +56,7 @@ struct ChoiceRow<Value: Hashable>: View {
             selection: $selection)
         ) {
             HStack {
-                Text(title)
+                Text(LocalizedStringKey(title))
                 Spacer()
                 Text(LocalizedStringKey(label(selection)))
             }
@@ -63,7 +66,7 @@ struct ChoiceRow<Value: Hashable>: View {
 
 extension ChoiceRow where Value == Bool {
     /// A yes/no question row.
-    init(title: LocalizedStringKey,
+    init(title: String,
          footer: LocalizedStringKey,
          selection: Binding<Bool>) {
         self.init(title: title,
@@ -82,5 +85,6 @@ extension ChoiceRow where Value == Bool {
                        label: \.label,
                        selection: .constant(.normal))
     }
+    .environmentObject(LocalizationManager())
     .environment(\.locale, .init(identifier: "ja"))
 }

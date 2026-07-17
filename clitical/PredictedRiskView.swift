@@ -9,6 +9,7 @@ import SwiftUI
 import CLPatientData
 
 struct PredictedRiskView: View {
+    @EnvironmentObject var localization: LocalizationManager
     let risk: PatientRisk?
 
     var body: some View {
@@ -47,7 +48,7 @@ struct PredictedRiskView: View {
                     }
                 }
             }
-            .navigationTitle("RiskViewTitle")
+            .navigationTitle(Text(verbatim: localization.string(forKey: "RiskViewTitle")))
             .navigationBarTitleDisplayMode(.inline)
         } else {
             VStack(spacing: 12.0) {
@@ -147,11 +148,13 @@ private struct RiskRow<Content: View>: View {
 
 #Preview("Error") {
     PredictedRiskView(risk: nil)
+        .environmentObject(LocalizationManager())
         .environment(\.locale, .init(identifier: "ja"))
 }
 
 #Preview("Result") {
     PredictedRiskView(risk: PatientRisk(of: previewPatientData()))
+        .environmentObject(LocalizationManager())
         .environment(\.locale, .init(identifier: "ja"))
 }
 
