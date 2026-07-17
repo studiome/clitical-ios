@@ -88,10 +88,17 @@ final class cliticalUITests: XCTestCase {
 
         app.tabBars.buttons["Settings"].tap()
         XCTAssertTrue(app.staticTexts["CLiTICAL"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.buttons["English"].exists,
+        let englishButton = app.buttons["English"]
+        scrollTo(englishButton, in: app)
+        XCTAssertTrue(englishButton.waitForExistence(timeout: 5),
                       "Language picker missing from Settings")
-        XCTAssertTrue(app.buttons["Terms of service"].exists
-                      || app.links["Terms of service"].exists,
+        // "Terms of service" may be rendered as a button or a link depending
+        // on the OS version, so query by label across all element types.
+        let terms = app.descendants(matching: .any)
+            .matching(NSPredicate(format: "label == %@", "Terms of service"))
+            .firstMatch
+        scrollTo(terms, in: app)
+        XCTAssertTrue(terms.waitForExistence(timeout: 5),
                       "Terms of service link missing")
     }
 
@@ -138,14 +145,16 @@ final class cliticalUITests: XCTestCase {
 
         XCTAssertTrue(app.navigationBars["Predicted Risks"].waitForExistence(timeout: 5),
                       "Predicted risk screen did not appear")
-        XCTAssertTrue(app.staticTexts["Predicted 2-year Overall Survival"].exists)
-        // The GNRI section sits at the bottom of the results List; on short
-        // screens (e.g. iPhone SE) SwiftUI doesn't materialize it until it's
-        // scrolled into view, so it's absent from the accessibility tree
-        // until then.
+        // In landscape the list viewport is shorter, so both the 2-year and
+        // GNRI sections may be off-screen until scrolled into view.
+        let twoYearTitle = app.staticTexts["Predicted 2-year Overall Survival"]
+        scrollTo(twoYearTitle, in: app)
+        XCTAssertTrue(twoYearTitle.waitForExistence(timeout: 5),
+                      "Predicted 2-year Overall Survival did not appear")
         let gnriTitle = app.staticTexts["Geriatric Nutritional Risk Index"]
         scrollTo(gnriTitle, in: app)
-        XCTAssertTrue(gnriTitle.waitForExistence(timeout: 5))
+        XCTAssertTrue(gnriTitle.waitForExistence(timeout: 5),
+                      "Geriatric Nutritional Risk Index did not appear")
     }
 
     /// With valid numbers but no artery lesion selected, predicting must show
