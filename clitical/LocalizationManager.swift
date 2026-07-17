@@ -40,6 +40,19 @@ final class LocalizationManager: ObservableObject {
 
     var locale: Locale { Locale(identifier: language.rawValue) }
 
+    /// Resolves a localization key against the current language, bypassing
+    /// `LocalizedStringKey`. `.navigationTitle` bridges to a UIKit
+    /// `UINavigationItem` that caches its resolved title and does not
+    /// re-localize on its own when only `Bundle.main`'s lookup is swapped, so
+    /// callers must feed it a concrete, freshly resolved `String` instead.
+    func string(forKey key: String) -> String {
+        guard let path = Bundle.main.path(forResource: language.rawValue, ofType: "lproj"),
+              let bundle = Bundle(path: path) else {
+            return key
+        }
+        return bundle.localizedString(forKey: key, value: nil, table: nil)
+    }
+
     init() {
         let resolved = Self.storedLanguage() ?? Self.systemLanguage()
         language = resolved

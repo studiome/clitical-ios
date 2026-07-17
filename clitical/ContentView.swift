@@ -9,6 +9,7 @@ import SwiftUI
 import CLPatientData
 
 struct RootContentView: View {
+    @EnvironmentObject var localization: LocalizationManager
     @State private var patientData = PatientData()
     @FocusState var isActive: Bool
     @State private var failure = false
@@ -158,7 +159,7 @@ struct RootContentView: View {
                         }
                     }
                 }
-                .navigationTitle("PatientDataTitle")
+                .navigationTitle(Text(verbatim: localization.string(forKey: "PatientDataTitle")))
             }
             .listStyle(.insetGrouped)
         }
@@ -210,5 +211,6 @@ struct RootContentView: View {
 
 #Preview {
     RootContentView()
+        .environmentObject(LocalizationManager())
         .environment(\.locale, .init(identifier: "ja"))
 }

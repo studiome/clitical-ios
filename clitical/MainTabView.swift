@@ -85,7 +85,7 @@ struct SettingsView: View {
                     }
                 }
             }
-            .navigationTitle("Settings")
+            .navigationTitle(Text(verbatim: localization.string(forKey: "Settings")))
             .sheet(isPresented: $isShowingTerms) {
                 SafariView(url: termsURL)
                     .ignoresSafeArea()
@@ -97,6 +97,8 @@ struct SettingsView: View {
 // MARK: - References
 
 struct ReferencesView: View {
+    @EnvironmentObject var localization: LocalizationManager
+
     private struct Reference: Identifiable {
         let id = UUID()
         let text: String
@@ -140,7 +142,7 @@ struct ReferencesView: View {
                     }
                 }
             }
-            .navigationTitle("References")
+            .navigationTitle(Text(verbatim: localization.string(forKey: "References")))
             .sheet(item: $selectedReference) { reference in
                 SafariView(url: reference.url)
                     .ignoresSafeArea()
