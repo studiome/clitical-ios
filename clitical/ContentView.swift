@@ -24,7 +24,7 @@ struct RootContentView: View {
                 List {
                     Section(header: Text("BasicInfo")) {
                         AgeFormView(patientData: $patientData).focused($isActive)
-                        ChoiceRow(title: "SexQuestionTitle",
+                        SegmentedRow(title: "SexQuestionTitle",
                                   footer: "SexQuestionDescription",
                                   options: Sex.allCases,
                                   label: \.label,
@@ -33,73 +33,71 @@ struct RootContentView: View {
                         WeightFormView(patientData: $patientData).focused($isActive)
                     }
                     Section(header: Text("SocialHistory")) {
-                        ChoiceRow(title: "SmokingQuestionTitle",
+                        ToggleRow(title: "SmokingQuestionTitle",
                                   footer: "SmokingQuestionDescription",
                                   selection: $patientData.isSmoking)
-                        ChoiceRow(title: "ActivityQuestionTitle",
-                                  footer: "ActivityQuestionDescription",
+                        MenuChoiceRow(title: "ActivityQuestionTitle",
                                   options: Activity.allCases,
                                   label: \.label,
                                   selection: $patientData.activity)
                     }
                     Section(header: Text("ClinicalInfo")) {
                         AlbFormView(patientData: $patientData).focused($isActive)
-                        ChoiceRow(title: "CKDQuestionTitle",
+                        MenuChoiceRow(title: "CKDQuestionTitle",
                                   footer: "CKDQuestionDescription",
                                   options: CKD.allCases,
                                   label: \.label,
                                   selection: $patientData.ckd)
-                        ChoiceRow(title: "UrgencyQuestionTitle",
+                        ToggleRow(title: "UrgencyQuestionTitle",
                                   footer: "UrgencyQuestionDescription",
                                   selection: $patientData.isUrgent)
-                        ChoiceRow(title: "FeverQuestionTitle",
+                        ToggleRow(title: "FeverQuestionTitle",
                                   footer: "FeverQuestionDescription",
                                   selection: $patientData.hasFever)
-                        ChoiceRow(title: "WBCQuestionTitle",
+                        ToggleRow(title: "WBCQuestionTitle",
                                   footer: "WBCQuestionDescription",
                                   selection: $patientData.hasAbnormalWBC)
-                        ChoiceRow(title: "LocalInfectionQuestionTitle",
+                        ToggleRow(title: "LocalInfectionQuestionTitle",
                                   footer: "LocalInfectionQuestionDescription",
                                   selection: $patientData.hasLocalInfection)
-                        ChoiceRow(title: "RutherfordClassQuestionTitle",
-                                  footer: "RutherfordClassQuestionDescription",
+                        MenuChoiceRow(title: "RutherfordClassQuestionTitle",
                                   options: RutherfordClassification.allCases,
                                   label: \.label,
                                   selection: $patientData.rutherford)
                     }
                     Section(header: Text("LesionInfo")) {
-                        ChoiceRow(title: "AILesionQuestionTitle",
+                        ToggleRow(title: "AILesionQuestionTitle",
                                   footer: "AILesionQuestionDescription",
                                   selection: $patientData.hasAILesion)
-                        ChoiceRow(title: "FPLesionQuestionTitle",
+                        ToggleRow(title: "FPLesionQuestionTitle",
                                   footer: "FPLesionQuestionDescription",
                                   selection: $patientData.hasFPLesion)
-                        ChoiceRow(title: "BKLesionQuestionTitle",
+                        ToggleRow(title: "BKLesionQuestionTitle",
                                   footer: "BKLesionQuestionDescription",
                                   selection: $patientData.hasBKLesion)
                     }
                     Section(header: Text("OtherLesionInfo")) {
-                        ChoiceRow(title: "ContralateralQuestionTitle",
+                        ToggleRow(title: "ContralateralQuestionTitle",
                                   footer: "ContralateralQuestionDescription",
                                   selection: $patientData.hasContraLateralLesion)
-                        ChoiceRow(title: "OtherVDQuestionTitle",
+                        ToggleRow(title: "OtherVDQuestionTitle",
                                   footer: "OtherVDQuestionDescription",
                                   selection: $patientData.hasOtherVD)
                     }
                     Section(header: Text("Complications")) {
-                        ChoiceRow(title: "CHFQuestionTitle",
+                        ToggleRow(title: "CHFQuestionTitle",
                                   footer: "CHFQuestionDescription",
                                   selection: $patientData.hasCHF)
-                        ChoiceRow(title: "CADQuestionTitle",
+                        ToggleRow(title: "CADQuestionTitle",
                                   footer: "CADQuestionDescription",
                                   selection: $patientData.hasCAD)
-                        ChoiceRow(title: "CVDQuestionTitle",
+                        ToggleRow(title: "CVDQuestionTitle",
                                   footer: "CVDQuestionDescription",
                                   selection: $patientData.hasCVD)
-                        ChoiceRow(title: "DLQuestionTitle",
+                        ToggleRow(title: "DLQuestionTitle",
                                   footer: "DLQuestionDescription",
                                   selection: $patientData.hasDyslipidemia)
-                        ChoiceRow(title: "MalignancyQuestionTitle",
+                        MenuChoiceRow(title: "MalignancyQuestionTitle",
                                   footer: "MalignancyQuestionDescription",
                                   options: MalignantNeoplasm.allCases,
                                   label: \.label,
@@ -192,11 +190,11 @@ struct RootContentView: View {
         }
         risk = newRisk
         failure = false
-        // Deferred to the next run loop turn: if a ChoiceListView pop just
-        // completed, UINavigationController's transition-coordinator
-        // transaction for that pop may not have settled yet. Flipping
-        // isActive synchronously in that window can be silently dropped by
-        // SwiftUI's NavigationLink(isActive:), so the push never happens.
+        // Deferred to the next run loop turn: if a keyboard dismissal or
+        // other transition-coordinator transaction just completed, it may
+        // not have settled yet. Flipping isActive synchronously in that
+        // window can be silently dropped by SwiftUI's
+        // NavigationLink(isActive:), so the push never happens.
         DispatchQueue.main.async {
             riskCalculated = true
         }

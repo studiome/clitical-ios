@@ -8,12 +8,6 @@
 
 import CLPatientData
 
-extension Bool {
-    var label: String {
-        self ? "Yes" : "No"
-    }
-}
-
 extension Sex {
     var label: String {
         switch self {

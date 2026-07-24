@@ -57,13 +57,14 @@ final class cliticalUITests: XCTestCase {
                       "Risk calculation nav title did not switch to English live")
         XCTAssertFalse(app.navigationBars["患者データ"].exists)
 
-        // A pushed question screen's nav title must re-localize live too.
-        let sexRow = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Sex")).firstMatch
-        XCTAssertTrue(sexRow.waitForExistence(timeout: 5), "Sex question row missing")
-        sexRow.tap()
-        XCTAssertTrue(app.navigationBars["Sex"].waitForExistence(timeout: 5),
-                      "Choice screen nav title did not switch to English live")
-        app.navigationBars.buttons.firstMatch.tap()
+        // The Sex segmented control's options must also re-localize live,
+        // not just tab labels. Sex is now an inline segmented row (no pushed
+        // screen), so we assert its segment labels directly.
+        let maleOption = app.buttons["Male"]
+        scrollTo(maleOption, in: app)
+        XCTAssertTrue(maleOption.waitForExistence(timeout: 5),
+                      "Sex segmented option did not switch to English live")
+        XCTAssertTrue(app.buttons["Female"].exists, "Female segmented option missing")
 
         app.tabBars.buttons["References"].tap()
         XCTAssertTrue(app.navigationBars["References"].waitForExistence(timeout: 5),
@@ -88,56 +89,26 @@ final class cliticalUITests: XCTestCase {
 
         app.tabBars.buttons["Settings"].tap()
         XCTAssertTrue(app.staticTexts["CLiTICAL"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.buttons["English"].exists,
+        let englishButton = app.buttons["English"]
+        scrollTo(englishButton, in: app)
+        XCTAssertTrue(englishButton.waitForExistence(timeout: 5),
                       "Language picker missing from Settings")
-        XCTAssertTrue(app.buttons["Terms of service"].exists
-                      || app.links["Terms of service"].exists,
+        // "Terms of service" may be rendered as a button or a link depending
+        // on the OS version, so query by label across all element types.
+        let terms = app.descendants(matching: .any)
+            .matching(NSPredicate(format: "label == %@", "Terms of service"))
+            .firstMatch
+        scrollTo(terms, in: app)
+        XCTAssertTrue(terms.waitForExistence(timeout: 5),
                       "Terms of service link missing")
     }
 
-    /// Tapping a reference citation opens SFSafariViewController inside the app.
-    func testReferencesTabOpensInAppBrowser() throws {
-        let app = XCUIApplication()
-        app.launchArguments += ["-app_language", "en"]
-        app.launch()
-
-        app.tabBars.buttons["References"].tap()
-
-        let citation = app.buttons
-            .matching(NSPredicate(format: "label BEGINSWITH %@", "1. Miyata"))
-            .firstMatch
-        XCTAssertTrue(citation.waitForExistence(timeout: 5), "Reference citation button not found")
-        citation.tap()
-
-        // SFSafariViewController shows a Done button when presented as a sheet.
-        let done = app.buttons["Done"]
-        XCTAssertTrue(done.waitForExistence(timeout: 10), "In-app browser did not open")
-        done.tap()
-
-        XCTAssertTrue(app.navigationBars["References"].waitForExistence(timeout: 5),
-                      "References view did not reappear after closing the browser")
-    }
-
-    /// Tapping the Terms of service button in the Settings tab opens SFSafariViewController.
-    func testSettingsTabTermsOpensInAppBrowser() throws {
-        let app = XCUIApplication()
-        app.launchArguments += ["-app_language", "en"]
-        app.launch()
-
-        app.tabBars.buttons["Settings"].tap()
-
-        let terms = app.buttons["Terms of service"]
-        XCTAssertTrue(terms.waitForExistence(timeout: 5), "Terms of service button not found")
-        terms.tap()
-
-        // SFSafariViewController shows a Done button when presented as a sheet.
-        let done = app.buttons["Done"]
-        XCTAssertTrue(done.waitForExistence(timeout: 10), "In-app browser did not open")
-        done.tap()
-
-        XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 5),
-                      "Settings view did not reappear after closing the browser")
-    }
+    // NOTE: There is deliberately no test that tapping a reference citation or
+    // the Terms of service button opens SFSafariViewController. The browser
+    // does open, but it renders in a separate remote process
+    // (SafariViewService) whose controls are exposed to XCUITest as unlabeled
+    // elements — and iOS 26 removed the "Done" text button from its chrome —
+    // so there is no stable element to assert on or to dismiss it with.
 
     /// Smoke test that the risk-calculation tab's form is interactive inside the
     /// TabView: predicting with an empty form surfaces the validation alert.
@@ -169,20 +140,22 @@ final class cliticalUITests: XCTestCase {
         app.launch()
 
         fillRequiredNumberFields(in: app)
-        setChoice(row: "Infrapopliteal", to: "Yes", in: app)
+        setToggle(row: "Infrapopliteal", to: "Yes", in: app)
 
         tapPredictButton(in: app)
 
         XCTAssertTrue(app.navigationBars["Predicted Risks"].waitForExistence(timeout: 5),
                       "Predicted risk screen did not appear")
-        XCTAssertTrue(app.staticTexts["Predicted 2-year Overall Survival"].exists)
-        // The GNRI section sits at the bottom of the results List; on short
-        // screens (e.g. iPhone SE) SwiftUI doesn't materialize it until it's
-        // scrolled into view, so it's absent from the accessibility tree
-        // until then.
+        // In landscape the list viewport is shorter, so both the 2-year and
+        // GNRI sections may be off-screen until scrolled into view.
+        let twoYearTitle = app.staticTexts["Predicted 2-year Overall Survival"]
+        scrollTo(twoYearTitle, in: app)
+        XCTAssertTrue(twoYearTitle.waitForExistence(timeout: 5),
+                      "Predicted 2-year Overall Survival did not appear")
         let gnriTitle = app.staticTexts["Geriatric Nutritional Risk Index"]
         scrollTo(gnriTitle, in: app)
-        XCTAssertTrue(gnriTitle.waitForExistence(timeout: 5))
+        XCTAssertTrue(gnriTitle.waitForExistence(timeout: 5),
+                      "Geriatric Nutritional Risk Index did not appear")
     }
 
     /// With valid numbers but no artery lesion selected, predicting must show
@@ -197,7 +170,7 @@ final class cliticalUITests: XCTestCase {
 
         let alert = app.alerts.firstMatch
         XCTAssertTrue(alert.waitForExistence(timeout: 5), "Validation alert did not appear")
-        XCTAssertTrue(alert.staticTexts["Check the artery lesion sites. At least one lesion must be Yes."].exists,
+        XCTAssertTrue(alert.staticTexts["Check the artery lesion sites. At least one lesion must be turned on."].exists,
                       "Alert should explain that at least one lesion is required")
         XCTAssertFalse(app.navigationBars["Predicted Risks"].exists)
     }
@@ -297,35 +270,29 @@ final class cliticalUITests: XCTestCase {
         }
     }
 
-    /// Opens a question row, picks an option on the pushed screen, and goes back.
-    private func setChoice(row title: String, to option: String, in app: XCUIApplication) {
-        // A list row is exposed as a button labelled "<title>, <current selection>".
-        let row = app.buttons
+    /// Sets an inline Bool question row's Toggle to the desired Yes/No state.
+    ///
+    /// SwiftUI's Toggle is exposed to XCUITest as `app.switches`, and its
+    /// accessibility label is the concatenation of the row's title and
+    /// footer text (e.g. "Infrapopliteal Infrapopliteal present or absent"),
+    /// so we match with `BEGINSWITH` rather than an exact label.
+    private func setToggle(row title: String, to option: String, in app: XCUIApplication) {
+        let desiredOn = option == "Yes"
+        let row = app.switches
             .matching(NSPredicate(format: "label BEGINSWITH %@", title))
             .firstMatch
         scrollTo(row, in: app)
-        XCTAssertTrue(row.waitForExistence(timeout: 5), "Missing question row: \(title)")
-        row.tap()
-
-        XCTAssertTrue(app.navigationBars[title].waitForExistence(timeout: 5),
-                      "Choice screen for \(title) did not open")
-        let optionElement = app.descendants(matching: .any)
-            .matching(NSPredicate(format: "label == %@", option))
-            .firstMatch
-        XCTAssertTrue(optionElement.waitForExistence(timeout: 5),
-                      "Missing option \(option) for \(title)")
-        optionElement.tap()
-        app.navigationBars.buttons.firstMatch.tap()
-        // Wait for the pop animation to fully complete before returning.
-        // Without this, tapPredictButton's scrollTo runs while the ChoiceListView
-        // is still animating out: it burns all 12 swipes on an unstable tree,
-        // over-scrolls past the Predict button, and leaves SwiftUI's NavigationView
-        // in a state where the programmatic isActive NavigationLink won't fire.
-        let dismissed = XCTNSPredicateExpectation(
-            predicate: NSPredicate(format: "exists == false"),
-            object: app.navigationBars[title]
-        )
-        _ = XCTWaiter().wait(for: [dismissed], timeout: 5)
+        XCTAssertTrue(row.waitForExistence(timeout: 5), "Missing toggle row: \(title)")
+        // SwiftUI exposes the row as two nested Switch elements: an outer one
+        // combining the row's title+footer text as its label, and an inner
+        // (unlabelled) one that is the real interactive control backing the
+        // accessibility activate action. Tapping the outer element is a
+        // no-op, so drill into the inner switch and tap that instead.
+        let toggle = row.switches.firstMatch
+        let isOn = (toggle.value as? String) == "1"
+        if isOn != desiredOn {
+            toggle.tap()
+        }
     }
 
     /// Scrolls back towards the top of the list in small increments until the

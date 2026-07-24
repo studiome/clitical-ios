@@ -1,60 +1,63 @@
 //
 //  PatientRiskTest.swift
-//  
+//
 //
 //  Created by kmiyahara on 2023/01/02.
 //
 
-import XCTest
+import Testing
 @testable import CLPatientData
 
-final class PatientRiskTests: XCTestCase {
-    
-    func testInit() throws {
+@Suite struct PatientRiskTests {
+    @Test func testInit() {
         let pd = PatientData()
         let risk = PatientRisk(of: pd)
-        XCTAssertNil(risk.gnri)
-        XCTAssertNil(risk.gnriRisk)
-        XCTAssertNil(risk.predicted30DDeathOrAmputation)
-        XCTAssertNil(risk.predicted30DMALE)
-        XCTAssertNil(risk.predicted2YOS)
-        XCTAssertNil(risk.predicted2YOSRisk)
-        XCTAssertNil(risk.predicted2YAFS)
+        #expect(risk.gnri == nil)
+        #expect(risk.gnriRisk == nil)
+        #expect(risk.predicted30DDeathOrAmputation == nil)
+        #expect(risk.predicted30DMALE == nil)
+        #expect(risk.predicted2YOS == nil)
+        #expect(risk.predicted2YOSRisk == nil)
+        #expect(risk.predicted2YAFS == nil)
     }
-    
-    func testErrorCase() throws{
+
+    @Test func testErrorCase() {
         var pd = PatientData()
         pd.height = 0.0
         let risk = PatientRisk(of: pd)
-        XCTAssertNil(risk.gnri)
-        XCTAssertNil(risk.gnriRisk)
-        XCTAssertNil(risk.predicted30DDeathOrAmputation)
-        XCTAssertNil(risk.predicted30DMALE)
-        XCTAssertNil(risk.predicted2YOS)
-        XCTAssertNil(risk.predicted2YOSRisk)
-        XCTAssertNil(risk.predicted2YAFS)
+        #expect(risk.gnri == nil)
+        #expect(risk.gnriRisk == nil)
+        #expect(risk.predicted30DDeathOrAmputation == nil)
+        #expect(risk.predicted30DMALE == nil)
+        #expect(risk.predicted2YOS == nil)
+        #expect(risk.predicted2YOSRisk == nil)
+        #expect(risk.predicted2YAFS == nil)
     }
-    
-    func testExtremelyLowRiskCase() throws{
+
+    @Test func testExtremelyLowRiskCase() throws {
         var pd = PatientData()
         pd.age = 65
         pd.weight = 50.0
         pd.height = 150.0
         pd.alb = 4.0
         pd.hasAILesion = true
-        //Others are all false
-        
+
         let risk = PatientRisk(of: pd)
-        XCTAssertEqual(String(format: "%.1f", risk.gnri!), "101.3")
-        XCTAssertEqual(risk.gnriRisk, .noRisk)
-        XCTAssertEqual(String(format: "%.3f", risk.predicted30DDeathOrAmputation!), "0.013")
-        XCTAssertEqual(String(format: "%.3f", risk.predicted30DMALE!), "0.032")
-        XCTAssertEqual(String(format: "%.2f", risk.predicted2YOS!), "0.92")
-        XCTAssertEqual(risk.predicted2YOSRisk, .low)
-        XCTAssertEqual(String(format: "%.2f", risk.predicted2YAFS!), "0.88")
+        let gnri = try #require(risk.gnri)
+        #expect(String(format: "%.1f", gnri) == "101.3")
+        #expect(risk.gnriRisk == .noRisk)
+        let p30DA = try #require(risk.predicted30DDeathOrAmputation)
+        #expect(String(format: "%.3f", p30DA) == "0.013")
+        let p30DM = try #require(risk.predicted30DMALE)
+        #expect(String(format: "%.3f", p30DM) == "0.032")
+        let p2YOS = try #require(risk.predicted2YOS)
+        #expect(String(format: "%.2f", p2YOS) == "0.92")
+        #expect(risk.predicted2YOSRisk == .low)
+        let p2YAFS = try #require(risk.predicted2YAFS)
+        #expect(String(format: "%.2f", p2YAFS) == "0.88")
     }
-    
-    func testLowRiskCase() throws{
+
+    @Test func testLowRiskCase() throws {
         var pd = PatientData()
         pd.sex = .male
         pd.age = 50
@@ -79,18 +82,23 @@ final class PatientRiskTests: XCTestCase {
         pd.hasContraLateralLesion = false
         pd.hasOtherVD = true
         pd.rutherford = .class4
-        
+
         let risk = PatientRisk(of: pd)
-        XCTAssertEqual(String(format: "%.1f", risk.gnri!), "101.3")
-        XCTAssertEqual(risk.gnriRisk, .noRisk)
-        XCTAssertEqual(String(format: "%.3f", risk.predicted30DDeathOrAmputation!), "0.088")
-        XCTAssertEqual(String(format: "%.3f", risk.predicted30DMALE!), "0.152")
-        XCTAssertEqual(String(format: "%.2f", risk.predicted2YOS!), "0.91")
-        XCTAssertEqual(risk.predicted2YOSRisk!, .low)
-        XCTAssertEqual(String(format: "%.2f", risk.predicted2YAFS!), "0.64")
+        let gnri = try #require(risk.gnri)
+        #expect(String(format: "%.1f", gnri) == "101.3")
+        #expect(risk.gnriRisk == .noRisk)
+        let p30DA = try #require(risk.predicted30DDeathOrAmputation)
+        #expect(String(format: "%.3f", p30DA) == "0.088")
+        let p30DM = try #require(risk.predicted30DMALE)
+        #expect(String(format: "%.3f", p30DM) == "0.152")
+        let p2YOS = try #require(risk.predicted2YOS)
+        #expect(String(format: "%.2f", p2YOS) == "0.91")
+        #expect(risk.predicted2YOSRisk == .low)
+        let p2YAFS = try #require(risk.predicted2YAFS)
+        #expect(String(format: "%.2f", p2YAFS) == "0.64")
     }
-    
-    func testMediumRiskCase() throws{
+
+    @Test func testMediumRiskCase() throws {
         var pd = PatientData()
         pd.sex = .female
         pd.age = 70
@@ -115,18 +123,23 @@ final class PatientRiskTests: XCTestCase {
         pd.hasContraLateralLesion = true
         pd.hasOtherVD = false
         pd.rutherford = .class5
-        
+
         let risk = PatientRisk(of: pd)
-        XCTAssertEqual(String(format: "%.1f", risk.gnri!), "93.8")
-        XCTAssertEqual(risk.gnriRisk, .low)
-        XCTAssertEqual(String(format: "%.3f", risk.predicted30DDeathOrAmputation!), "0.170")
-        XCTAssertEqual(String(format: "%.3f", risk.predicted30DMALE!), "0.175")
-        XCTAssertEqual(String(format: "%.2f", risk.predicted2YOS!), "0.67")
-        XCTAssertEqual(risk.predicted2YOSRisk!, .medium)
-        XCTAssertEqual(String(format: "%.2f", risk.predicted2YAFS!), "0.25")
+        let gnri = try #require(risk.gnri)
+        #expect(String(format: "%.1f", gnri) == "93.8")
+        #expect(risk.gnriRisk == .low)
+        let p30DA = try #require(risk.predicted30DDeathOrAmputation)
+        #expect(String(format: "%.3f", p30DA) == "0.170")
+        let p30DM = try #require(risk.predicted30DMALE)
+        #expect(String(format: "%.3f", p30DM) == "0.175")
+        let p2YOS = try #require(risk.predicted2YOS)
+        #expect(String(format: "%.2f", p2YOS) == "0.67")
+        #expect(risk.predicted2YOSRisk == .medium)
+        let p2YAFS = try #require(risk.predicted2YAFS)
+        #expect(String(format: "%.2f", p2YAFS) == "0.25")
     }
-    
-    func testHighRiskCase1() throws{
+
+    @Test func testHighRiskCase1() throws {
         var pd = PatientData()
         pd.sex = .male
         pd.age = 85
@@ -151,20 +164,25 @@ final class PatientRiskTests: XCTestCase {
         pd.hasContraLateralLesion = true
         pd.hasOtherVD = false
         pd.rutherford = .class5
-        
+
         let risk = PatientRisk(of: pd)
-        XCTAssertEqual(String(format: "%.1f", risk.gnri!), "86.2")
-        XCTAssertEqual(risk.gnriRisk!, .moderate)
-        XCTAssertEqual(String(format: "%.3f", risk.predicted30DDeathOrAmputation!), "0.100")
-        XCTAssertEqual(String(format: "%.3f", risk.predicted30DMALE!), "0.043")
-        XCTAssertEqual(String(format: "%.2f", risk.predicted2YOS!), "0.08")
-        XCTAssertEqual(risk.predicted2YOSRisk!, .high)
-        XCTAssertEqual(String(format: "%.2f", risk.predicted2YAFS!), "0.03")
+        let gnri = try #require(risk.gnri)
+        #expect(String(format: "%.1f", gnri) == "86.2")
+        #expect(risk.gnriRisk == .moderate)
+        let p30DA = try #require(risk.predicted30DDeathOrAmputation)
+        #expect(String(format: "%.3f", p30DA) == "0.100")
+        let p30DM = try #require(risk.predicted30DMALE)
+        #expect(String(format: "%.3f", p30DM) == "0.043")
+        let p2YOS = try #require(risk.predicted2YOS)
+        #expect(String(format: "%.2f", p2YOS) == "0.08")
+        #expect(risk.predicted2YOSRisk == .high)
+        let p2YAFS = try #require(risk.predicted2YAFS)
+        #expect(String(format: "%.2f", p2YAFS) == "0.03")
     }
-    
+
     // Regression: isUrgent and hasAbnormalWBC must be counted independently.
     // Same base as testExtremelyLowRiskCase, with only isUrgent set.
-    func testUrgentWithNormalWBC() throws{
+    @Test func testUrgentWithNormalWBC() throws {
         var pd = PatientData()
         pd.age = 65
         pd.weight = 50.0
@@ -175,14 +193,18 @@ final class PatientRiskTests: XCTestCase {
         pd.hasAbnormalWBC = false
 
         let risk = PatientRisk(of: pd)
-        XCTAssertEqual(String(format: "%.3f", risk.predicted30DDeathOrAmputation!), "0.024")
-        XCTAssertEqual(String(format: "%.3f", risk.predicted30DMALE!), "0.040")
-        XCTAssertEqual(String(format: "%.2f", risk.predicted2YOS!), "0.92")
-        XCTAssertEqual(String(format: "%.2f", risk.predicted2YAFS!), "0.83")
+        let p30DA = try #require(risk.predicted30DDeathOrAmputation)
+        #expect(String(format: "%.3f", p30DA) == "0.024")
+        let p30DM = try #require(risk.predicted30DMALE)
+        #expect(String(format: "%.3f", p30DM) == "0.040")
+        let p2YOS = try #require(risk.predicted2YOS)
+        #expect(String(format: "%.2f", p2YOS) == "0.92")
+        let p2YAFS = try #require(risk.predicted2YAFS)
+        #expect(String(format: "%.2f", p2YAFS) == "0.83")
     }
 
     // Same base, with only hasAbnormalWBC set.
-    func testNonUrgentWithAbnormalWBC() throws{
+    @Test func testNonUrgentWithAbnormalWBC() throws {
         var pd = PatientData()
         pd.age = 65
         pd.weight = 50.0
@@ -193,13 +215,17 @@ final class PatientRiskTests: XCTestCase {
         pd.hasAbnormalWBC = true
 
         let risk = PatientRisk(of: pd)
-        XCTAssertEqual(String(format: "%.3f", risk.predicted30DDeathOrAmputation!), "0.023")
-        XCTAssertEqual(String(format: "%.3f", risk.predicted30DMALE!), "0.053")
-        XCTAssertEqual(String(format: "%.2f", risk.predicted2YOS!), "0.92")
-        XCTAssertEqual(String(format: "%.2f", risk.predicted2YAFS!), "0.85")
+        let p30DA = try #require(risk.predicted30DDeathOrAmputation)
+        #expect(String(format: "%.3f", p30DA) == "0.023")
+        let p30DM = try #require(risk.predicted30DMALE)
+        #expect(String(format: "%.3f", p30DM) == "0.053")
+        let p2YOS = try #require(risk.predicted2YOS)
+        #expect(String(format: "%.2f", p2YOS) == "0.92")
+        let p2YAFS = try #require(risk.predicted2YAFS)
+        #expect(String(format: "%.2f", p2YAFS) == "0.85")
     }
 
-    func testHighRiskCase2() throws{
+    @Test func testHighRiskCase2() throws {
         var pd = PatientData()
         pd.sex = .female
         pd.age = 90
@@ -224,14 +250,19 @@ final class PatientRiskTests: XCTestCase {
         pd.hasContraLateralLesion = false
         pd.hasOtherVD = true
         pd.rutherford = .class6
-        
+
         let risk = PatientRisk(of: pd)
-        XCTAssertEqual(String(format: "%.1f", risk.gnri!), "71.3")
-        XCTAssertEqual(risk.gnriRisk!, .major)
-        XCTAssertEqual(String(format: "%.3f", risk.predicted30DDeathOrAmputation!), "0.370")
-        XCTAssertEqual(String(format: "%.3f", risk.predicted30DMALE!), "0.122")
-        XCTAssertEqual(String(format: "%.2f", risk.predicted2YOS!), "0.00")
-        XCTAssertEqual(risk.predicted2YOSRisk!, .high)
-        XCTAssertEqual(String(format: "%.2f", risk.predicted2YAFS!), "0.00")
+        let gnri = try #require(risk.gnri)
+        #expect(String(format: "%.1f", gnri) == "71.3")
+        #expect(risk.gnriRisk == .major)
+        let p30DA = try #require(risk.predicted30DDeathOrAmputation)
+        #expect(String(format: "%.3f", p30DA) == "0.370")
+        let p30DM = try #require(risk.predicted30DMALE)
+        #expect(String(format: "%.3f", p30DM) == "0.122")
+        let p2YOS = try #require(risk.predicted2YOS)
+        #expect(String(format: "%.2f", p2YOS) == "0.00")
+        #expect(risk.predicted2YOSRisk == .high)
+        let p2YAFS = try #require(risk.predicted2YAFS)
+        #expect(String(format: "%.2f", p2YAFS) == "0.00")
     }
 }
