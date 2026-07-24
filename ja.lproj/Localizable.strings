@@ -32,7 +32,6 @@
 "AlbQuestionTitle" = "アルブミン値 [g/dl]";
 "AlbQuestionDescription" = "アルブミン値 [g/dl]を入力してください。";
 "ActivityQuestionTitle" = "ADL";
-"ActivityQuestionDescription" = "独歩, 車いす, 寝たきりから選んでください。";
 "ActivityAmbulatory" = "独歩";
 "ActivityWheelchair" = "車いす";
 "ActivityImmobile" = "寝たきり";
@@ -52,7 +51,6 @@
 "LocalInfectionQuestionTitle" = "局所感染";
 "LocalInfectionQuestionDescription" = "膿瘍、もしくは次から二つ以上 [発熱・発赤・リンパ管炎・リンパ節腫脹・疼痛]";
 "RutherfordClassQuestionTitle" = "ラザフォード分類";
-"RutherfordClassQuestionDescription" = "class 4, 5, 6から選んでください。";
 "Rutherford4" = "Class 4";
 "Rutherford5" = "Class 5";
 "Rutherford6" = "Class 6";

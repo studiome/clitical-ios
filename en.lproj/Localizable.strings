@@ -31,7 +31,6 @@
 "AlbQuestionTitle" = "Albumin [g/dl]";
 "AlbQuestionDescription" = "Enter Albumin [g/dl].";
 "ActivityQuestionTitle" = "Activity";
-"ActivityQuestionDescription" = "Ambulatory: able to walk, Wheelchair: unable to walk but could stand on their own legs during bed to wheelchair transfer, Immobile: full assistance is indispensable";
 "ActivityAmbulatory" = "Ambulatory";
 "ActivityWheelchair" = "Wheelchair";
 "ActivityImmobile" = "Immobile";
@@ -51,7 +50,6 @@
 "LocalInfectionQuestionTitle" = "Local Infection";
 "LocalInfectionQuestionDescription" = "Suppurative wound, or at least two of the following: heat, erythema, lymphangitis, lymph node swelling, oedema, and pain";
 "RutherfordClassQuestionTitle" = "Rutherford Classification";
-"RutherfordClassQuestionDescription" = "classes 4, 5, or 6";
 "Rutherford4" = "Class 4";
 "Rutherford5" = "Class 5";
 "Rutherford6" = "Class 6";

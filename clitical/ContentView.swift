@@ -37,7 +37,6 @@ struct RootContentView: View {
                                   footer: "SmokingQuestionDescription",
                                   selection: $patientData.isSmoking)
                         MenuChoiceRow(title: "ActivityQuestionTitle",
-                                  footer: "ActivityQuestionDescription",
                                   options: Activity.allCases,
                                   label: \.label,
                                   selection: $patientData.activity)
@@ -62,7 +61,6 @@ struct RootContentView: View {
                                   footer: "LocalInfectionQuestionDescription",
                                   selection: $patientData.hasLocalInfection)
                         MenuChoiceRow(title: "RutherfordClassQuestionTitle",
-                                  footer: "RutherfordClassQuestionDescription",
                                   options: RutherfordClassification.allCases,
                                   label: \.label,
                                   selection: $patientData.rutherford)
