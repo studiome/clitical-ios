@@ -14,7 +14,6 @@
 "OtherLesionInfo" = "その他血管病変";
 "Complications" = "合併症";
 "SexQuestionTitle" =  "性別";
-"SexQuestionDescription" =  "生物学的性別を選んでください。";
 "SexMale" = "男性";
 "SexFemale" = "女性";
 "CHFQuestionTitle" = "うっ血性心不全";
@@ -36,7 +35,8 @@
 "ActivityWheelchair" = "車いす";
 "ActivityImmobile" = "寝たきり";
 "UrgencyQuestionTitle" = "緊急血行再建の適応";
-"UrgencyQuestionDescription" = "オン：緊急手術、オフ：待機手術";
+"UrgencyUrgent" = "緊急手術";
+"UrgencyElective" = "待機手術";
 "CKDQuestionTitle" = "慢性腎臓病";
 "CKDQuestionDescription" = "eGFR(推定糸球体濾過量) [mL/min/1.73m\U00B2], 正常: 60以上, G3: 30-59, G4: 15-29, G5: 15以下, G5D: 透析";
 "CKDNormal" = "正常";
@@ -69,7 +69,6 @@
 "DLQuestionTitle" = "脂質異常症";
 "DLQuestionDescription" = "LDL-C > 140 [mg/dl]";
 "MalignancyQuestionTitle" = "悪性新生物";
-"MalignancyQuestionDescription" = "なし, 既往歴あり, 治療中から選んでください。";
 "MalignancyNo" = "なし";
 "MalignancyPast" = "既往歴あり";
 "MalignancyTreatment" = "治療中";

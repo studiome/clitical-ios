@@ -25,7 +25,6 @@ struct RootContentView: View {
                     Section(header: Text("BasicInfo")) {
                         AgeFormView(patientData: $patientData).focused($isActive)
                         SegmentedRow(title: "SexQuestionTitle",
-                                  footer: "SexQuestionDescription",
                                   options: Sex.allCases,
                                   label: \.label,
                                   selection: $patientData.sex)
@@ -48,8 +47,9 @@ struct RootContentView: View {
                                   options: CKD.allCases,
                                   label: \.label,
                                   selection: $patientData.ckd)
-                        ToggleRow(title: "UrgencyQuestionTitle",
-                                  footer: "UrgencyQuestionDescription",
+                        SegmentedRow(title: "UrgencyQuestionTitle",
+                                  options: [true, false],
+                                  label: { $0 ? "UrgencyUrgent" : "UrgencyElective" },
                                   selection: $patientData.isUrgent)
                         ToggleRow(title: "FeverQuestionTitle",
                                   footer: "FeverQuestionDescription",
@@ -98,7 +98,6 @@ struct RootContentView: View {
                                   footer: "DLQuestionDescription",
                                   selection: $patientData.hasDyslipidemia)
                         MenuChoiceRow(title: "MalignancyQuestionTitle",
-                                  footer: "MalignancyQuestionDescription",
                                   options: MalignantNeoplasm.allCases,
                                   label: \.label,
                                   selection: $patientData.malignantNeoplasm)
