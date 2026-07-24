@@ -78,20 +78,30 @@ struct MenuChoiceRow<Value: Hashable>: View {
     }
 
     var body: some View {
-        Picker(selection: $selection) {
-            ForEach(options, id: \.self) { option in
-                Text(LocalizedStringKey(label(option)))
-                    .tag(option)
-            }
-        } label: {
+        // Picker's `.menu` style only lays the current value and chevron out
+        // trailing the label when that label is a single line; a multi-line
+        // label (title + footer) pushes them onto a new line, left-aligned,
+        // breaking the standard leading-title/trailing-value list row. An
+        // explicit HStack keeps that layout regardless of the footer.
+        HStack {
             VStack(alignment: .leading, spacing: 2) {
                 Text(LocalizedStringKey(title))
                 if let footer {
                     Text(footer).font(.footnote).foregroundStyle(.secondary)
                 }
             }
+            Spacer()
+            Picker(selection: $selection) {
+                ForEach(options, id: \.self) { option in
+                    Text(LocalizedStringKey(label(option)))
+                        .tag(option)
+                }
+            } label: {
+                EmptyView()
+            }
+            .labelsHidden()
+            .pickerStyle(.menu)
         }
-        .pickerStyle(.menu)
     }
 }
 
