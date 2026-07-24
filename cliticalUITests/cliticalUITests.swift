@@ -170,7 +170,7 @@ final class cliticalUITests: XCTestCase {
 
         let alert = app.alerts.firstMatch
         XCTAssertTrue(alert.waitForExistence(timeout: 5), "Validation alert did not appear")
-        XCTAssertTrue(alert.staticTexts["Check the artery lesion sites. At least one lesion must be Yes."].exists,
+        XCTAssertTrue(alert.staticTexts["Check the artery lesion sites. At least one lesion must be turned on."].exists,
                       "Alert should explain that at least one lesion is required")
         XCTAssertFalse(app.navigationBars["Predicted Risks"].exists)
     }
