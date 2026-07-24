@@ -97,7 +97,6 @@ struct RootContentView: View {
                                   footer: "DLQuestionDescription",
                                   selection: $patientData.hasDyslipidemia)
                         MenuChoiceRow(title: "MalignancyQuestionTitle",
-                                  footer: "MalignancyQuestionDescription",
                                   options: MalignantNeoplasm.allCases,
                                   label: \.label,
                                   selection: $patientData.malignantNeoplasm)

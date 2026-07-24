@@ -67,7 +67,6 @@
 "DLQuestionTitle" = "Dyslipidemia";
 "DLQuestionDescription" = "Serum low density lipoprotein (LDL-C) > 140 [mg/dl]";
 "MalignancyQuestionTitle" = "Malignant neoplasm";
-"MalignancyQuestionDescription" = "Absent, past history of malignant neoplasm, or present under treatment";
 "MalignancyNo" = "No";
 "MalignancyPast" = "Past history";
 "MalignancyTreatment" = "Under treatment";

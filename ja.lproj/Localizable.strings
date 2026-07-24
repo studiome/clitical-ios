@@ -68,7 +68,6 @@
 "DLQuestionTitle" = "脂質異常症";
 "DLQuestionDescription" = "LDL-C > 140 [mg/dl]";
 "MalignancyQuestionTitle" = "悪性新生物";
-"MalignancyQuestionDescription" = "なし, 既往歴あり, 治療中から選んでください。";
 "MalignancyNo" = "なし";
 "MalignancyPast" = "既往歴あり";
 "MalignancyTreatment" = "治療中";
