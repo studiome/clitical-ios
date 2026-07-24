@@ -57,13 +57,14 @@ final class cliticalUITests: XCTestCase {
                       "Risk calculation nav title did not switch to English live")
         XCTAssertFalse(app.navigationBars["患者データ"].exists)
 
-        // A pushed question screen's nav title must re-localize live too.
-        let sexRow = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Sex")).firstMatch
-        XCTAssertTrue(sexRow.waitForExistence(timeout: 5), "Sex question row missing")
-        sexRow.tap()
-        XCTAssertTrue(app.navigationBars["Sex"].waitForExistence(timeout: 5),
-                      "Choice screen nav title did not switch to English live")
-        app.navigationBars.buttons.firstMatch.tap()
+        // The Sex segmented control's options must also re-localize live,
+        // not just tab labels. Sex is now an inline segmented row (no pushed
+        // screen), so we assert its segment labels directly.
+        let maleOption = app.buttons["Male"]
+        scrollTo(maleOption, in: app)
+        XCTAssertTrue(maleOption.waitForExistence(timeout: 5),
+                      "Sex segmented option did not switch to English live")
+        XCTAssertTrue(app.buttons["Female"].exists, "Female segmented option missing")
 
         app.tabBars.buttons["References"].tap()
         XCTAssertTrue(app.navigationBars["References"].waitForExistence(timeout: 5),
@@ -139,7 +140,7 @@ final class cliticalUITests: XCTestCase {
         app.launch()
 
         fillRequiredNumberFields(in: app)
-        setChoice(row: "Infrapopliteal", to: "Yes", in: app)
+        setToggle(row: "Infrapopliteal", to: "Yes", in: app)
 
         tapPredictButton(in: app)
 
@@ -269,35 +270,29 @@ final class cliticalUITests: XCTestCase {
         }
     }
 
-    /// Opens a question row, picks an option on the pushed screen, and goes back.
-    private func setChoice(row title: String, to option: String, in app: XCUIApplication) {
-        // A list row is exposed as a button labelled "<title>, <current selection>".
-        let row = app.buttons
+    /// Sets an inline Bool question row's Toggle to the desired Yes/No state.
+    ///
+    /// SwiftUI's Toggle is exposed to XCUITest as `app.switches`, and its
+    /// accessibility label is the concatenation of the row's title and
+    /// footer text (e.g. "Infrapopliteal Infrapopliteal present or absent"),
+    /// so we match with `BEGINSWITH` rather than an exact label.
+    private func setToggle(row title: String, to option: String, in app: XCUIApplication) {
+        let desiredOn = option == "Yes"
+        let row = app.switches
             .matching(NSPredicate(format: "label BEGINSWITH %@", title))
             .firstMatch
         scrollTo(row, in: app)
-        XCTAssertTrue(row.waitForExistence(timeout: 5), "Missing question row: \(title)")
-        row.tap()
-
-        XCTAssertTrue(app.navigationBars[title].waitForExistence(timeout: 5),
-                      "Choice screen for \(title) did not open")
-        let optionElement = app.descendants(matching: .any)
-            .matching(NSPredicate(format: "label == %@", option))
-            .firstMatch
-        XCTAssertTrue(optionElement.waitForExistence(timeout: 5),
-                      "Missing option \(option) for \(title)")
-        optionElement.tap()
-        app.navigationBars.buttons.firstMatch.tap()
-        // Wait for the pop animation to fully complete before returning.
-        // Without this, tapPredictButton's scrollTo runs while the ChoiceListView
-        // is still animating out: it burns all 12 swipes on an unstable tree,
-        // over-scrolls past the Predict button, and leaves SwiftUI's NavigationView
-        // in a state where the programmatic isActive NavigationLink won't fire.
-        let dismissed = XCTNSPredicateExpectation(
-            predicate: NSPredicate(format: "exists == false"),
-            object: app.navigationBars[title]
-        )
-        _ = XCTWaiter().wait(for: [dismissed], timeout: 5)
+        XCTAssertTrue(row.waitForExistence(timeout: 5), "Missing toggle row: \(title)")
+        // SwiftUI exposes the row as two nested Switch elements: an outer one
+        // combining the row's title+footer text as its label, and an inner
+        // (unlabelled) one that is the real interactive control backing the
+        // accessibility activate action. Tapping the outer element is a
+        // no-op, so drill into the inner switch and tap that instead.
+        let toggle = row.switches.firstMatch
+        let isOn = (toggle.value as? String) == "1"
+        if isOn != desiredOn {
+            toggle.tap()
+        }
     }
 
     /// Scrolls back towards the top of the list in small increments until the
