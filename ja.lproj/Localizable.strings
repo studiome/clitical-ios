@@ -14,7 +14,6 @@
 "OtherLesionInfo" = "その他血管病変";
 "Complications" = "合併症";
 "SexQuestionTitle" =  "性別";
-"SexQuestionDescription" =  "生物学的性別を選んでください。";
 "SexMale" = "男性";
 "SexFemale" = "女性";
 "CHFQuestionTitle" = "うっ血性心不全";

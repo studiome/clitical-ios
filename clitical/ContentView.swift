@@ -25,7 +25,6 @@ struct RootContentView: View {
                     Section(header: Text("BasicInfo")) {
                         AgeFormView(patientData: $patientData).focused($isActive)
                         SegmentedRow(title: "SexQuestionTitle",
-                                  footer: "SexQuestionDescription",
                                   options: Sex.allCases,
                                   label: \.label,
                                   selection: $patientData.sex)

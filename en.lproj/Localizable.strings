@@ -13,7 +13,6 @@
 "OtherLesionInfo" = "Concomitant Vascular Lesions";
 "Complications" = "Complications";
 "SexQuestionTitle" =  "Sex";
-"SexQuestionDescription" = "Choose one.";
 "SexMale" = "Male";
 "SexFemale" = "Female";
 "CHFQuestionTitle" = "Congestive heart failure";

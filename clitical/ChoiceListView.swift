@@ -31,10 +31,22 @@ struct ToggleRow: View {
 /// controls for a handful of closely related choices.
 struct SegmentedRow<Value: Hashable>: View {
     let title: String
-    let footer: LocalizedStringKey
+    let footer: LocalizedStringKey?
     let options: [Value]
     let label: (Value) -> String
     @Binding var selection: Value
+
+    init(title: String,
+         footer: LocalizedStringKey? = nil,
+         options: [Value],
+         label: @escaping (Value) -> String,
+         selection: Binding<Value>) {
+        self.title = title
+        self.footer = footer
+        self.options = options
+        self.label = label
+        self._selection = selection
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -47,9 +59,11 @@ struct SegmentedRow<Value: Hashable>: View {
             }
             .pickerStyle(.segmented)
             .labelsHidden()
-            Text(footer)
-                .font(.footnote)
-                .foregroundStyle(.secondary)
+            if let footer {
+                Text(footer)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
         }
     }
 }
@@ -112,7 +126,6 @@ struct MenuChoiceRow<Value: Hashable>: View {
                       footer: "SmokingQuestionDescription",
                       selection: .constant(true))
             SegmentedRow(title: "SexQuestionTitle",
-                         footer: "SexQuestionDescription",
                          options: Sex.allCases,
                          label: \.label,
                          selection: .constant(.female))
