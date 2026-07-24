@@ -35,7 +35,8 @@
 "ActivityWheelchair" = "車いす";
 "ActivityImmobile" = "寝たきり";
 "UrgencyQuestionTitle" = "緊急血行再建の適応";
-"UrgencyQuestionDescription" = "オン：緊急手術、オフ：待機手術";
+"UrgencyUrgent" = "緊急手術";
+"UrgencyElective" = "待機手術";
 "CKDQuestionTitle" = "慢性腎臓病";
 "CKDQuestionDescription" = "eGFR(推定糸球体濾過量) [mL/min/1.73m\U00B2], 正常: 60以上, G3: 30-59, G4: 15-29, G5: 15以下, G5D: 透析";
 "CKDNormal" = "正常";

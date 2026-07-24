@@ -47,8 +47,9 @@ struct RootContentView: View {
                                   options: CKD.allCases,
                                   label: \.label,
                                   selection: $patientData.ckd)
-                        ToggleRow(title: "UrgencyQuestionTitle",
-                                  footer: "UrgencyQuestionDescription",
+                        SegmentedRow(title: "UrgencyQuestionTitle",
+                                  options: [true, false],
+                                  label: { $0 ? "UrgencyUrgent" : "UrgencyElective" },
                                   selection: $patientData.isUrgent)
                         ToggleRow(title: "FeverQuestionTitle",
                                   footer: "FeverQuestionDescription",

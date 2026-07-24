@@ -158,6 +158,25 @@ final class cliticalUITests: XCTestCase {
                       "Geriatric Nutritional Risk Index did not appear")
     }
 
+    /// The urgency question is two independent named states (urgent vs.
+    /// elective revascularization), not an on/off mechanism, so per HIG it
+    /// must be an inline segmented control with both options visibly
+    /// labeled — matching the pattern already used for Sex.
+    func testUrgencyQuestionIsSegmentedControlWithBothLabels() throws {
+        let app = XCUIApplication()
+        app.launchArguments += ["-app_language", "en"]
+        app.launch()
+
+        app.tabBars.buttons["Risk Assessment"].tap()
+
+        let urgent = app.buttons["Urgent"]
+        scrollTo(urgent, in: app)
+        XCTAssertTrue(urgent.waitForExistence(timeout: 5),
+                      "Urgency segmented option 'Urgent' missing")
+        XCTAssertTrue(app.buttons["Elective"].exists,
+                      "Urgency segmented option 'Elective' missing")
+    }
+
     /// With valid numbers but no artery lesion selected, predicting must show
     /// the lesion-specific validation alert instead of the risk screen.
     func testPredictWithoutLesionShowsLesionAlert() throws {

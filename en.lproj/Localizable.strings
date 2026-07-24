@@ -34,7 +34,8 @@
 "ActivityWheelchair" = "Wheelchair";
 "ActivityImmobile" = "Immobile";
 "UrgencyQuestionTitle" = "Urgent revascularization";
-"UrgencyQuestionDescription" = "On: urgent revascularization, Off: elective";
+"UrgencyUrgent" = "Urgent";
+"UrgencyElective" = "Elective";
 "CKDQuestionTitle" = "Chronic kidney disease";
 "CKDQuestionDescription" = "eGFR(estimated glomerular filtration rate) [mL/min/1.73m\U00B2], Normal: 60 or higher, G3: 30-59, G4: 15-29, G5: below 15, G5D: below 15 in haemodialysis";
 "CKDNormal" = "Normal";
