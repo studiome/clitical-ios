@@ -14,11 +14,13 @@ struct WeightFormView: View {
     var body: some View {
         HStack {
             Text("WeightQuestionTitle")
+                .accessibilityHidden(true)
             TextField("WeightQuestionDescription",
                       value: $patientData.weight,
                       format: .number)
             .multilineTextAlignment(.trailing)
             .keyboardType(.decimalPad)
+            .accessibilityLabel(Text("WeightQuestionTitle"))
         }
     }
 }

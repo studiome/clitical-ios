@@ -122,6 +122,7 @@ struct RootContentView: View {
                                 EmptyView()
                             }
                             .opacity(0)
+                            .accessibilityHidden(true)
                         )
                         // Destructive role (not a bare red tint) so VoiceOver
                         // announces it as destructive, and a confirmation

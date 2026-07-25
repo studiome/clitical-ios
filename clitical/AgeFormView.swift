@@ -14,11 +14,13 @@ struct AgeFormView: View {
     var body: some View {
         HStack {
             Text("AgeQuestionTitle")
+                .accessibilityHidden(true)
             TextField("AgeQuestionDescription",
                       value: $patientData.age,
                       format: .number)
             .multilineTextAlignment(.trailing)
             .keyboardType(.numberPad)
+            .accessibilityLabel(Text("AgeQuestionTitle"))
         }
     }
 }

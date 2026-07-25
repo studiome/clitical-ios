@@ -105,13 +105,11 @@ struct MenuChoiceRow<Value: Hashable>: View {
                 }
             }
             Spacer()
-            Picker(selection: $selection) {
+            Picker(LocalizedStringKey(title), selection: $selection) {
                 ForEach(options, id: \.self) { option in
                     Text(LocalizedStringKey(label(option)))
                         .tag(option)
                 }
-            } label: {
-                EmptyView()
             }
             .labelsHidden()
             .pickerStyle(.menu)
