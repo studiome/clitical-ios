@@ -14,11 +14,13 @@ struct AlbFormView: View {
     var body: some View {
         HStack {
             Text("AlbQuestionTitle")
+                .accessibilityHidden(true)
             TextField("AlbQuestionDescription",
                       value: $patientData.alb,
                       format: .number)
             .multilineTextAlignment(.trailing)
             .keyboardType(.decimalPad)
+            .accessibilityLabel(Text("AlbQuestionTitle"))
         }
     }
 }
