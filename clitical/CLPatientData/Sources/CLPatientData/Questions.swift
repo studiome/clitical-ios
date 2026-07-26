@@ -4,6 +4,24 @@
 //
 //  Created by kmiyahara on 2023/01/04.
 //
+// References
+// Miyata T. et al, Risk prediction model for early outcomes of
+// revascularization for chronic limb-threatening ischaemia.
+// Br J Surg. 2022 Oct 14;109(11):1123.
+// https://doi.org/10.1093/bjs/znab036
+// Miyata T. et al, Prediction Models for Two Year Overall Survival and
+// Amputation Free Survival After Revascularisation for Chronic Limb
+// Threatening Ischaemia.
+// Eur J Vasc Endovasc Surg . 2022 Jun 7;S1078-5884(22)00340-9.
+// https://doi.org/10.1016/j.ejvs.2022.05.038
+// NOTICE
+// occlusive lesion
+// EJEVS occlusive classification
+// | AI | FP | BK | 2yr occlusive lesion
+// | +  | +- | +- | AI
+// | -  | +  | +- | FP without AI
+// | -  | -  | +  | Below IP
+// | -  | -  | -  | undefined illegal
 
 enum ThirtyDayDeathOrAmputationQuestions: CaseIterable {
     case intercept
