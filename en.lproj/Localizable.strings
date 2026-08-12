@@ -108,3 +108,23 @@
 "AppTerms" = "Terms of service";
 "TapToOpenLink" = "Tap to open link.";
 "AppLegalese" = "2022 Kazuhiro Miyahara, JSVS, JCLIMB";
+
+/* About screen */
+"AboutTagline" = "CLTI revascularisation risk prediction";
+"AboutOverview" = "Overview";
+"AboutOverviewBody" = "CLiTICAL predicts post-operative risks of revascularisation for chronic limb-threatening ischaemia (CLTI) from patient data, using prediction models built on the JCLIMB registry of the Japanese Society for Vascular Surgery.";
+"AboutPredictions" = "What it predicts";
+"AboutPredictionsFooter" = "Enter the patient data, then tap Predict risks to calculate.";
+"AboutModelSource" = "Model source";
+"AboutModelSourceBody" = "The prediction equations are based on two peer-reviewed papers. The original articles are available from the References tab.";
+"AboutPrivacy" = "Privacy";
+"AboutPrivacyBody" = "Patient data is processed on this device only and is never sent or stored elsewhere. The only thing the app saves is the language you select.";
+"AboutDisclaimer" = "Disclaimer";
+"AboutDisclaimerBody" = "This app is intended to support the clinical judgement of healthcare professionals. The values it calculates are estimates from statistical models and do not determine diagnosis or treatment. The final decision remains the responsibility of the attending physician.";
+"AboutCredits" = "Credits";
+"AboutPublisher" = "Published by";
+"AboutPublisherName" = "Japanese Society for Vascular Surgery / JCLIMB Committee";
+"AboutDeveloper" = "Developed by";
+"AboutDeveloperName" = "Kazuhiro Miyahara";
+"AboutVersion" = "Version";
+"AboutBuild" = "Build";

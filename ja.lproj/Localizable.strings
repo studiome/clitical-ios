@@ -109,3 +109,23 @@
 "AppTerms" = "利用規約";
 "TapToOpenLink" = "論文サイトを開きます。";
 "AppLegalese" = "2022 発行: 特定非営利法人日本血管外科学会、JCLIMB委員会、ソフトウェア制作: 宮原和洋";
+
+/* About screen */
+"AboutTagline" = "CLTI血行再建リスク予測";
+"AboutOverview" = "概要";
+"AboutOverviewBody" = "CLiTICALは、包括的高度慢性下肢虚血 (CLTI) に対する血行再建術の術後リスクを、患者データから予測するアプリです。日本血管外科学会のJCLIMBレジストリをもとに構築された予測モデルを実装しています。";
+"AboutPredictions" = "予測できる指標";
+"AboutPredictionsFooter" = "患者データを入力し、「リスクを予測」をタップすると算出されます。";
+"AboutModelSource" = "モデルの出典";
+"AboutModelSourceBody" = "予測式は査読付き論文2編に基づいています。原著は「参考文献」タブから参照できます。";
+"AboutPrivacy" = "プライバシー";
+"AboutPrivacyBody" = "入力された患者データは端末内でのみ処理され、外部への送信・保存は行いません。アプリ内に保存されるのは選択した言語の設定だけです。";
+"AboutDisclaimer" = "免責事項";
+"AboutDisclaimerBody" = "本アプリは医療従事者の臨床判断を支援することを目的としています。算出される値は統計モデルによる推定であり、診断や治療方針を決定するものではありません。最終的な判断は担当医師の責任において行ってください。";
+"AboutCredits" = "クレジット";
+"AboutPublisher" = "発行";
+"AboutPublisherName" = "特定非営利活動法人 日本血管外科学会 / JCLIMB委員会";
+"AboutDeveloper" = "ソフトウェア制作";
+"AboutDeveloperName" = "宮原和洋";
+"AboutVersion" = "バージョン";
+"AboutBuild" = "ビルド";
