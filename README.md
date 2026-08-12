@@ -1,128 +1,136 @@
 # CLiTICAL for iOS
 
-包括的高度慢性下肢虚血（CLTI: Chronic Limb-Threatening Ischaemia）に対する血行再建術の
-術後リスクを、患者データから予測する iOS アプリです。
+*日本語版: [README.ja.md](README.ja.md)*
 
-日本血管外科学会（JSVS）JCLIMB レジストリのデータをもとに構築された Miyata らの予測モデルを
-実装しており、Flutter/Android 版 CLiTICAL を SwiftUI でネイティブ実装したものです。
+An iOS app that predicts post-operative risks of revascularisation for chronic
+limb-threatening ischaemia (CLTI) from patient data.
 
-> **免責事項**
-> 本アプリは医療従事者の臨床判断を支援することを目的としています。算出される値は統計モデルに
-> よる推定であり、診断や治療方針を決定するものではありません。最終的な判断は担当医師の責任に
-> おいて行ってください。
+It implements the prediction models by Miyata et al., built on the JCLIMB registry of the
+Japanese Society for Vascular Surgery (JSVS), and is a native SwiftUI rewrite of the
+Flutter/Android version of CLiTICAL.
 
-## 主な機能
+> **Disclaimer**
+> This app is intended to support the clinical judgement of healthcare professionals. The
+> values it calculates are estimates from statistical models and do not determine diagnosis
+> or treatment. The final decision remains the responsibility of the attending physician.
 
-- **患者データ入力** — 基本情報・生活歴・臨床情報・動脈病変部位・その他血管病変・合併症の
-  6 セクションに分けて入力
-- **リスク予測** — 入力値から 5 つの指標を算出
-- **参考文献** — 予測モデルの原著論文を `SFSafariViewController` で表示
-- **設定** — 日本語／英語の切り替え（アプリ内で即時反映）、利用規約、アプリ情報
-- **アクセシビリティ** — VoiceOver 対応、Dynamic Type、色に依存しないリスク表示
+## Features
 
-## 予測できる指標
+- **Patient data entry** — six sections: basic information, social history, clinical
+  information, arterial lesion sites, other vascular lesions, and comorbidities
+- **Risk prediction** — five indices calculated from the entered data
+- **References** — the source papers opened in an `SFSafariViewController`
+- **Settings** — Japanese/English switching applied instantly in-app, terms of service,
+  and app information
+- **Accessibility** — VoiceOver support, Dynamic Type, and risk levels never conveyed by
+  colour alone
 
-| 指標 | 内容 |
+## Predicted indices
+
+| Index | Description |
 | --- | --- |
-| 予測 30 日死亡・大切断率 | 術後 30 日以内の死亡または大切断の発生率 |
-| 予測 30 日 MALE 発生率 | 術後 30 日以内の主要有害下肢事故（大切断／新たな急性・慢性下肢虚血） |
-| 予測 2 年 OS | 2 年全生存率（低／中等度／高リスクの分類付き） |
-| 予測 2 年 AFS | 2 年大切断回避生存率 |
-| GNRI | Geriatric Nutritional Risk Index（栄養リスク指標、4 段階分類付き） |
+| 30-day death or major amputation | Risk of death and/or major amputation within 30 days |
+| 30-day MALE | Major adverse limb events within 30 days |
+| 2-year OS | Two-year overall survival, with a low/medium/high risk classification |
+| 2-year AFS | Two-year amputation-free survival |
+| GNRI | Geriatric Nutritional Risk Index, with a four-level classification |
 
-GNRI は `14.89 × Alb + 41.7 × min(体重 / (22 × 身長²), 1.0)` で算出し、
-98 以上＝リスクなし／92–98＝軽度／82–92＝中等度／82 未満＝高度に分類します。
-30 日リスクはロジスティック回帰、2 年 OS/AFS は Cox 比例ハザードモデル
-（基準生存率 OS 0.922、AFS 0.876）で算出しています。
+GNRI is calculated as `14.89 × Alb + 41.7 × min(weight / (22 × height²), 1.0)` and
+classified as no risk (≥98), low (92–98), moderate (82–92), or major (<82).
+The 30-day risks use logistic regression; 2-year OS/AFS use Cox proportional hazards models
+(baseline survival 0.922 for OS and 0.876 for AFS).
 
-なお動脈病変は AI（大動脈・腸骨動脈）／FP（大腿膝窩）／BK（膝下）のうち
-最低 1 部位の選択が必要で、上位部位が優先されて病変分類が決まります。
+At least one arterial lesion site must be selected — AI (aortoiliac), FP (femoropopliteal),
+or BK (below the knee) — and the most proximal selected site determines the lesion
+classification.
 
-## 動作環境
+## Requirements
 
-- iOS 15.0 以降（iPhone 専用）
-- Xcode 15 以降 / Swift 5.9
-- 外部依存パッケージなし（ネットワーク通信は文献・規約リンクの表示のみ）
+- iOS 15.0 or later (iPhone only)
+- Xcode 15 or later / Swift 5.9
+- No third-party dependencies (the only networking is opening reference and terms links)
 
-## プロジェクト構成
+## Project layout
 
 ```
 clitical-ios/
-├── clitical/                     # アプリ本体（SwiftUI）
-│   ├── CliticalApp.swift         # エントリポイント
-│   ├── MainTabView.swift         # タブ構成／参考文献／設定・アプリ情報
-│   ├── ContentView.swift         # 患者データ入力フォーム
-│   ├── PredictedRiskView.swift   # 予測結果画面
+├── clitical/                     # App target (SwiftUI)
+│   ├── CliticalApp.swift         # Entry point
+│   ├── MainTabView.swift         # Tabs, references, settings and about
+│   ├── ContentView.swift         # Patient data form
+│   ├── PredictedRiskView.swift   # Results screen
 │   ├── ChoiceListView.swift      # ToggleRow / SegmentedRow / MenuChoiceRow
-│   ├── AgeFormView.swift ほか     # 数値入力フォーム（年齢・身長・体重・Alb）
-│   ├── Labels.swift              # ドメイン enum → ローカライズキーの対応
-│   ├── LocalizationManager.swift # アプリ内言語切り替え
-│   ├── QuestionError.swift       # 入力エラーの定義
-│   └── CLPatientData/            # ローカル Swift Package（ドメインロジック）
+│   ├── AgeFormView.swift, …      # Numeric fields (age, height, weight, Alb)
+│   ├── Labels.swift              # Domain enums → localization keys
+│   ├── LocalizationManager.swift # In-app language switching
+│   ├── QuestionError.swift       # Input error definitions
+│   └── CLPatientData/            # Local Swift package (domain logic)
 │       ├── Sources/CLPatientData/
-│       │   ├── PatientData.swift # 患者データのモデル（値型）
-│       │   ├── PatientRisk.swift # リスク計算とリスク分類
-│       │   └── Questions.swift   # 各モデルの説明変数と回帰係数
+│       │   ├── PatientData.swift # Patient data model (value type)
+│       │   ├── PatientRisk.swift # Risk calculation and classification
+│       │   └── Questions.swift   # Predictors and regression coefficients
 │       └── Tests/CLPatientDataTests/
 ├── cliticalUITests/              # XCUITest
 ├── ja.lproj / en.lproj           # Localizable.strings
 └── clitical-ios.xcodeproj
 ```
 
-## アーキテクチャ
+## Architecture
 
-- **ドメインロジックの分離** — リスク計算は UI から独立したローカル Swift Package
-  `CLPatientData` に置き、SwiftUI に依存しない形でテスト可能にしています。
-  回帰係数は `Questions.swift` に説明変数ごとの `enum` として集約されています。
-- **値型の患者データ** — `PatientData` は `struct` で、`@State` / `@Binding` を通じて
-  各フォームに渡されます。永続化は行いません。
-- **アプリ内言語切り替え** — `LocalizationManager` が `Bundle.main` のクラスを差し替え、
-  選択した `.lproj` を優先させることで、再起動なしに `Text("key")` を再解決します。
-  UIKit 側にキャッシュされるナビゲーションタイトルのみ `localization.string(forKey:)` で
-  明示的に解決しています。
-- **HIG 準拠の UI** — 設定的な項目はタブを持たせず「設定」タブに集約し、選択肢は画面遷移では
-  なくインラインの `Picker` / `Toggle` で表現しています。
+- **Domain logic kept separate** — risk calculation lives in `CLPatientData`, a local Swift
+  package independent of the UI, so it is testable without SwiftUI. The regression
+  coefficients are collected in `Questions.swift` as one `enum` case per predictor.
+- **Patient data as a value type** — `PatientData` is a `struct` passed to the forms through
+  `@State` / `@Binding`, and is never persisted.
+- **In-app language switching** — `LocalizationManager` swaps the class of `Bundle.main` so
+  that the selected `.lproj` wins, letting `Text("key")` re-resolve without a restart. Only
+  navigation titles, which UIKit caches, are resolved explicitly via
+  `localization.string(forKey:)`.
+- **HIG-conformant UI** — settings-like items are grouped in a single Settings tab rather
+  than holding tabs of their own, and choices use inline `Picker` / `Toggle` controls
+  instead of pushed screens.
 
-## ビルドと実行
+## Build and run
 
-Xcode で `clitical-ios.xcodeproj` を開き、スキーム `clitical-ios` を実行します。
+Open `clitical-ios.xcodeproj` in Xcode and run the `clitical-ios` scheme.
 
-コマンドラインからビルドする場合:
+From the command line:
 
 ```bash
 xcodebuild -project clitical-ios.xcodeproj -scheme clitical-ios -destination 'platform=iOS Simulator,name=iPhone 16' build
 ```
 
-## テスト
+## Tests
 
-Red/Green の TDD で開発しています。ドメインロジックのユニットテストは
-[Swift Testing](https://developer.apple.com/documentation/testing) で記述しています。
+Development follows red/green TDD. The domain unit tests are written with
+[Swift Testing](https://developer.apple.com/documentation/testing).
 
-パッケージ単体のテスト:
+Package tests only:
 
 ```bash
 swift test --package-path clitical/CLPatientData
 ```
 
-UI テストを含む全テスト:
+All tests including the UI tests:
 
 ```bash
 xcodebuild -project clitical-ios.xcodeproj -scheme clitical-ios -destination 'platform=iOS Simulator,name=iPhone 16' test
 ```
 
-## ローカライズ
+## Localization
 
-対応言語は日本語（既定）と英語です。文言は `ja.lproj/Localizable.strings` と
-`en.lproj/Localizable.strings` に配置し、キーは両ファイルで一致させます。
-選択言語は `UserDefaults` の `app_language` に保存され、初回起動時は端末の言語設定に従います。
+Japanese (default) and English are supported. Strings live in
+`ja.lproj/Localizable.strings` and `en.lproj/Localizable.strings`, and the key sets are kept
+identical between the two. The selected language is stored in `UserDefaults` under
+`app_language`; on first launch the app follows the device language.
 
-## バージョニング
+## Versioning
 
-`MARKETING_VERSION`（表示バージョン）と `CURRENT_PROJECT_VERSION`（ビルド番号）は
-Xcode プロジェクトのビルド設定で管理しています。表示バージョンは「設定 > アプリ情報」に
-表示されます。
+`MARKETING_VERSION` (display version) and `CURRENT_PROJECT_VERSION` (build number) are
+managed in the Xcode project's build settings. The display version is shown under
+Settings > About.
 
-## 参考文献
+## References
 
 1. Miyata T. et al, *Risk prediction model for early outcomes of revascularization for
    chronic limb-threatening ischaemia.* Br J Surg. 2022 Oct 14;109(11):1123.
@@ -132,20 +140,20 @@ Xcode プロジェクトのビルド設定で管理しています。表示バ�
    Eur J Vasc Endovasc Surg. 2022 Jun 7;S1078-5884(22)00340-9.
    <https://doi.org/10.1016/j.ejvs.2022.05.038>
 
-## プライバシー
+## Privacy
 
-入力された患者データは端末内でのみ処理され、外部への送信・保存は行いません。
-アプリ内に保存されるのは選択言語の設定のみです。
+Patient data is processed on this device only and is never sent or stored elsewhere. The
+only thing the app saves is the selected language.
 
-## ライセンス
+## License
 
-本ソフトウェアは [MIT License](LICENSE) で公開しています。
+Released under the [MIT License](LICENSE).
 
-予測モデルの回帰係数や分類基準は「参考文献」に挙げた論文に基づくものであり、
-MIT License はソフトウェアの実装にのみ適用されます。
+The regression coefficients and classification thresholds come from the papers listed under
+References; the MIT License applies to the software implementation only.
 
-## クレジット
+## Credits
 
-- 発行: 特定非営利活動法人 日本血管外科学会 / JCLIMB 委員会（2022）
-- ソフトウェア制作: 宮原和洋
-- 利用規約: <https://studiome.github.io/clti_risk/>
+- Published by: Japanese Society for Vascular Surgery / JCLIMB Committee (2022)
+- Developed by: Kazuhiro Miyahara
+- Terms of service: <https://studiome.github.io/clti_risk/>
