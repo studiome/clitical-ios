@@ -105,7 +105,9 @@
 "Language" = "Language";
 "References" = "References";
 "About" = "About";
-"AppTerms" = "Terms of service";
+"AppTerms" = "Terms of Use";
+"AppPrivacyPolicy" = "Privacy Policy";
+"AppSupport" = "Support";
 "TapToOpenLink" = "Tap to open link.";
 "AppLegalese" = "2022 Kazuhiro Miyahara, JSVS, JCLIMB";
 
@@ -121,6 +123,7 @@
 "AboutPrivacyBody" = "Patient data is processed on this device only and is never sent or stored elsewhere. The only thing the app saves is the language you select.";
 "AboutDisclaimer" = "Disclaimer";
 "AboutDisclaimerBody" = "This app is intended to support the clinical judgement of healthcare professionals. The values it calculates are estimates from statistical models and do not determine diagnosis or treatment. The final decision remains the responsibility of the attending physician.";
+"AboutLegalAndSupport" = "Legal and Support";
 "AboutCredits" = "Credits";
 "AboutPublisher" = "Published by";
 "AboutPublisherName" = "Japanese Society for Vascular Surgery / JCLIMB Committee";

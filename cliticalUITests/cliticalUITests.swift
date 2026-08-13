@@ -93,14 +93,18 @@ final class cliticalUITests: XCTestCase {
         scrollTo(englishButton, in: app)
         XCTAssertTrue(englishButton.waitForExistence(timeout: 5),
                       "Language picker missing from Settings")
-        // "Terms of service" may be rendered as a button or a link depending
-        // on the OS version, so query by label across all element types.
-        let terms = app.descendants(matching: .any)
-            .matching(NSPredicate(format: "label == %@", "Terms of service"))
-            .firstMatch
-        scrollTo(terms, in: app)
-        XCTAssertTrue(terms.waitForExistence(timeout: 5),
-                      "Terms of service link missing")
+        // Legal and support actions may be rendered as buttons or links
+        // depending on the OS version, so query by label across all elements.
+        for label in ["Terms of Use", "Privacy Policy", "Support"] {
+            let action = app.descendants(matching: .any)
+                .matching(NSPredicate(format: "label == %@", label))
+                .firstMatch
+            scrollTo(action, in: app)
+            XCTAssertTrue(action.waitForExistence(timeout: 5),
+                          "Missing Settings action: \(label)")
+        }
+        XCTAssertTrue(app.staticTexts["Version"].waitForExistence(timeout: 5),
+                      "App version is missing from Settings")
     }
 
     // NOTE: There is deliberately no test that tapping a reference citation or

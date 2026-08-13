@@ -107,6 +107,8 @@
 "References" = "参考文献";
 "About" = "アプリ情報";
 "AppTerms" = "利用規約";
+"AppPrivacyPolicy" = "プライバシーポリシー";
+"AppSupport" = "サポート";
 "TapToOpenLink" = "論文サイトを開きます。";
 "AppLegalese" = "2022 発行: 特定非営利活動法人日本血管外科学会、JCLIMB委員会、ソフトウェア制作: 宮原和洋";
 
@@ -122,6 +124,7 @@
 "AboutPrivacyBody" = "入力された患者データは端末内でのみ処理され、外部への送信・保存は行いません。アプリ内に保存されるのは選択した言語の設定だけです。";
 "AboutDisclaimer" = "免責事項";
 "AboutDisclaimerBody" = "本アプリは医療従事者の臨床判断を支援することを目的としています。算出される値は統計モデルによる推定であり、診断や治療方針を決定するものではありません。最終的な判断は担当医師の責任において行ってください。";
+"AboutLegalAndSupport" = "法務・サポート";
 "AboutCredits" = "クレジット";
 "AboutPublisher" = "発行";
 "AboutPublisherName" = "特定非営利活動法人 日本血管外科学会 / JCLIMB委員会";
