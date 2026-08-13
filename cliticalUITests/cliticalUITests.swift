@@ -88,7 +88,6 @@ final class cliticalUITests: XCTestCase {
         XCTAssertTrue(citation.waitForExistence(timeout: 5), "Reference citation missing")
 
         app.tabBars.buttons["Settings"].tap()
-        XCTAssertTrue(app.staticTexts["CLiTICAL"].waitForExistence(timeout: 5))
         let englishButton = app.buttons["English"]
         scrollTo(englishButton, in: app)
         XCTAssertTrue(englishButton.waitForExistence(timeout: 5),
@@ -103,7 +102,9 @@ final class cliticalUITests: XCTestCase {
             XCTAssertTrue(action.waitForExistence(timeout: 5),
                           "Missing Settings action: \(label)")
         }
-        XCTAssertTrue(app.staticTexts["Version"].waitForExistence(timeout: 5),
+        let appVersionLabel = app.staticTexts["CLiTICAL"]
+        scrollTo(appVersionLabel, in: app)
+        XCTAssertTrue(appVersionLabel.waitForExistence(timeout: 5),
                       "App version is missing from Settings")
     }
 
@@ -205,10 +206,10 @@ final class cliticalUITests: XCTestCase {
         app.launchArguments += ["-app_language", "en"]
         app.launch()
 
-        fillRequiredNumberFields(in: app)
+        fillAgeField(in: app)
 
         let reset = app.buttons["Reset data"]
-        scrollTo(reset, in: app)
+        scrollDownTo(reset, in: app)
         XCTAssertTrue(reset.waitForExistence(timeout: 5), "Reset button missing")
         reset.tap()
 
@@ -225,20 +226,20 @@ final class cliticalUITests: XCTestCase {
         )
         _ = XCTWaiter().wait(for: [dialogGone], timeout: 5)
 
-        let ageField = app.textFields["Enter Age [year-old]."]
-        scrollToTop(until: ageField, in: app)
+        let ageField = app.textFields["Age [year-old]"]
+        scrollUpTo(ageField, in: app)
         XCTAssertEqual(ageField.value as? String, "70",
                        "Dismissing the confirmation must not clear the data")
 
         // Confirming must clear the data (the placeholder shows again).
-        scrollTo(reset, in: app)
+        scrollDownTo(reset, in: app)
         reset.tap()
         XCTAssertTrue(dialog.waitForExistence(timeout: 5),
                       "Reset confirmation dialog did not appear")
         dialog.buttons["Reset data"].tap()
 
-        scrollToTop(until: ageField, in: app)
-        XCTAssertEqual(ageField.value as? String, "Enter Age [year-old].",
+        scrollUpTo(ageField, in: app)
+        XCTAssertEqual((ageField.value as? String) ?? "", "",
                        "Confirming the dialog must clear the data")
     }
 
@@ -266,10 +267,10 @@ final class cliticalUITests: XCTestCase {
     /// Enters age, height, weight, and albumin, then dismisses the keyboard.
     private func fillRequiredNumberFields(in app: XCUIApplication) {
         let values = [
-            ("Enter Age [year-old].", "70"),
-            ("Enter Body Height [cm].", "160"),
-            ("Enter Body Weight [kg].", "55"),
-            ("Enter Albumin [g/dl].", "4"),
+            ("Age [year-old]", "70"),
+            ("Body Height [cm]", "160"),
+            ("Body Weight [kg]", "55"),
+            ("Albumin [g/dl]", "4"),
         ]
         for (placeholder, value) in values {
             let field = app.textFields[placeholder]
@@ -280,17 +281,17 @@ final class cliticalUITests: XCTestCase {
             let done = app.buttons["Done"]
             if done.exists { done.tap() }
         }
-        // After the last field, the keyboard dismiss animation can still be in
-        // progress. Without this wait, scrollTo() sees isHittable==false on the
-        // Predict button (keyboard covers it) and over-scrolls past it.
-        let keyboard = app.keyboards.firstMatch
-        if keyboard.exists {
-            let keyboardGone = XCTNSPredicateExpectation(
-                predicate: NSPredicate(format: "exists == false"),
-                object: keyboard
-            )
-            _ = XCTWaiter().wait(for: [keyboardGone], timeout: 3)
-        }
+    }
+
+    /// Enters only age for reset behavior checks that do not need valid risk data.
+    private func fillAgeField(in app: XCUIApplication) {
+        let field = app.textFields["Age [year-old]"]
+        scrollTo(field, in: app)
+        XCTAssertTrue(field.waitForExistence(timeout: 5), "Missing field: Age [year-old]")
+        field.tap()
+        field.typeText("70")
+        let done = app.buttons["Done"]
+        if done.exists { done.tap() }
     }
 
     /// Sets an inline Bool question row's Toggle to the desired Yes/No state.
@@ -326,6 +327,22 @@ final class cliticalUITests: XCTestCase {
             let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.3))
             let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.45))
             start.press(forDuration: 0.05, thenDragTo: end)
+            swipes += 1
+        }
+    }
+
+    private func scrollDownTo(_ element: XCUIElement, in app: XCUIApplication, maxSwipes: Int = 12) {
+        var swipes = 0
+        while !(element.exists && element.isHittable) && swipes < maxSwipes {
+            app.swipeUp()
+            swipes += 1
+        }
+    }
+
+    private func scrollUpTo(_ element: XCUIElement, in app: XCUIApplication, maxSwipes: Int = 12) {
+        var swipes = 0
+        while !(element.exists && element.isHittable) && swipes < maxSwipes {
+            app.swipeDown()
             swipes += 1
         }
     }

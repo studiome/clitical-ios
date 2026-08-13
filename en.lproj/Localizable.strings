@@ -22,13 +22,9 @@
 "AILesionQuestionTitle" = "Aorto-Iliac";
 "AILesionQuestionDescription" = "Aorto-Iliac occlusive lesion present or absent";
 "AgeQuestionTitle" = "Age [year-old]";
-"AgeQuestionDescription" = "Enter Age [year-old].";
 "WeightQuestionTitle" = "Body Weight [kg]";
-"WeightQuestionDescription" = "Enter Body Weight [kg].";
 "HeightQuestionTitle" = "Body Height [cm]";
-"HeightQuestionDescription" = "Enter Body Height [cm].";
 "AlbQuestionTitle" = "Albumin [g/dl]";
-"AlbQuestionDescription" = "Enter Albumin [g/dl].";
 "ActivityQuestionTitle" = "Activity";
 "ActivityAmbulatory" = "Ambulatory";
 "ActivityWheelchair" = "Wheelchair";
@@ -71,7 +67,7 @@
 "MalignancyNo" = "No";
 "MalignancyPast" = "Past history";
 "MalignancyTreatment" = "Under treatment";
-"DONE" = "Done";
+"KeyboardDone" = "Done";
 "PredictRisks" = "Predict Risk";
 "GNRINoRisk" = "No Risk";
 "GNRILowRisk" = "Low Risk";

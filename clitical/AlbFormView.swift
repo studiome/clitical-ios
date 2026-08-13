@@ -15,7 +15,7 @@ struct AlbFormView: View {
         HStack {
             Text("AlbQuestionTitle")
                 .accessibilityHidden(true)
-            TextField("AlbQuestionDescription",
+            TextField("",
                       value: $patientData.alb,
                       format: .number)
             .multilineTextAlignment(.trailing)

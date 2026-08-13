@@ -124,7 +124,7 @@ struct SettingsView: View {
                 }
                 Section(header: Text("About"), footer: Text("AppLegalese")) {
                     HStack {
-                        Text("AboutVersion")
+                        Text(verbatim: AppInfo.name)
                         Spacer()
                         Text(verbatim: AppInfo.version)
                             .foregroundStyle(.secondary)
