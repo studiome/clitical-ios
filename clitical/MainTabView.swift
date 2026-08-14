@@ -102,7 +102,7 @@ struct SettingsView: View {
     @State private var selectedLegalDocument: AppInfo.LegalDocument?
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 Section(header: Text("Language")) {
                     Picker("Language", selection: $localization.language) {
@@ -165,7 +165,7 @@ struct ReferencesView: View {
     @State private var selectedReference: Reference?
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 Section(footer: Text("TapToOpenLink")) {
                     ForEach(references) { reference in
