@@ -5,29 +5,29 @@ import XCTest
 final class PatientDataTests: XCTestCase {
     func testInit() {
         let pd = PatientData()
-        XCTAssertTrue(pd.sex == .female)
-        XCTAssertTrue(pd.age == nil)
-        XCTAssertTrue(pd.height == nil)
-        XCTAssertTrue(pd.weight == nil)
-        XCTAssertTrue(pd.alb == nil)
-        XCTAssertTrue(pd.activity == .ambulatory)
-        XCTAssertTrue(pd.hasCHF == false)
-        XCTAssertTrue(pd.hasCAD == false)
-        XCTAssertTrue(pd.hasCVD == false)
-        XCTAssertTrue(pd.ckd == .normal)
-        XCTAssertTrue(pd.malignantNeoplasm == .no)
-        XCTAssertTrue(pd.hasAILesion == false)
-        XCTAssertTrue(pd.hasFPLesion == false)
-        XCTAssertTrue(pd.hasBKLesion == false)
-        XCTAssertTrue(pd.isUrgent == false)
-        XCTAssertTrue(pd.hasFever == false)
-        XCTAssertTrue(pd.hasAbnormalWBC == false)
-        XCTAssertTrue(pd.hasLocalInfection == false)
-        XCTAssertTrue(pd.hasDyslipidemia == false)
-        XCTAssertTrue(pd.isSmoking == false)
-        XCTAssertTrue(pd.hasContraLateralLesion == false)
-        XCTAssertTrue(pd.hasOtherVD == false)
-        XCTAssertTrue(pd.rutherford == .class4)
+        XCTAssertEqual(pd.sex, .female)
+        XCTAssertNil(pd.age)
+        XCTAssertNil(pd.height)
+        XCTAssertNil(pd.weight)
+        XCTAssertNil(pd.alb)
+        XCTAssertEqual(pd.activity, .ambulatory)
+        XCTAssertFalse(pd.hasCHF)
+        XCTAssertFalse(pd.hasCAD)
+        XCTAssertFalse(pd.hasCVD)
+        XCTAssertEqual(pd.ckd, .normal)
+        XCTAssertEqual(pd.malignantNeoplasm, .no)
+        XCTAssertFalse(pd.hasAILesion)
+        XCTAssertFalse(pd.hasFPLesion)
+        XCTAssertFalse(pd.hasBKLesion)
+        XCTAssertFalse(pd.isUrgent)
+        XCTAssertFalse(pd.hasFever)
+        XCTAssertFalse(pd.hasAbnormalWBC)
+        XCTAssertFalse(pd.hasLocalInfection)
+        XCTAssertFalse(pd.hasDyslipidemia)
+        XCTAssertFalse(pd.isSmoking)
+        XCTAssertFalse(pd.hasContraLateralLesion)
+        XCTAssertFalse(pd.hasOtherVD)
+        XCTAssertEqual(pd.rutherford, .class4)
     }
 
     func testValueSemantics() {
@@ -35,8 +35,8 @@ final class PatientDataTests: XCTestCase {
         original.age = 70
         var copy = original
         copy.age = 80
-        XCTAssertTrue(original.age == 70)
-        XCTAssertTrue(copy.age == 80)
+        XCTAssertEqual(original.age, 70)
+        XCTAssertEqual(copy.age, 80)
     }
 
     func testClearResetsToInitialState() {
@@ -45,9 +45,9 @@ final class PatientDataTests: XCTestCase {
         pd.height = 160.0
         pd.hasCHF = true
         pd.clear()
-        XCTAssertTrue(pd.age == nil)
-        XCTAssertTrue(pd.height == nil)
-        XCTAssertTrue(pd.hasCHF == false)
-        XCTAssertTrue(pd.sex == .female)
+        XCTAssertNil(pd.age)
+        XCTAssertNil(pd.height)
+        XCTAssertFalse(pd.hasCHF)
+        XCTAssertEqual(pd.sex, .female)
     }
 }

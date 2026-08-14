@@ -37,7 +37,7 @@ struct MainTabView: View {
             NavigationSplitView {
                 sidebar
             } detail: {
-                selectedSectionView
+                splitViewDetail
             }
         } else {
             tabRoot
@@ -67,6 +67,7 @@ struct MainTabView: View {
                 NavigationLink(value: section) {
                     Label(section.titleKey, systemImage: section.symbolName)
                 }
+                .accessibilityIdentifier(section.rawValue)
             }
             .adaptiveSidebarStyle()
             .navigationTitle(Text(verbatim: AppInfo.name))
@@ -78,6 +79,7 @@ struct MainTabView: View {
                     } label: {
                         Label(section.titleKey, systemImage: section.symbolName)
                     }
+                    .accessibilityIdentifier(section.rawValue)
                     .foregroundStyle(.primary)
                     .listRowBackground(
                         selectedSection == section ? Color.accentColor.opacity(0.12) : nil
@@ -88,8 +90,29 @@ struct MainTabView: View {
         }
     }
 
-    private var selectedSectionView: some View {
-        (selectedSection ?? .riskCalculation).view
+    private var splitViewDetail: some View {
+        ZStack {
+            splitViewSection(.riskCalculation) {
+                RootContentView()
+            }
+            splitViewSection(.references) {
+                ReferencesView()
+            }
+            splitViewSection(.settings) {
+                SettingsView()
+            }
+        }
+    }
+
+    private func splitViewSection<Content: View>(
+        _ section: AppSection,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        let isSelected = selectedSection == section
+        return content()
+            .opacity(isSelected ? 1 : 0)
+            .allowsHitTesting(isSelected)
+            .accessibilityHidden(!isSelected)
     }
 
     private var tabRoot: some View {
@@ -110,15 +133,10 @@ struct MainTabView: View {
     }
 }
 
+@available(iOS 17.0, *)
 private extension View {
-    @ViewBuilder
     func adaptiveSidebarStyle() -> some View {
-        if #available(iOS 17.0, *) {
-            self
-                .contentMargins(.horizontal, 8, for: .scrollContent)
-        } else {
-            self
-        }
+        contentMargins(.horizontal, 8, for: .scrollContent)
     }
 }
 
@@ -145,17 +163,6 @@ private enum AppSection: String, CaseIterable, Identifiable {
         }
     }
 
-    @ViewBuilder
-    var view: some View {
-        switch self {
-        case .riskCalculation:
-            RootContentView()
-        case .references:
-            ReferencesView()
-        case .settings:
-            SettingsView()
-        }
-    }
 }
 
 // MARK: - App metadata
