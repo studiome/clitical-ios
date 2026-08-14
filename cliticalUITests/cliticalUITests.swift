@@ -29,28 +29,30 @@ final class cliticalUITests: XCTestCase {
         app.launchArguments += ["-app_language", "ja"]
         app.launch()
 
-        // Three content tabs, starting in Japanese.
+        // Three top-level destinations, starting in Japanese. On iPad and
+        // newer OSes these may be exposed as sidebar items instead of a
+        // bottom tab bar.
         let jaTabs = ["リスク計算", "参考文献", "設定"]
         for label in jaTabs {
-            XCTAssertTrue(app.tabBars.buttons[label].waitForExistence(timeout: 5),
+            XCTAssertTrue(topLevelItem(label, in: app).waitForExistence(timeout: 5),
                           "Missing tab: \(label)")
         }
 
         // Open the Settings tab and choose English in the language picker.
-        app.tabBars.buttons["設定"].tap()
-        let englishOption = app.buttons["English"].firstMatch
+        tapTopLevelItem("設定", in: app)
+        let englishOption = languageOption("English", in: app)
         XCTAssertTrue(englishOption.waitForExistence(timeout: 5), "English option not found")
         englishOption.tap()
 
-        // The whole UI (including the tab bar) should now be English.
-        XCTAssertTrue(app.tabBars.buttons["Risk Assessment"].waitForExistence(timeout: 5),
+        // The whole UI (including top-level navigation) should now be English.
+        XCTAssertTrue(topLevelItem("Risk Assessment", in: app).waitForExistence(timeout: 5),
                       "UI did not switch to English live")
-        XCTAssertTrue(app.tabBars.buttons["References"].exists)
-        XCTAssertTrue(app.tabBars.buttons["Settings"].exists)
-        XCTAssertFalse(app.tabBars.buttons["リスク計算"].exists)
+        XCTAssertTrue(topLevelItem("References", in: app).exists)
+        XCTAssertTrue(topLevelItem("Settings", in: app).exists)
+        XCTAssertFalse(topLevelItem("リスク計算", in: app).exists)
 
         // Navigation bar titles must also re-localize live, not just tab labels.
-        app.tabBars.buttons["Risk Assessment"].tap()
+        tapTopLevelItem("Risk Assessment", in: app)
         XCTAssertTrue(app.staticTexts["Basic Information"].waitForExistence(timeout: 5),
                       "In-body section header did not switch to English live")
         XCTAssertTrue(app.navigationBars["Patient Data"].waitForExistence(timeout: 5),
@@ -66,11 +68,11 @@ final class cliticalUITests: XCTestCase {
                       "Sex segmented option did not switch to English live")
         XCTAssertTrue(app.buttons["Female"].exists, "Female segmented option missing")
 
-        app.tabBars.buttons["References"].tap()
+        tapTopLevelItem("References", in: app)
         XCTAssertTrue(app.navigationBars["References"].waitForExistence(timeout: 5),
                       "References nav title did not switch to English live")
 
-        app.tabBars.buttons["Settings"].tap()
+        tapTopLevelItem("Settings", in: app)
         XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 5),
                       "Settings nav title did not switch to English live")
     }
@@ -81,14 +83,14 @@ final class cliticalUITests: XCTestCase {
         app.launchArguments += ["-app_language", "en"]
         app.launch()
 
-        app.tabBars.buttons["References"].tap()
+        tapTopLevelItem("References", in: app)
         XCTAssertTrue(app.staticTexts["Tap to open link."].waitForExistence(timeout: 5))
         let citation = app.descendants(matching: .any)
             .containing(NSPredicate(format: "label BEGINSWITH %@", "1. Miyata")).firstMatch
         XCTAssertTrue(citation.waitForExistence(timeout: 5), "Reference citation missing")
 
-        app.tabBars.buttons["Settings"].tap()
-        let englishButton = app.buttons["English"]
+        tapTopLevelItem("Settings", in: app)
+        let englishButton = languageOption("English", in: app)
         scrollTo(englishButton, in: app)
         XCTAssertTrue(englishButton.waitForExistence(timeout: 5),
                       "Language picker missing from Settings")
@@ -122,14 +124,10 @@ final class cliticalUITests: XCTestCase {
         app.launchArguments += ["-app_language", "en"]
         app.launch()
 
-        app.tabBars.buttons["Risk Assessment"].tap()
+        tapTopLevelItem("Risk Assessment", in: app)
         // The Predict button sits at the bottom of a long scrolling form.
         let predict = app.buttons["Predict Risk"]
-        var swipes = 0
-        while !predict.exists && swipes < 12 {
-            app.swipeUp()
-            swipes += 1
-        }
+        scrollTo(predict, in: app)
         XCTAssertTrue(predict.waitForExistence(timeout: 5), "Predict button missing")
         predict.tap()
 
@@ -172,7 +170,7 @@ final class cliticalUITests: XCTestCase {
         app.launchArguments += ["-app_language", "en"]
         app.launch()
 
-        app.tabBars.buttons["Risk Assessment"].tap()
+        tapTopLevelItem("Risk Assessment", in: app)
 
         let urgent = app.buttons["Urgent"]
         scrollTo(urgent, in: app)
@@ -245,6 +243,30 @@ final class cliticalUITests: XCTestCase {
 
     // MARK: - Helpers
 
+    private func topLevelItem(_ label: String, in app: XCUIApplication) -> XCUIElement {
+        let tabButton = app.tabBars.buttons[label]
+        if tabButton.exists {
+            return tabButton
+        }
+        return app.descendants(matching: .any)
+            .matching(NSPredicate(format: "label == %@", label))
+            .firstMatch
+    }
+
+    private func tapTopLevelItem(_ label: String, in app: XCUIApplication) {
+        let item = topLevelItem(label, in: app)
+        XCTAssertTrue(item.waitForExistence(timeout: 5), "Missing top-level item: \(label)")
+        item.tap()
+    }
+
+    /// On iOS 16, an inline SwiftUI Picker is exposed as switches; later
+    /// runtimes expose the same options as buttons. Select the control type
+    /// that is present so the test asserts the same user-visible choice.
+    private func languageOption(_ label: String, in app: XCUIApplication) -> XCUIElement {
+        let toggle = app.switches[label]
+        return toggle.exists ? toggle : app.buttons[label]
+    }
+
     /// Scrolls up in small increments until the element is on screen and
     /// tappable.
     ///
@@ -257,8 +279,9 @@ final class cliticalUITests: XCTestCase {
     private func scrollTo(_ element: XCUIElement, in app: XCUIApplication, maxSwipes: Int = 40) {
         var swipes = 0
         while !(element.exists && element.isHittable) && swipes < maxSwipes {
-            let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.7))
-            let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.55))
+            let container = scrollContainer(in: app)
+            let start = container.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.7))
+            let end = container.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.55))
             start.press(forDuration: 0.05, thenDragTo: end)
             swipes += 1
         }
@@ -324,17 +347,44 @@ final class cliticalUITests: XCTestCase {
     private func scrollToTop(until element: XCUIElement, in app: XCUIApplication, maxSwipes: Int = 40) {
         var swipes = 0
         while !(element.exists && element.isHittable) && swipes < maxSwipes {
-            let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.3))
-            let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.45))
+            let container = scrollContainer(in: app)
+            let start = container.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.3))
+            let end = container.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.45))
             start.press(forDuration: 0.05, thenDragTo: end)
             swipes += 1
         }
     }
 
+    private func scrollContainer(in app: XCUIApplication) -> XCUIElement {
+        for index in 0..<3 {
+            let table = app.tables.element(boundBy: index)
+            if table.exists,
+               table.staticTexts["Basic Information"].exists
+                || table.staticTexts["患者基本情報"].exists
+                || table.textFields["Age [year-old]"].exists
+                || table.textFields["年齢 [歳]"].exists {
+                return table
+            }
+        }
+        if app.tables.firstMatch.exists {
+            return app.tables.firstMatch
+        }
+        if app.collectionViews.firstMatch.exists {
+            return app.collectionViews.firstMatch
+        }
+        if app.scrollViews.firstMatch.exists {
+            return app.scrollViews.firstMatch
+        }
+        if app.windows.firstMatch.exists {
+            return app.windows.firstMatch
+        }
+        return app
+    }
+
     private func scrollDownTo(_ element: XCUIElement, in app: XCUIApplication, maxSwipes: Int = 12) {
         var swipes = 0
         while !(element.exists && element.isHittable) && swipes < maxSwipes {
-            app.swipeUp()
+            scrollContainer(in: app).swipeUp()
             swipes += 1
         }
     }
@@ -342,7 +392,7 @@ final class cliticalUITests: XCTestCase {
     private func scrollUpTo(_ element: XCUIElement, in app: XCUIApplication, maxSwipes: Int = 12) {
         var swipes = 0
         while !(element.exists && element.isHittable) && swipes < maxSwipes {
-            app.swipeDown()
+            scrollContainer(in: app).swipeDown()
             swipes += 1
         }
     }

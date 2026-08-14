@@ -33,6 +33,10 @@ struct RootContentView: View {
                 patientDataSections
                 actionSection
             }
+            // iOS 16 caches LocalizedStringKey values inside List rows. Rebuild
+            // only the list when the in-app language changes so section headers
+            // re-resolve without discarding the parent view's patient data.
+            .id(localization.language)
             .riskAssessmentListStyle()
             .keyboardDoneInset(isActive: isActive) {
                 isActive = false
@@ -51,6 +55,9 @@ struct RootContentView: View {
                     patientDataSections
                     actionSection
                 }
+                // Keep the same language-refresh behavior in the regular-width
+                // layout while preserving RootContentView's state.
+                .id(localization.language)
                 .riskAssessmentListStyle()
                 .frame(minWidth: 360, idealWidth: 480, maxWidth: 560)
 
@@ -69,7 +76,7 @@ struct RootContentView: View {
 
     @ViewBuilder
     private var patientDataSections: some View {
-        Section(header: Text("BasicInfo")) {
+        Section(header: localizedText("BasicInfo")) {
             AgeFormView(patientData: $patientData).focused($isActive)
             SegmentedRow(
                 title: "SexQuestionTitle",
@@ -79,7 +86,7 @@ struct RootContentView: View {
             HeightFormView(patientData: $patientData).focused($isActive)
             WeightFormView(patientData: $patientData).focused($isActive)
         }
-        Section(header: Text("SocialHistory")) {
+        Section(header: localizedText("SocialHistory")) {
             ToggleRow(
                 title: "SmokingQuestionTitle",
                 footer: "SmokingQuestionDescription",
@@ -90,7 +97,7 @@ struct RootContentView: View {
                 label: \.label,
                 selection: $patientData.activity)
         }
-        Section(header: Text("ClinicalInfo")) {
+        Section(header: localizedText("ClinicalInfo")) {
             AlbFormView(patientData: $patientData).focused($isActive)
             MenuChoiceRow(
                 title: "CKDQuestionTitle",
@@ -121,7 +128,7 @@ struct RootContentView: View {
                 label: \.label,
                 selection: $patientData.rutherford)
         }
-        Section(header: Text("LesionInfo")) {
+        Section(header: localizedText("LesionInfo")) {
             ToggleRow(
                 title: "AILesionQuestionTitle",
                 footer: "AILesionQuestionDescription",
@@ -135,7 +142,7 @@ struct RootContentView: View {
                 footer: "BKLesionQuestionDescription",
                 selection: $patientData.hasBKLesion)
         }
-        Section(header: Text("OtherLesionInfo")) {
+        Section(header: localizedText("OtherLesionInfo")) {
             ToggleRow(
                 title: "ContralateralQuestionTitle",
                 footer: "ContralateralQuestionDescription",
@@ -145,7 +152,7 @@ struct RootContentView: View {
                 footer: "OtherVDQuestionDescription",
                 selection: $patientData.hasOtherVD)
         }
-        Section(header: Text("Complications")) {
+        Section(header: localizedText("Complications")) {
             ToggleRow(
                 title: "CHFQuestionTitle",
                 footer: "CHFQuestionDescription",
@@ -248,6 +255,10 @@ struct RootContentView: View {
         errorMessage = error.message
         failure = true
         riskCalculated = false
+    }
+
+    private func localizedText(_ key: String) -> Text {
+        Text(verbatim: localization.string(forKey: key))
     }
 }
 

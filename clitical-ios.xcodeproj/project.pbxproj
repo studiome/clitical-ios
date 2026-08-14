@@ -24,7 +24,6 @@
 		2196DF7A296DC20600A9FF81 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2196DF7C296DC20600A9FF81 /* Localizable.strings */; };
 		21AA010000000000000000A2 /* LocalizationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AA010000000000000000A1 /* LocalizationManager.swift */; };
 		21AA010000000000000000B2 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AA010000000000000000B1 /* MainTabView.swift */; };
-		21C1BCDA302EA39100A6118B /* CLPatientData in Frameworks */ = {isa = PBXBuildFile; productRef = 21C1BCD9302EA39100A6118B /* CLPatientData */; };
 		21FB98E7302E9DED008432ED /* CLPatientData in Frameworks */ = {isa = PBXBuildFile; productRef = 21FB98E6302E9DED008432ED /* CLPatientData */; };
 /* End PBXBuildFile section */
 
@@ -59,7 +58,6 @@
 		2196DF7D296DC21400A9FF81 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		21AA010000000000000000A1 /* LocalizationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationManager.swift; sourceTree = "<group>"; };
 		21AA010000000000000000B1 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
-		21C78F8B2951F4180054A045 /* CLPatientData */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CLPatientData; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,7 +73,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				21C1BCDA302EA39100A6118B /* CLPatientData in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,7 +102,6 @@
 		212A1FC32951B38000508396 /* clitical */ = {
 			isa = PBXGroup;
 			children = (
-				21C78F8B2951F4180054A045 /* CLPatientData */,
 				212A1FC42951B38000508396 /* CliticalApp.swift */,
 				212A1FC62951B38000508396 /* ContentView.swift */,
 				218C5C222983BDEA006A4592 /* PredictedRiskView.swift */,
@@ -218,6 +214,9 @@
 				Base,
 			);
 			mainGroup = 212A1FB82951B38000508396;
+			packageReferences = (
+				21FB98E5302E9DED008432ED /* CLPatientData */,
+			);
 			productRefGroup = 212A1FC22951B38000508396 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -568,13 +567,17 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCSwiftPackageProductDependency section */
-		21C1BCD9302EA39100A6118B /* CLPatientData */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = CLPatientData;
+/* Begin XCLocalSwiftPackageReference section */
+		21FB98E5302E9DED008432ED /* CLPatientData */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = clitical/CLPatientData;
 		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
 		21FB98E6302E9DED008432ED /* CLPatientData */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 21FB98E5302E9DED008432ED /* CLPatientData */;
 			productName = CLPatientData;
 		};
 /* End XCSwiftPackageProductDependency section */
