@@ -31,6 +31,16 @@
       shouldAutocreateTestPlan = "YES">
       <Testables>
          <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "21FB99080000000000000001"
+               BuildableName = "CLPatientDataLocalTests.xctest"
+               BlueprintName = "CLPatientDataLocalTests"
+               ReferencedContainer = "container:clitical-ios.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
             skipped = "NO"
             parallelizable = "NO">
             <BuildableReference
