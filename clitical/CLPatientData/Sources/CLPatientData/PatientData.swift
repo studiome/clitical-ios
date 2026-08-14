@@ -1,4 +1,4 @@
-public struct PatientData {
+public struct PatientData: Equatable {
     public var sex: Sex = .female
     public var age: Int?
     public var height: Double? //cm
@@ -30,18 +30,18 @@ public struct PatientData {
     }
 }
 
-public enum Sex: CaseIterable{
+public enum Sex: CaseIterable, Equatable {
     case male
     case female
 }
 
-public enum Activity: CaseIterable{
+public enum Activity: CaseIterable, Equatable {
     case ambulatory
     case wheelchair
     case immobile
 }
 
-public enum CKD: CaseIterable{
+public enum CKD: CaseIterable, Equatable {
     case normal
     case g3
     case g4
@@ -49,13 +49,13 @@ public enum CKD: CaseIterable{
     case g5D
 }
 
-public enum MalignantNeoplasm: CaseIterable{
+public enum MalignantNeoplasm: CaseIterable, Equatable {
     case no
     case pastHistory
     case underTreatment
 }
 
-public enum RutherfordClassification: CaseIterable{
+public enum RutherfordClassification: CaseIterable, Equatable {
     case class4
     case class5
     case class6

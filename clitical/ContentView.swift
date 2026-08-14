@@ -21,10 +21,15 @@ struct RootContentView: View {
     @State private var predictionRequestID = UUID()
 
     var body: some View {
-        if horizontalSizeClass == .regular {
-            regularBody
-        } else {
-            compactBody
+        Group {
+            if horizontalSizeClass == .regular {
+                regularBody
+            } else {
+                compactBody
+            }
+        }
+        .onChange(of: patientData) { _ in
+            invalidatePrediction()
         }
     }
 
@@ -201,10 +206,8 @@ struct RootContentView: View {
                 titleVisibility: .visible
             ) {
                 Button("RESET", role: .destructive) {
-                    predictionRequestID = UUID()
                     patientData.clear()
-                    risk = nil
-                    riskCalculated = false
+                    invalidatePrediction()
                 }
                 // Explicit cancel: the automatic one resolves its
                 // label through the overridden Bundle.main (see
@@ -263,6 +266,12 @@ struct RootContentView: View {
         predictionRequestID = UUID()
         errorMessage = error.message
         failure = true
+        riskCalculated = false
+    }
+
+    private func invalidatePrediction() {
+        predictionRequestID = UUID()
+        risk = nil
         riskCalculated = false
     }
 

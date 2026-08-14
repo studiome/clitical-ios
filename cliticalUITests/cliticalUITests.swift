@@ -182,6 +182,32 @@ final class cliticalUITests: XCTestCase {
                       "Geriatric Nutritional Risk Index did not appear")
     }
 
+    /// On regular-width layouts, changing patient data after prediction must
+    /// remove the now-stale result from the preview pane.
+    func testEditingPatientDataClearsPredictedRiskPreview() throws {
+        let app = XCUIApplication()
+        app.launchArguments += ["-app_language", "en"]
+        app.launch()
+
+        fillRequiredNumberFields(in: app)
+        setToggle(row: "Infrapopliteal", to: "Yes", in: app)
+        tapPredictButton(in: app)
+
+        let twoYearTitle = app.staticTexts["Predicted 2-year Overall Survival"]
+        XCTAssertTrue(twoYearTitle.waitForExistence(timeout: 5),
+                      "Predicted risk did not appear before editing")
+
+        setToggle(row: "Congestive heart failure", to: "Yes", in: app)
+
+        XCTAssertFalse(twoYearTitle.waitForExistence(timeout: 1),
+                       "Editing patient data must remove the stale predicted risk")
+        XCTAssertTrue(
+            app.staticTexts["Enter the patient data to show the predicted risks here."]
+                .waitForExistence(timeout: 5),
+            "The empty prediction state did not return after editing"
+        )
+    }
+
     /// The urgency question is two independent named states (urgent vs.
     /// elective revascularization), not an on/off mechanism, so per HIG it
     /// must be an inline segmented control with both options visibly
