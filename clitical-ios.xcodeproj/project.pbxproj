@@ -242,7 +242,7 @@
 					212A1FC02951B38000508396 = {
 						CreatedOnToolsVersion = 14.2;
 					};
-				212A1FDA2951B38000508396 = {
+					212A1FDA2951B38000508396 = {
 						CreatedOnToolsVersion = 14.2;
 						TestTargetID = 212A1FC02951B38000508396;
 					};

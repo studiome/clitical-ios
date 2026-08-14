@@ -35,17 +35,6 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "21FB99080000000000000001"
-               BuildableName = "CLPatientDataLocalTests.xctest"
-               BlueprintName = "CLPatientDataLocalTests"
-               ReferencedContainer = "container:clitical-ios.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "212A1FDA2951B38000508396"
                BuildableName = "clitical-iosUITests.xctest"
                BlueprintName = "clitical-iosUITests"
