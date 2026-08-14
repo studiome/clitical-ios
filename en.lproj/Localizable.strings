@@ -94,6 +94,8 @@
 "2YOS" = "Predicted 2-year Overall Survival";
 "2YAFS" = "Predicted 2-year Amputation Free Survival";
 "RiskViewTitle"  = "Predicted Risks";
+"RiskPreviewEmptyTitle" = "Predicted Risks";
+"RiskPreviewEmptyMessage" = "Enter the patient data to show the predicted risks here.";
 
 /* Bottom tab menu */
 "RiskCalculationTab" = "Risk Assessment";

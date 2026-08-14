@@ -26,7 +26,73 @@ private struct SafariView: UIViewControllerRepresentable {
 // MARK: - MainTabView
 
 struct MainTabView: View {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @State private var selectedTab: AppSection = .riskCalculation
+    @State private var selectedSection: AppSection? = .riskCalculation
+
     var body: some View {
+        if #available(iOS 18.0, *) {
+            adaptableTabRoot
+        } else if horizontalSizeClass == .regular {
+            NavigationSplitView {
+                sidebar
+            } detail: {
+                selectedSectionView
+            }
+        } else {
+            tabRoot
+        }
+    }
+
+    @available(iOS 18.0, *)
+    private var adaptableTabRoot: some View {
+        TabView(selection: $selectedTab) {
+            Tab("RiskCalculationTab", systemImage: "chart.line.uptrend.xyaxis", value: AppSection.riskCalculation) {
+                RootContentView()
+            }
+            Tab("References", systemImage: "doc.text", value: AppSection.references) {
+                ReferencesView()
+            }
+            Tab("Settings", systemImage: "gearshape", value: AppSection.settings) {
+                SettingsView()
+            }
+        }
+        .tabViewStyle(.sidebarAdaptable)
+    }
+
+    @ViewBuilder
+    private var sidebar: some View {
+        if #available(iOS 17.0, *) {
+            List(AppSection.allCases, selection: $selectedSection) { section in
+                NavigationLink(value: section) {
+                    Label(section.titleKey, systemImage: section.symbolName)
+                }
+            }
+            .adaptiveSidebarStyle()
+            .navigationTitle(Text(verbatim: AppInfo.name))
+        } else {
+            List {
+                ForEach(AppSection.allCases) { section in
+                    Button {
+                        selectedSection = section
+                    } label: {
+                        Label(section.titleKey, systemImage: section.symbolName)
+                    }
+                    .foregroundStyle(.primary)
+                    .listRowBackground(
+                        selectedSection == section ? Color.accentColor.opacity(0.12) : nil
+                    )
+                }
+            }
+            .navigationTitle(Text(verbatim: AppInfo.name))
+        }
+    }
+
+    private var selectedSectionView: some View {
+        (selectedSection ?? .riskCalculation).view
+    }
+
+    private var tabRoot: some View {
         TabView {
             RootContentView()
                 .tabItem {
@@ -40,6 +106,54 @@ struct MainTabView: View {
                 .tabItem {
                     Label("Settings", systemImage: "gearshape")
                 }
+        }
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func adaptiveSidebarStyle() -> some View {
+        if #available(iOS 17.0, *) {
+            self
+                .contentMargins(.horizontal, 8, for: .scrollContent)
+        } else {
+            self
+        }
+    }
+}
+
+private enum AppSection: String, CaseIterable, Identifiable {
+    case riskCalculation
+    case references
+    case settings
+
+    var id: Self { self }
+
+    var titleKey: LocalizedStringKey {
+        switch self {
+        case .riskCalculation: "RiskCalculationTab"
+        case .references: "References"
+        case .settings: "Settings"
+        }
+    }
+
+    var symbolName: String {
+        switch self {
+        case .riskCalculation: "chart.line.uptrend.xyaxis"
+        case .references: "doc.text"
+        case .settings: "gearshape"
+        }
+    }
+
+    @ViewBuilder
+    var view: some View {
+        switch self {
+        case .riskCalculation:
+            RootContentView()
+        case .references:
+            ReferencesView()
+        case .settings:
+            SettingsView()
         }
     }
 }
@@ -102,7 +216,7 @@ struct SettingsView: View {
     @State private var selectedLegalDocument: AppInfo.LegalDocument?
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 Section(header: Text("Language")) {
                     Picker("Language", selection: $localization.language) {
@@ -165,7 +279,7 @@ struct ReferencesView: View {
     @State private var selectedReference: Reference?
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 Section(footer: Text("TapToOpenLink")) {
                     ForEach(references) { reference in
