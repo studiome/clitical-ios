@@ -91,7 +91,8 @@ final class cliticalUITests: XCTestCase {
 
         tapTopLevelItem("Settings", in: app)
         let englishButton = languageOption("English", in: app)
-        scrollTo(englishButton, in: app)
+        let settingsContainer = settingsScrollContainer(in: app)
+        scrollTo(englishButton, in: app, container: settingsContainer)
         XCTAssertTrue(englishButton.waitForExistence(timeout: 5),
                       "Language picker missing from Settings")
         // Legal and support actions may be rendered as buttons or links
@@ -100,14 +101,32 @@ final class cliticalUITests: XCTestCase {
             let action = app.descendants(matching: .any)
                 .matching(NSPredicate(format: "label == %@", label))
                 .firstMatch
-            scrollTo(action, in: app)
+            scrollTo(action, in: app, container: settingsContainer)
             XCTAssertTrue(action.waitForExistence(timeout: 5),
                           "Missing Settings action: \(label)")
         }
         let appVersionLabel = app.staticTexts["CLiTICAL"]
-        scrollTo(appVersionLabel, in: app)
+        scrollTo(appVersionLabel, in: app, container: settingsContainer)
         XCTAssertTrue(appVersionLabel.waitForExistence(timeout: 5),
                       "App version is missing from Settings")
+    }
+
+    /// On iPad with NavigationSplitView, changing the selected section must
+    /// not recreate the risk form and discard patient input.
+    func testSwitchingSectionsPreservesPatientData() throws {
+        let app = XCUIApplication()
+        app.launchArguments += ["-app_language", "en"]
+        app.launch()
+
+        fillAgeField(in: app)
+        tapTopLevelItem("References", in: app)
+        XCTAssertTrue(app.staticTexts["Tap to open link."].waitForExistence(timeout: 5))
+
+        tapTopLevelItem("Risk Assessment", in: app)
+        let ageField = app.textFields["Age [year-old]"]
+        scrollUpTo(ageField, in: app)
+        XCTAssertEqual(ageField.value as? String, "70",
+                       "Changing sections must preserve entered patient data")
     }
 
     // NOTE: There is deliberately no test that tapping a reference citation or
@@ -244,9 +263,38 @@ final class cliticalUITests: XCTestCase {
         if tabButton.exists {
             return tabButton
         }
-        return app.descendants(matching: .any)
-            .matching(NSPredicate(format: "label == %@", label))
+        if let identifier = appSectionIdentifier(for: label) {
+            let sidebarButton = app.buttons.matching(identifier: identifier).firstMatch
+            if sidebarButton.exists {
+                return sidebarButton
+            }
+            let sidebarCell = app.cells.matching(identifier: identifier).firstMatch
+            if sidebarCell.exists {
+                return sidebarCell
+            }
+        }
+        let sidebarButton = app.buttons
+            .matching(NSPredicate(format: "label CONTAINS %@", label))
             .firstMatch
+        if sidebarButton.exists {
+            return sidebarButton
+        }
+        return app.cells
+            .matching(NSPredicate(format: "label CONTAINS %@", label))
+            .firstMatch
+    }
+
+    private func appSectionIdentifier(for label: String) -> String? {
+        switch label {
+        case "Risk Assessment", "リスク計算":
+            "riskCalculation"
+        case "References", "参考文献":
+            "references"
+        case "Settings", "設定":
+            "settings"
+        default:
+            nil
+        }
     }
 
     private func tapTopLevelItem(_ label: String, in app: XCUIApplication) {
@@ -272,12 +320,17 @@ final class cliticalUITests: XCTestCase {
     /// the loop never observes it as hittable and scrolls all the way to the
     /// bottom of the list. A short, fixed-distance drag lands more precisely
     /// at the cost of needing more iterations, which the higher cap covers.
-    private func scrollTo(_ element: XCUIElement, in app: XCUIApplication, maxSwipes: Int = 40) {
+    private func scrollTo(
+        _ element: XCUIElement,
+        in app: XCUIApplication,
+        container: XCUIElement? = nil,
+        maxSwipes: Int = 40
+    ) {
         var swipes = 0
         while !(element.exists && element.isHittable) && swipes < maxSwipes {
-            let container = scrollContainer(in: app)
-            let start = container.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.7))
-            let end = container.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.55))
+            let scrollView = container ?? scrollContainer(in: app)
+            let start = scrollView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.7))
+            let end = scrollView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.55))
             start.press(forDuration: 0.05, thenDragTo: end)
             swipes += 1
         }
@@ -381,6 +434,18 @@ final class cliticalUITests: XCTestCase {
             return app.windows.firstMatch
         }
         return app
+    }
+
+    private func settingsScrollContainer(in app: XCUIApplication) -> XCUIElement {
+        let settingsTable = app.tables
+            .containing(.staticText, identifier: "Language")
+            .firstMatch
+        if settingsTable.exists {
+            return settingsTable
+        }
+        return app.tables.element(boundBy: 1).exists
+            ? app.tables.element(boundBy: 1)
+            : app.tables.firstMatch
     }
 
     private func scrollDownTo(_ element: XCUIElement, in app: XCUIApplication, maxSwipes: Int = 12) {

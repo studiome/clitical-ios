@@ -18,6 +18,7 @@ struct RootContentView: View {
     @State private var errorMessage = ""
     @State private var risk: PatientRisk?
     @State private var confirmingReset = false
+    @State private var predictionRequestID = UUID()
 
     var body: some View {
         if horizontalSizeClass == .regular {
@@ -198,6 +199,7 @@ struct RootContentView: View {
                 titleVisibility: .visible
             ) {
                 Button("RESET", role: .destructive) {
+                    predictionRequestID = UUID()
                     patientData.clear()
                     risk = nil
                     riskCalculated = false
@@ -245,13 +247,17 @@ struct RootContentView: View {
         if horizontalSizeClass == .regular {
             riskCalculated = false
         } else {
+            let requestID = UUID()
+            predictionRequestID = requestID
             DispatchQueue.main.async {
+                guard predictionRequestID == requestID, risk != nil else { return }
                 riskCalculated = true
             }
         }
     }
 
     private func fail(with error: QuestionError) {
+        predictionRequestID = UUID()
         errorMessage = error.message
         failure = true
         riskCalculated = false
@@ -260,6 +266,17 @@ struct RootContentView: View {
     private func localizedText(_ key: String) -> Text {
         Text(verbatim: localization.string(forKey: key))
     }
+}
+
+// These literal localizable API calls ensure Xcode includes the dynamically
+// resolved section-header keys when exporting localization catalogs.
+private enum SectionHeaderLocalizationKeys {
+    static let basicInfo = String(localized: "BasicInfo")
+    static let socialHistory = String(localized: "SocialHistory")
+    static let clinicalInfo = String(localized: "ClinicalInfo")
+    static let lesionInfo = String(localized: "LesionInfo")
+    static let otherLesionInfo = String(localized: "OtherLesionInfo")
+    static let complications = String(localized: "Complications")
 }
 
 private struct RiskPreviewPane: View {
