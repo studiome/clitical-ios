@@ -24,7 +24,8 @@
 		2196DF7A296DC20600A9FF81 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2196DF7C296DC20600A9FF81 /* Localizable.strings */; };
 		21AA010000000000000000A2 /* LocalizationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AA010000000000000000A1 /* LocalizationManager.swift */; };
 		21AA010000000000000000B2 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AA010000000000000000B1 /* MainTabView.swift */; };
-		21C78F8E2951F4CF0054A045 /* CLPatientData in Frameworks */ = {isa = PBXBuildFile; productRef = 21C78F8D2951F4CF0054A045 /* CLPatientData */; };
+		21C1BCDA302EA39100A6118B /* CLPatientData in Frameworks */ = {isa = PBXBuildFile; productRef = 21C1BCD9302EA39100A6118B /* CLPatientData */; };
+		21FB98E7302E9DED008432ED /* CLPatientData in Frameworks */ = {isa = PBXBuildFile; productRef = 21FB98E6302E9DED008432ED /* CLPatientData */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,7 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				21C78F8E2951F4CF0054A045 /* CLPatientData in Frameworks */,
+				21FB98E7302E9DED008432ED /* CLPatientData in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21C1BCDA302EA39100A6118B /* CLPatientData in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -163,7 +165,7 @@
 			);
 			name = "clitical-ios";
 			packageProductDependencies = (
-				21C78F8D2951F4CF0054A045 /* CLPatientData */,
+				21FB98E6302E9DED008432ED /* CLPatientData */,
 			);
 			productName = clitical;
 			productReference = 212A1FC12951B38000508396 /* clitical-ios.app */;
@@ -567,7 +569,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		21C78F8D2951F4CF0054A045 /* CLPatientData */ = {
+		21C1BCD9302EA39100A6118B /* CLPatientData */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CLPatientData;
+		};
+		21FB98E6302E9DED008432ED /* CLPatientData */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CLPatientData;
 		};

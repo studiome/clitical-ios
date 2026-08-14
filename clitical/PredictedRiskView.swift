@@ -11,6 +11,12 @@ import CLPatientData
 struct PredictedRiskView: View {
     @EnvironmentObject var localization: LocalizationManager
     let risk: PatientRisk?
+    let showsNavigationTitle: Bool
+
+    init(risk: PatientRisk?, showsNavigationTitle: Bool = true) {
+        self.risk = risk
+        self.showsNavigationTitle = showsNavigationTitle
+    }
 
     var body: some View {
         if let risk {
@@ -48,8 +54,10 @@ struct PredictedRiskView: View {
                     }
                 }
             }
-            .navigationTitle(Text(verbatim: localization.string(forKey: "RiskViewTitle")))
-            .navigationBarTitleDisplayMode(.inline)
+            .conditionalNavigationTitle(
+                showsNavigationTitle,
+                title: localization.string(forKey: "RiskViewTitle")
+            )
         } else {
             VStack(spacing: 12.0) {
                 Image(systemName: "exclamationmark.triangle")
@@ -93,6 +101,19 @@ struct PredictedRiskView: View {
                 .foregroundColor(color ?? .primary)
         } else {
             Text("---")
+        }
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func conditionalNavigationTitle(_ isVisible: Bool, title: String) -> some View {
+        if isVisible {
+            self
+                .navigationTitle(Text(verbatim: title))
+                .navigationBarTitleDisplayMode(.inline)
+        } else {
+            self
         }
     }
 }

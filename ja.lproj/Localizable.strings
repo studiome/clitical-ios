@@ -95,6 +95,8 @@
 "2YOS" = "予測2年OS(全生存率)";
 "2YAFS" = "予測2年AFS(大切断回避生存率)";
 "RiskViewTitle"  = "予測リスク";
+"RiskPreviewEmptyTitle" = "予測結果";
+"RiskPreviewEmptyMessage" = "患者データを入力すると、ここに予測リスクが表示されます。";
 
 /* Bottom tab menu */
 "RiskCalculationTab" = "リスク計算";
