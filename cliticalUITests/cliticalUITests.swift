@@ -91,8 +91,7 @@ final class cliticalUITests: XCTestCase {
 
         tapTopLevelItem("Settings", in: app)
         let englishButton = languageOption("English", in: app)
-        let settingsContainer = settingsScrollContainer(in: app)
-        scrollTo(englishButton, in: app, container: settingsContainer)
+        scrollTo(englishButton, in: app)
         XCTAssertTrue(englishButton.waitForExistence(timeout: 5),
                       "Language picker missing from Settings")
         // Legal and support actions may be rendered as buttons or links
@@ -101,12 +100,12 @@ final class cliticalUITests: XCTestCase {
             let action = app.descendants(matching: .any)
                 .matching(NSPredicate(format: "label == %@", label))
                 .firstMatch
-            scrollTo(action, in: app, container: settingsContainer)
+            scrollTo(action, in: app)
             XCTAssertTrue(action.waitForExistence(timeout: 5),
                           "Missing Settings action: \(label)")
         }
         let appVersionLabel = app.staticTexts["CLiTICAL"]
-        scrollTo(appVersionLabel, in: app, container: settingsContainer)
+        scrollTo(appVersionLabel, in: app)
         XCTAssertTrue(appVersionLabel.waitForExistence(timeout: 5),
                       "App version is missing from Settings")
     }
@@ -230,13 +229,22 @@ final class cliticalUITests: XCTestCase {
         XCTAssertTrue(reset.waitForExistence(timeout: 5), "Reset button missing")
         reset.tap()
 
-        // Confirmation dialogs use different container types and may expose
-        // their localized labels inconsistently between iOS releases. Use
-        // the app-owned identifier instead of the system accessibility label.
-        let cancel = app.buttons["resetConfirmationCancel"]
-        XCTAssertTrue(cancel.waitForExistence(timeout: 5),
-                      "Reset confirmation dialog did not appear")
-        cancel.tap()
+        // In compact size class the dialog is an action sheet with a Cancel
+        // button; in regular size class (e.g. iPhone in landscape) SwiftUI
+        // renders it as a popover with no dismiss action — the user taps
+        // outside to dismiss. Verify appearance via the title text, which is
+        // stable across both presentation styles.
+        XCTAssertTrue(
+            app.staticTexts["Reset all entered data?"].waitForExistence(timeout: 5),
+            "Reset confirmation dialog did not appear"
+        )
+        let cancel = cancelConfirmationButton(in: app)
+        if cancel.exists {
+            cancel.tap()
+        } else {
+            // Regular size class: popover has no Cancel button; tap outside.
+            app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.1)).tap()
+        }
 
         let ageField = app.textFields["Age [year-old]"]
         scrollUpTo(ageField, in: app)
@@ -246,8 +254,10 @@ final class cliticalUITests: XCTestCase {
         // Confirming must clear the data (the placeholder shows again).
         scrollDownTo(reset, in: app)
         reset.tap()
-        XCTAssertTrue(cancel.waitForExistence(timeout: 5),
-                      "Reset confirmation dialog did not appear")
+        XCTAssertTrue(
+            app.staticTexts["Reset all entered data?"].waitForExistence(timeout: 5),
+            "Reset confirmation dialog did not appear"
+        )
         resetConfirmationButton(in: app).tap()
 
         scrollUpTo(ageField, in: app)
@@ -322,15 +332,11 @@ final class cliticalUITests: XCTestCase {
     private func scrollTo(
         _ element: XCUIElement,
         in app: XCUIApplication,
-        container: XCUIElement? = nil,
         maxSwipes: Int = 40
     ) {
         var swipes = 0
         while !(element.exists && element.isHittable) && swipes < maxSwipes {
-            let scrollView = container ?? scrollContainer(in: app)
-            let start = scrollView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.7))
-            let end = scrollView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.55))
-            start.press(forDuration: 0.05, thenDragTo: end)
+            dragContent(in: app, from: 0.7, to: 0.55)
             swipes += 1
         }
     }
@@ -401,56 +407,24 @@ final class cliticalUITests: XCTestCase {
     private func scrollToTop(until element: XCUIElement, in app: XCUIApplication, maxSwipes: Int = 40) {
         var swipes = 0
         while !(element.exists && element.isHittable) && swipes < maxSwipes {
-            let container = scrollContainer(in: app)
-            let start = container.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.3))
-            let end = container.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.45))
-            start.press(forDuration: 0.05, thenDragTo: end)
+            dragContent(in: app, from: 0.3, to: 0.45)
             swipes += 1
         }
     }
 
-    private func scrollContainer(in app: XCUIApplication) -> XCUIElement {
-        for index in 0..<3 {
-            let table = app.tables.element(boundBy: index)
-            if table.exists,
-               table.staticTexts["Basic Information"].exists
-                || table.staticTexts["患者基本情報"].exists
-                || table.textFields["Age [year-old]"].exists
-                || table.textFields["年齢 [歳]"].exists {
-                return table
-            }
-        }
-        if app.tables.firstMatch.exists {
-            return app.tables.firstMatch
-        }
-        if app.collectionViews.firstMatch.exists {
-            return app.collectionViews.firstMatch
-        }
-        if app.scrollViews.firstMatch.exists {
-            return app.scrollViews.firstMatch
-        }
-        if app.windows.firstMatch.exists {
-            return app.windows.firstMatch
-        }
-        return app
-    }
-
-    private func settingsScrollContainer(in app: XCUIApplication) -> XCUIElement {
-        let settingsTable = app.tables
-            .containing(.staticText, identifier: "Language")
-            .firstMatch
-        if settingsTable.exists {
-            return settingsTable
-        }
-        return app.tables.element(boundBy: 1).exists
-            ? app.tables.element(boundBy: 1)
-            : app.tables.firstMatch
+    /// Uses the application window rather than a queried Table/List. SwiftUI
+    /// can replace a scroll container during layout updates; retaining that
+    /// container query until the drag causes XCTest's snapshot lookup to fail.
+    private func dragContent(in app: XCUIApplication, from startY: CGFloat, to endY: CGFloat) {
+        let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.75, dy: startY))
+        let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.75, dy: endY))
+        start.press(forDuration: 0.05, thenDragTo: end)
     }
 
     private func scrollDownTo(_ element: XCUIElement, in app: XCUIApplication, maxSwipes: Int = 12) {
         var swipes = 0
         while !(element.exists && element.isHittable) && swipes < maxSwipes {
-            scrollContainer(in: app).swipeUp()
+            dragContent(in: app, from: 0.7, to: 0.3)
             swipes += 1
         }
     }
@@ -461,9 +435,20 @@ final class cliticalUITests: XCTestCase {
         // be tappable. On iOS 26, asking hit-testing for an off-screen text
         // field can itself fail when its activation point is not materialized.
         while !element.exists && swipes < maxSwipes {
-            scrollContainer(in: app).swipeDown()
+            dragContent(in: app, from: 0.3, to: 0.7)
             swipes += 1
         }
+    }
+
+    /// Returns the Cancel button of the reset confirmation dialog, probing
+    /// sheet, alert, and flat button hierarchies so tests remain stable across
+    /// iOS versions that expose the dialog differently.
+    private func cancelConfirmationButton(in app: XCUIApplication) -> XCUIElement {
+        let sheetButton = app.sheets.buttons["Cancel"]
+        if sheetButton.exists { return sheetButton }
+        let alertButton = app.alerts.buttons["Cancel"]
+        if alertButton.exists { return alertButton }
+        return app.buttons.matching(NSPredicate(format: "label == %@", "Cancel")).firstMatch
     }
 
     private func resetConfirmationButton(in app: XCUIApplication) -> XCUIElement {
