@@ -10,12 +10,15 @@ import XCTest
 final class cliticalUITests: XCTestCase {
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
 
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
+        // cliticalUITestsLaunchTests runs for every target application UI
+        // configuration, which leaves the device in whatever orientation the
+        // last configuration used — landscape, if that run came first. These
+        // tests scroll by dragging normalized screen coordinates, so their
+        // geometry must not depend on which tests ran before them.
+        XCUIDevice.shared.orientation = .portrait
     }
 
     override func tearDownWithError() throws {
@@ -347,6 +350,73 @@ final class cliticalUITests: XCTestCase {
         }
     }
 
+    /// The band of the window that no bar is covering.
+    ///
+    /// A List's rows keep existing in the accessibility tree while they scroll
+    /// underneath the tab bar, so "the element exists" does not mean a tap will
+    /// reach it — see `scrollIntoTappableArea`.
+    private func unobstructedBounds(in app: XCUIApplication) -> (top: CGFloat, bottom: CGFloat) {
+        let window = app.windows.firstMatch.frame
+        var top = window.minY
+        var bottom = window.maxY
+        let navigationBar = app.navigationBars.firstMatch
+        if navigationBar.exists {
+            top = max(top, navigationBar.frame.maxY)
+        }
+        for bar in [app.tabBars.firstMatch, app.keyboards.firstMatch] where bar.exists {
+            bottom = min(bottom, bar.frame.minY)
+        }
+        return (top, max(top, bottom))
+    }
+
+    /// Drags the form content between two absolute y positions.
+    ///
+    /// The x stays in the middle of the form column so the gesture does not
+    /// land in the risk-preview pane that sits beside the form on iPad, and
+    /// callers pass y positions taken from `unobstructedBounds` so the drag
+    /// itself never starts on the keyboard or a bar.
+    private func dragForm(in app: XCUIApplication, fromY: CGFloat, toY: CGFloat) {
+        let x = patientFormContainer(in: app).frame.midX
+        let origin = app.coordinate(withNormalizedOffset: .zero)
+        let start = origin.withOffset(CGVector(dx: x, dy: fromY))
+        let end = origin.withOffset(CGVector(dx: x, dy: toY))
+        start.press(forDuration: 0.05, thenDragTo: end)
+    }
+
+    /// Scrolls until `element` is not merely present in the accessibility tree
+    /// but clear of the bars drawn over the scrolling content, so that `tap()`
+    /// — which aims at the element's centre — actually reaches it.
+    ///
+    /// `scrollTo` stops at existence. On a 375x667 screen that leaves the
+    /// Albumin row at y=611 while the tab bar starts at y=618: the tab bar
+    /// swallows the touch, the field never takes focus, and the following
+    /// `typeText` fails with "Neither element nor any descendant has keyboard
+    /// focus".
+    private func scrollIntoTappableArea(
+        _ element: XCUIElement,
+        in app: XCUIApplication,
+        maxSwipes: Int = 40
+    ) {
+        scrollTo(element, in: app, maxSwipes: maxSwipes)
+        var swipes = 0
+        while element.exists && swipes < maxSwipes {
+            let bounds = unobstructedBounds(in: app)
+            let frame = element.frame
+            if frame.minY >= bounds.top && frame.maxY <= bounds.bottom {
+                return
+            }
+            let span = bounds.bottom - bounds.top
+            let near = bounds.top + span * 0.35
+            let far = bounds.top + span * 0.75
+            if frame.maxY > bounds.bottom {
+                dragForm(in: app, fromY: far, toY: near)
+            } else {
+                dragForm(in: app, fromY: near, toY: far)
+            }
+            swipes += 1
+        }
+    }
+
     /// Enters age, height, weight, and albumin, then dismisses the keyboard.
     private func fillRequiredNumberFields(in app: XCUIApplication) {
         let values = [
@@ -356,23 +426,47 @@ final class cliticalUITests: XCTestCase {
             ("Albumin [g/dl]", "4"),
         ]
         for (placeholder, value) in values {
-            let field = app.textFields[placeholder]
-            scrollTo(field, in: app)
-            XCTAssertTrue(field.waitForExistence(timeout: 5), "Missing field: \(placeholder)")
-            field.tap()
-            field.typeText(value)
-            let done = app.buttons["Done"]
-            if done.exists { done.tap() }
+            fillNumberField(placeholder, with: value, in: app)
         }
     }
 
     /// Enters only age for reset behavior checks that do not need valid risk data.
     private func fillAgeField(in app: XCUIApplication) {
-        let field = app.textFields["Age [year-old]"]
-        scrollTo(field, in: app)
-        XCTAssertTrue(field.waitForExistence(timeout: 5), "Missing field: Age [year-old]")
+        fillNumberField("Age [year-old]", with: "70", in: app)
+    }
+
+    private func fillNumberField(
+        _ placeholder: String,
+        with value: String,
+        in app: XCUIApplication
+    ) {
+        let field = app.textFields[placeholder]
+        scrollIntoTappableArea(field, in: app)
+        XCTAssertTrue(field.waitForExistence(timeout: 5), "Missing field: \(placeholder)")
         field.tap()
-        field.typeText("70")
+
+        // A `TextField(value:format:)` rewrites its own text every time the
+        // bound number reparses, and on iOS 16 a keystroke that arrives during
+        // that rewrite is swallowed — typing "70" in one go intermittently
+        // leaves "7" behind. Enter one character at a time and wait for the
+        // field to report it before sending the next.
+        var typed = ""
+        for character in value {
+            typed.append(character)
+            var attempts = 0
+            while (field.value as? String) != typed && attempts < 3 {
+                field.typeText(String(character))
+                let accepted = XCTNSPredicateExpectation(
+                    predicate: NSPredicate(format: "value == %@", typed),
+                    object: field
+                )
+                _ = XCTWaiter().wait(for: [accepted], timeout: 2)
+                attempts += 1
+            }
+            XCTAssertEqual(field.value as? String, typed,
+                           "\(placeholder) did not accept the typed value")
+        }
+
         let done = app.buttons["Done"]
         if done.exists { done.tap() }
     }
@@ -388,7 +482,7 @@ final class cliticalUITests: XCTestCase {
         let row = app.switches
             .matching(NSPredicate(format: "label BEGINSWITH %@", title))
             .firstMatch
-        scrollTo(row, in: app)
+        scrollIntoTappableArea(row, in: app)
         XCTAssertTrue(row.waitForExistence(timeout: 5), "Missing toggle row: \(title)")
         // Some runtimes expose a nested unlabeled switch, while iOS 26
         // exposes the labeled row itself as the interactive switch.
@@ -505,7 +599,7 @@ final class cliticalUITests: XCTestCase {
     /// Scrolls to the Predict button at the bottom of the form and taps it.
     private func tapPredictButton(in app: XCUIApplication) {
         let predict = app.buttons["Predict Risk"]
-        scrollTo(predict, in: app)
+        scrollIntoTappableArea(predict, in: app)
         XCTAssertTrue(predict.waitForExistence(timeout: 5), "Predict button missing")
         predict.tap()
     }
