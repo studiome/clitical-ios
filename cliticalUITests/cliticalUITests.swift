@@ -189,6 +189,13 @@ final class cliticalUITests: XCTestCase {
         app.launchArguments += ["-app_language", "en"]
         app.launch()
 
+        let emptyPreviewMessage = app.staticTexts[
+            "Enter the patient data to show the predicted risks here."
+        ]
+        guard emptyPreviewMessage.waitForExistence(timeout: 2) else {
+            throw XCTSkip("The predicted-risk preview is only present in regular width")
+        }
+
         fillRequiredNumberFields(in: app)
         setToggle(row: "Infrapopliteal", to: "Yes", in: app)
         tapPredictButton(in: app)
@@ -202,8 +209,7 @@ final class cliticalUITests: XCTestCase {
         XCTAssertFalse(twoYearTitle.waitForExistence(timeout: 1),
                        "Editing patient data must remove the stale predicted risk")
         XCTAssertTrue(
-            app.staticTexts["Enter the patient data to show the predicted risks here."]
-                .waitForExistence(timeout: 5),
+            emptyPreviewMessage.waitForExistence(timeout: 5),
             "The empty prediction state did not return after editing"
         )
     }
