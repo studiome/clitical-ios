@@ -46,7 +46,7 @@ classification.
 
 ## Requirements
 
-- iOS 15.0 or later (iPhone only)
+- iOS 16.0 or later (iPhone and iPad)
 - Xcode 15 or later / Swift 5.9
 - No third-party dependencies (the only networking is opening reference and terms links)
 
