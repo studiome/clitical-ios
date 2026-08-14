@@ -40,7 +40,7 @@ struct RootContentView: View {
             .id(localization.language)
             .accessibilityIdentifier("patientDataList")
             .riskAssessmentListStyle()
-            .keyboardDoneInset(isActive: isActive) {
+            .keyboardDoneToolbar {
                 isActive = false
             }
             .navigationTitle(Text(verbatim: localization.string(forKey: "PatientDataTitle")))
@@ -70,7 +70,7 @@ struct RootContentView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .background(Color(.systemGroupedBackground))
-            .keyboardDoneInset(isActive: isActive) {
+            .keyboardDoneToolbar {
                 isActive = false
             }
             .navigationTitle(Text(verbatim: localization.string(forKey: "PatientDataTitle")))
@@ -325,19 +325,22 @@ private extension View {
         }
     }
 
-    func keyboardDoneInset(isActive: Bool, dismiss: @escaping () -> Void) -> some View {
-        safeAreaInset(edge: .bottom) {
-            if isActive {
-                HStack {
-                    Spacer()
-                    Button("KeyboardDone") {
-                        dismiss()
-                    }
-                    .buttonStyle(.bordered)
+    /// Places the keyboard-dismiss button in the keyboard's own accessory bar.
+    ///
+    /// This used to insert and remove a bottom `safeAreaInset` as the focus
+    /// state changed. Adding a safe-area inset while the keyboard is animating
+    /// changes the layout that the keyboard and scroll insets are derived from,
+    /// which on iPad kept the app reporting itself as animating: XCUITest's
+    /// "wait for the app to idle" then burned its full 60 second timeout on
+    /// every interaction until the test blew its 10 minute allowance. Letting
+    /// UIKit own the accessory bar keeps the app's layout out of that loop.
+    func keyboardDoneToolbar(dismiss: @escaping () -> Void) -> some View {
+        toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("KeyboardDone") {
+                    dismiss()
                 }
-                .padding(.horizontal)
-                .padding(.vertical, 8)
-                .background(.bar)
             }
         }
     }
