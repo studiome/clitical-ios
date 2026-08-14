@@ -15,7 +15,7 @@ struct WeightFormView: View {
         HStack {
             Text("WeightQuestionTitle")
                 .accessibilityHidden(true)
-            TextField("WeightQuestionDescription",
+            TextField("",
                       value: $patientData.weight,
                       format: .number)
             .multilineTextAlignment(.trailing)

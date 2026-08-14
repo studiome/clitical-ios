@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1420"
-   version = "1.3">
+   LastUpgradeVersion = "2660"
+   version = "1.7">
+   <!-- Dedicated CLPatientData unit-test scheme. -->
    <BuildAction
       parallelizeBuildables = "YES"
-      buildImplicitDependencies = "YES">
+      buildImplicitDependencies = "YES"
+      buildArchitectures = "Automatic">
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "CLPatientData"
-               BuildableName = "CLPatientData"
-               BlueprintName = "CLPatientData"
-               ReferencedContainer = "container:">
+               BlueprintIdentifier = "21FB99080000000000000001"
+               BuildableName = "CLPatientDataLocalTests.xctest"
+               BlueprintName = "CLPatientDataLocalTests"
+               ReferencedContainer = "container:clitical-ios.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -29,13 +31,14 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
-            skipped = "NO">
+            skipped = "NO"
+            parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "CLPatientDataTests"
-               BuildableName = "CLPatientDataTests"
-               BlueprintName = "CLPatientDataTests"
-               ReferencedContainer = "container:">
+               BlueprintIdentifier = "21FB99080000000000000001"
+               BuildableName = "CLPatientDataLocalTests.xctest"
+               BlueprintName = "CLPatientDataLocalTests"
+               ReferencedContainer = "container:clitical-ios.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -57,15 +60,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "CLPatientData"
-            BuildableName = "CLPatientData"
-            BlueprintName = "CLPatientData"
-            ReferencedContainer = "container:">
-         </BuildableReference>
-      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

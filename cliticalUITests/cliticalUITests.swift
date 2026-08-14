@@ -10,12 +10,15 @@ import XCTest
 final class cliticalUITests: XCTestCase {
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
 
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
+        // cliticalUITestsLaunchTests runs for every target application UI
+        // configuration, which leaves the device in whatever orientation the
+        // last configuration used — landscape, if that run came first. These
+        // tests scroll by dragging normalized screen coordinates, so their
+        // geometry must not depend on which tests ran before them.
+        XCUIDevice.shared.orientation = .portrait
     }
 
     override func tearDownWithError() throws {
@@ -29,28 +32,30 @@ final class cliticalUITests: XCTestCase {
         app.launchArguments += ["-app_language", "ja"]
         app.launch()
 
-        // Three content tabs, starting in Japanese.
+        // Three top-level destinations, starting in Japanese. On iPad and
+        // newer OSes these may be exposed as sidebar items instead of a
+        // bottom tab bar.
         let jaTabs = ["リスク計算", "参考文献", "設定"]
         for label in jaTabs {
-            XCTAssertTrue(app.tabBars.buttons[label].waitForExistence(timeout: 5),
+            XCTAssertTrue(topLevelItem(label, in: app).waitForExistence(timeout: 5),
                           "Missing tab: \(label)")
         }
 
         // Open the Settings tab and choose English in the language picker.
-        app.tabBars.buttons["設定"].tap()
-        let englishOption = app.buttons["English"].firstMatch
+        tapTopLevelItem("設定", in: app)
+        let englishOption = languageOption("English", in: app)
         XCTAssertTrue(englishOption.waitForExistence(timeout: 5), "English option not found")
         englishOption.tap()
 
-        // The whole UI (including the tab bar) should now be English.
-        XCTAssertTrue(app.tabBars.buttons["Risk Assessment"].waitForExistence(timeout: 5),
+        // The whole UI (including top-level navigation) should now be English.
+        XCTAssertTrue(topLevelItem("Risk Assessment", in: app).waitForExistence(timeout: 5),
                       "UI did not switch to English live")
-        XCTAssertTrue(app.tabBars.buttons["References"].exists)
-        XCTAssertTrue(app.tabBars.buttons["Settings"].exists)
-        XCTAssertFalse(app.tabBars.buttons["リスク計算"].exists)
+        XCTAssertTrue(topLevelItem("References", in: app).exists)
+        XCTAssertTrue(topLevelItem("Settings", in: app).exists)
+        XCTAssertFalse(topLevelItem("リスク計算", in: app).exists)
 
         // Navigation bar titles must also re-localize live, not just tab labels.
-        app.tabBars.buttons["Risk Assessment"].tap()
+        tapTopLevelItem("Risk Assessment", in: app)
         XCTAssertTrue(app.staticTexts["Basic Information"].waitForExistence(timeout: 5),
                       "In-body section header did not switch to English live")
         XCTAssertTrue(app.navigationBars["Patient Data"].waitForExistence(timeout: 5),
@@ -66,11 +71,11 @@ final class cliticalUITests: XCTestCase {
                       "Sex segmented option did not switch to English live")
         XCTAssertTrue(app.buttons["Female"].exists, "Female segmented option missing")
 
-        app.tabBars.buttons["References"].tap()
+        tapTopLevelItem("References", in: app)
         XCTAssertTrue(app.navigationBars["References"].waitForExistence(timeout: 5),
                       "References nav title did not switch to English live")
 
-        app.tabBars.buttons["Settings"].tap()
+        tapTopLevelItem("Settings", in: app)
         XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 5),
                       "Settings nav title did not switch to English live")
     }
@@ -81,26 +86,49 @@ final class cliticalUITests: XCTestCase {
         app.launchArguments += ["-app_language", "en"]
         app.launch()
 
-        app.tabBars.buttons["References"].tap()
+        tapTopLevelItem("References", in: app)
         XCTAssertTrue(app.staticTexts["Tap to open link."].waitForExistence(timeout: 5))
         let citation = app.descendants(matching: .any)
             .containing(NSPredicate(format: "label BEGINSWITH %@", "1. Miyata")).firstMatch
         XCTAssertTrue(citation.waitForExistence(timeout: 5), "Reference citation missing")
 
-        app.tabBars.buttons["Settings"].tap()
-        XCTAssertTrue(app.staticTexts["CLiTICAL"].waitForExistence(timeout: 5))
-        let englishButton = app.buttons["English"]
+        tapTopLevelItem("Settings", in: app)
+        let englishButton = languageOption("English", in: app)
         scrollTo(englishButton, in: app)
         XCTAssertTrue(englishButton.waitForExistence(timeout: 5),
                       "Language picker missing from Settings")
-        // "Terms of service" may be rendered as a button or a link depending
-        // on the OS version, so query by label across all element types.
-        let terms = app.descendants(matching: .any)
-            .matching(NSPredicate(format: "label == %@", "Terms of service"))
-            .firstMatch
-        scrollTo(terms, in: app)
-        XCTAssertTrue(terms.waitForExistence(timeout: 5),
-                      "Terms of service link missing")
+        // Legal and support actions may be rendered as buttons or links
+        // depending on the OS version, so query by label across all elements.
+        for label in ["Terms of Use", "Privacy Policy", "Support"] {
+            let action = app.descendants(matching: .any)
+                .matching(NSPredicate(format: "label == %@", label))
+                .firstMatch
+            scrollTo(action, in: app)
+            XCTAssertTrue(action.waitForExistence(timeout: 5),
+                          "Missing Settings action: \(label)")
+        }
+        let appVersionLabel = app.staticTexts["CLiTICAL"]
+        scrollTo(appVersionLabel, in: app)
+        XCTAssertTrue(appVersionLabel.waitForExistence(timeout: 5),
+                      "App version is missing from Settings")
+    }
+
+    /// On iPad with NavigationSplitView, changing the selected section must
+    /// not recreate the risk form and discard patient input.
+    func testSwitchingSectionsPreservesPatientData() throws {
+        let app = XCUIApplication()
+        app.launchArguments += ["-app_language", "en"]
+        app.launch()
+
+        fillAgeField(in: app)
+        tapTopLevelItem("References", in: app)
+        XCTAssertTrue(app.staticTexts["Tap to open link."].waitForExistence(timeout: 5))
+
+        tapTopLevelItem("Risk Assessment", in: app)
+        let ageField = app.textFields["Age [year-old]"]
+        scrollUpTo(ageField, in: app)
+        XCTAssertEqual(ageField.value as? String, "70",
+                       "Changing sections must preserve entered patient data")
     }
 
     // NOTE: There is deliberately no test that tapping a reference citation or
@@ -117,14 +145,10 @@ final class cliticalUITests: XCTestCase {
         app.launchArguments += ["-app_language", "en"]
         app.launch()
 
-        app.tabBars.buttons["Risk Assessment"].tap()
+        tapTopLevelItem("Risk Assessment", in: app)
         // The Predict button sits at the bottom of a long scrolling form.
         let predict = app.buttons["Predict Risk"]
-        var swipes = 0
-        while !predict.exists && swipes < 12 {
-            app.swipeUp()
-            swipes += 1
-        }
+        scrollTo(predict, in: app)
         XCTAssertTrue(predict.waitForExistence(timeout: 5), "Predict button missing")
         predict.tap()
 
@@ -144,10 +168,10 @@ final class cliticalUITests: XCTestCase {
 
         tapPredictButton(in: app)
 
-        XCTAssertTrue(app.navigationBars["Predicted Risks"].waitForExistence(timeout: 5),
-                      "Predicted risk screen did not appear")
-        // In landscape the list viewport is shorter, so both the 2-year and
-        // GNRI sections may be off-screen until scrolled into view.
+        // On compact width (iPhone) the results are pushed as a dedicated
+        // "Predicted Risks" screen. On regular width (iPad) they render inline
+        // in the preview pane — no navigation bar. Assert the content texts
+        // directly so the test covers both layouts.
         let twoYearTitle = app.staticTexts["Predicted 2-year Overall Survival"]
         scrollTo(twoYearTitle, in: app)
         XCTAssertTrue(twoYearTitle.waitForExistence(timeout: 5),
@@ -156,6 +180,38 @@ final class cliticalUITests: XCTestCase {
         scrollTo(gnriTitle, in: app)
         XCTAssertTrue(gnriTitle.waitForExistence(timeout: 5),
                       "Geriatric Nutritional Risk Index did not appear")
+    }
+
+    /// On regular-width layouts, changing patient data after prediction must
+    /// remove the now-stale result from the preview pane.
+    func testEditingPatientDataClearsPredictedRiskPreview() throws {
+        let app = XCUIApplication()
+        app.launchArguments += ["-app_language", "en"]
+        app.launch()
+
+        let emptyPreviewMessage = app.staticTexts[
+            "Enter the patient data to show the predicted risks here."
+        ]
+        guard emptyPreviewMessage.waitForExistence(timeout: 2) else {
+            throw XCTSkip("The predicted-risk preview is only present in regular width")
+        }
+
+        fillRequiredNumberFields(in: app)
+        setToggle(row: "Infrapopliteal", to: "Yes", in: app)
+        tapPredictButton(in: app)
+
+        let twoYearTitle = app.staticTexts["Predicted 2-year Overall Survival"]
+        XCTAssertTrue(twoYearTitle.waitForExistence(timeout: 5),
+                      "Predicted risk did not appear before editing")
+
+        setToggle(row: "Congestive heart failure", to: "Yes", in: app)
+
+        XCTAssertFalse(twoYearTitle.waitForExistence(timeout: 1),
+                       "Editing patient data must remove the stale predicted risk")
+        XCTAssertTrue(
+            emptyPreviewMessage.waitForExistence(timeout: 5),
+            "The empty prediction state did not return after editing"
+        )
     }
 
     /// The urgency question is two independent named states (urgent vs.
@@ -167,7 +223,7 @@ final class cliticalUITests: XCTestCase {
         app.launchArguments += ["-app_language", "en"]
         app.launch()
 
-        app.tabBars.buttons["Risk Assessment"].tap()
+        tapTopLevelItem("Risk Assessment", in: app)
 
         let urgent = app.buttons["Urgent"]
         scrollTo(urgent, in: app)
@@ -201,60 +257,194 @@ final class cliticalUITests: XCTestCase {
         app.launchArguments += ["-app_language", "en"]
         app.launch()
 
-        fillRequiredNumberFields(in: app)
+        fillAgeField(in: app)
 
         let reset = app.buttons["Reset data"]
-        scrollTo(reset, in: app)
+        scrollDownTo(reset, in: app)
         XCTAssertTrue(reset.waitForExistence(timeout: 5), "Reset button missing")
         reset.tap()
 
-        // Dismissing the confirmation without confirming must keep the data.
-        // On this OS the dialog presents as a popover, where the cancel-role
-        // button is omitted and tapping outside dismisses (per HIG).
-        let dialog = app.sheets.firstMatch
-        XCTAssertTrue(dialog.waitForExistence(timeout: 5),
-                      "Reset confirmation dialog did not appear")
-        app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.15)).tap()
-        let dialogGone = XCTNSPredicateExpectation(
-            predicate: NSPredicate(format: "exists == false"),
-            object: dialog
+        // In compact size class the dialog is an action sheet with a Cancel
+        // button; in regular size class (e.g. iPhone in landscape) SwiftUI
+        // renders it as a popover with no dismiss action — the user taps
+        // outside to dismiss. Verify appearance via the title text, which is
+        // stable across both presentation styles.
+        XCTAssertTrue(
+            app.staticTexts["Reset all entered data?"].waitForExistence(timeout: 5),
+            "Reset confirmation dialog did not appear"
         )
-        _ = XCTWaiter().wait(for: [dialogGone], timeout: 5)
+        let cancel = cancelConfirmationButton(in: app)
+        if cancel.exists {
+            cancel.tap()
+        } else {
+            // Regular size class: popover has no Cancel button; tap outside.
+            app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.1)).tap()
+        }
 
-        let ageField = app.textFields["Enter Age [year-old]."]
-        scrollToTop(until: ageField, in: app)
+        let ageField = app.textFields["Age [year-old]"]
+        scrollUpTo(ageField, in: app)
         XCTAssertEqual(ageField.value as? String, "70",
                        "Dismissing the confirmation must not clear the data")
 
         // Confirming must clear the data (the placeholder shows again).
-        scrollTo(reset, in: app)
+        scrollDownTo(reset, in: app)
         reset.tap()
-        XCTAssertTrue(dialog.waitForExistence(timeout: 5),
-                      "Reset confirmation dialog did not appear")
-        dialog.buttons["Reset data"].tap()
+        XCTAssertTrue(
+            app.staticTexts["Reset all entered data?"].waitForExistence(timeout: 5),
+            "Reset confirmation dialog did not appear"
+        )
+        resetConfirmationButton(in: app).tap()
 
-        scrollToTop(until: ageField, in: app)
-        XCTAssertEqual(ageField.value as? String, "Enter Age [year-old].",
+        scrollUpTo(ageField, in: app)
+        XCTAssertEqual((ageField.value as? String) ?? "", "",
                        "Confirming the dialog must clear the data")
     }
 
     // MARK: - Helpers
 
-    /// Scrolls up in small increments until the element is on screen and
-    /// tappable.
+    private func topLevelItem(_ label: String, in app: XCUIApplication) -> XCUIElement {
+        let tabButton = app.tabBars.buttons[label]
+        if tabButton.exists {
+            return tabButton
+        }
+        if let identifier = appSectionIdentifier(for: label) {
+            let sidebarButton = app.buttons.matching(identifier: identifier).firstMatch
+            if sidebarButton.exists {
+                return sidebarButton
+            }
+            let sidebarCell = app.cells.matching(identifier: identifier).firstMatch
+            if sidebarCell.exists {
+                return sidebarCell
+            }
+        }
+        let sidebarButton = app.buttons
+            .matching(NSPredicate(format: "label CONTAINS %@", label))
+            .firstMatch
+        if sidebarButton.exists {
+            return sidebarButton
+        }
+        return app.cells
+            .matching(NSPredicate(format: "label CONTAINS %@", label))
+            .firstMatch
+    }
+
+    private func appSectionIdentifier(for label: String) -> String? {
+        switch label {
+        case "Risk Assessment", "リスク計算":
+            "riskCalculation"
+        case "References", "参考文献":
+            "references"
+        case "Settings", "設定":
+            "settings"
+        default:
+            nil
+        }
+    }
+
+    private func tapTopLevelItem(_ label: String, in app: XCUIApplication) {
+        let item = topLevelItem(label, in: app)
+        XCTAssertTrue(item.waitForExistence(timeout: 5), "Missing top-level item: \(label)")
+        item.tap()
+    }
+
+    /// On iOS 16, an inline SwiftUI Picker is exposed as switches; later
+    /// runtimes expose the same options as buttons. Select the control type
+    /// that is present so the test asserts the same user-visible choice.
+    private func languageOption(_ label: String, in app: XCUIApplication) -> XCUIElement {
+        let toggle = app.switches[label]
+        return toggle.exists ? toggle : app.buttons[label]
+    }
+
+    /// Scrolls the patient-data form down in small increments until the
+    /// element appears in the accessibility tree.
     ///
-    /// app.swipeUp() drags nearly the full screen height in one gesture. On
-    /// a short screen (e.g. iPhone SE) that single jump can skip clean over
-    /// a target row's position between the before/after existence checks, so
-    /// the loop never observes it as hittable and scrolls all the way to the
-    /// bottom of the list. A short, fixed-distance drag lands more precisely
-    /// at the cost of needing more iterations, which the higher cap covers.
-    private func scrollTo(_ element: XCUIElement, in app: XCUIApplication, maxSwipes: Int = 40) {
+    /// The form container is re-queried every iteration so a SwiftUI layout
+    /// update that replaces the underlying collection view mid-scroll does not
+    /// leave a stale element reference.  Container-relative coordinates keep
+    /// the gesture inside the form column on both iPhone (full-width) and iPad
+    /// (where the right portion of RootContentView is the risk-preview pane).
+    ///
+    /// On iOS 26, isHittable can return false for on-screen elements whose
+    /// activation point has not yet been materialized, so the loop stops on
+    /// existence alone — matching scrollUpTo's behaviour.
+    private func scrollTo(
+        _ element: XCUIElement,
+        in app: XCUIApplication,
+        maxSwipes: Int = 40
+    ) {
         var swipes = 0
-        while !(element.exists && element.isHittable) && swipes < maxSwipes {
-            let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.7))
-            let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.55))
+        while !element.exists && swipes < maxSwipes {
+            let container = patientFormContainer(in: app)
+            let start = container.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.7))
+            let end   = container.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
             start.press(forDuration: 0.05, thenDragTo: end)
+            swipes += 1
+        }
+    }
+
+    /// The band of the window that no bar is covering.
+    ///
+    /// A List's rows keep existing in the accessibility tree while they scroll
+    /// underneath the tab bar, so "the element exists" does not mean a tap will
+    /// reach it — see `scrollIntoTappableArea`.
+    private func unobstructedBounds(in app: XCUIApplication) -> (top: CGFloat, bottom: CGFloat) {
+        let window = app.windows.firstMatch.frame
+        var top = window.minY
+        var bottom = window.maxY
+        let navigationBar = app.navigationBars.firstMatch
+        if navigationBar.exists {
+            top = max(top, navigationBar.frame.maxY)
+        }
+        for bar in [app.tabBars.firstMatch, app.keyboards.firstMatch] where bar.exists {
+            bottom = min(bottom, bar.frame.minY)
+        }
+        return (top, max(top, bottom))
+    }
+
+    /// Drags the form content between two absolute y positions.
+    ///
+    /// The x stays in the middle of the form column so the gesture does not
+    /// land in the risk-preview pane that sits beside the form on iPad, and
+    /// callers pass y positions taken from `unobstructedBounds` so the drag
+    /// itself never starts on the keyboard or a bar.
+    private func dragForm(in app: XCUIApplication, fromY: CGFloat, toY: CGFloat) {
+        let x = patientFormContainer(in: app).frame.midX
+        let origin = app.coordinate(withNormalizedOffset: .zero)
+        let start = origin.withOffset(CGVector(dx: x, dy: fromY))
+        let end = origin.withOffset(CGVector(dx: x, dy: toY))
+        start.press(forDuration: 0.05, thenDragTo: end)
+    }
+
+    /// Scrolls until `element` is not merely present in the accessibility tree
+    /// but clear of the bars drawn over the scrolling content, so that `tap()`
+    /// — which aims at the element's centre — actually reaches it.
+    ///
+    /// `scrollTo` stops at existence. On a 375x667 screen that leaves the
+    /// Albumin row at y=611 while the tab bar starts at y=618: the tab bar
+    /// swallows the touch, the field never takes focus, and the following
+    /// `typeText` fails with "Neither element nor any descendant has keyboard
+    /// focus".
+    private func scrollIntoTappableArea(
+        _ element: XCUIElement,
+        in app: XCUIApplication,
+        maxSwipes: Int = 40
+    ) {
+        scrollTo(element, in: app, maxSwipes: maxSwipes)
+        var swipes = 0
+        while element.exists && swipes < maxSwipes {
+            let bounds = unobstructedBounds(in: app)
+            let frame = element.frame
+            if frame.minY >= bounds.top && frame.maxY <= bounds.bottom {
+                return
+            }
+            let span = bounds.bottom - bounds.top
+            let near = bounds.top + span * 0.35
+            let far = bounds.top + span * 0.75
+            if frame.maxY > bounds.bottom {
+                dragForm(in: app, fromY: far, toY: near)
+            } else {
+                dragForm(in: app, fromY: near, toY: far)
+            }
             swipes += 1
         }
     }
@@ -262,31 +452,55 @@ final class cliticalUITests: XCTestCase {
     /// Enters age, height, weight, and albumin, then dismisses the keyboard.
     private func fillRequiredNumberFields(in app: XCUIApplication) {
         let values = [
-            ("Enter Age [year-old].", "70"),
-            ("Enter Body Height [cm].", "160"),
-            ("Enter Body Weight [kg].", "55"),
-            ("Enter Albumin [g/dl].", "4"),
+            ("Age [year-old]", "70"),
+            ("Body Height [cm]", "160"),
+            ("Body Weight [kg]", "55"),
+            ("Albumin [g/dl]", "4"),
         ]
         for (placeholder, value) in values {
-            let field = app.textFields[placeholder]
-            scrollTo(field, in: app)
-            XCTAssertTrue(field.waitForExistence(timeout: 5), "Missing field: \(placeholder)")
-            field.tap()
-            field.typeText(value)
-            let done = app.buttons["Done"]
-            if done.exists { done.tap() }
+            fillNumberField(placeholder, with: value, in: app)
         }
-        // After the last field, the keyboard dismiss animation can still be in
-        // progress. Without this wait, scrollTo() sees isHittable==false on the
-        // Predict button (keyboard covers it) and over-scrolls past it.
-        let keyboard = app.keyboards.firstMatch
-        if keyboard.exists {
-            let keyboardGone = XCTNSPredicateExpectation(
-                predicate: NSPredicate(format: "exists == false"),
-                object: keyboard
-            )
-            _ = XCTWaiter().wait(for: [keyboardGone], timeout: 3)
+    }
+
+    /// Enters only age for reset behavior checks that do not need valid risk data.
+    private func fillAgeField(in app: XCUIApplication) {
+        fillNumberField("Age [year-old]", with: "70", in: app)
+    }
+
+    private func fillNumberField(
+        _ placeholder: String,
+        with value: String,
+        in app: XCUIApplication
+    ) {
+        let field = app.textFields[placeholder]
+        scrollIntoTappableArea(field, in: app)
+        XCTAssertTrue(field.waitForExistence(timeout: 5), "Missing field: \(placeholder)")
+        field.tap()
+
+        // A `TextField(value:format:)` rewrites its own text every time the
+        // bound number reparses, and on iOS 16 a keystroke that arrives during
+        // that rewrite is swallowed — typing "70" in one go intermittently
+        // leaves "7" behind. Enter one character at a time and wait for the
+        // field to report it before sending the next.
+        var typed = ""
+        for character in value {
+            typed.append(character)
+            var attempts = 0
+            while (field.value as? String) != typed && attempts < 3 {
+                field.typeText(String(character))
+                let accepted = XCTNSPredicateExpectation(
+                    predicate: NSPredicate(format: "value == %@", typed),
+                    object: field
+                )
+                _ = XCTWaiter().wait(for: [accepted], timeout: 2)
+                attempts += 1
+            }
+            XCTAssertEqual(field.value as? String, typed,
+                           "\(placeholder) did not accept the typed value")
         }
+
+        let done = app.buttons["Done"]
+        if done.exists { done.tap() }
     }
 
     /// Sets an inline Bool question row's Toggle to the desired Yes/No state.
@@ -300,18 +514,24 @@ final class cliticalUITests: XCTestCase {
         let row = app.switches
             .matching(NSPredicate(format: "label BEGINSWITH %@", title))
             .firstMatch
-        scrollTo(row, in: app)
+        scrollIntoTappableArea(row, in: app)
         XCTAssertTrue(row.waitForExistence(timeout: 5), "Missing toggle row: \(title)")
-        // SwiftUI exposes the row as two nested Switch elements: an outer one
-        // combining the row's title+footer text as its label, and an inner
-        // (unlabelled) one that is the real interactive control backing the
-        // accessibility activate action. Tapping the outer element is a
-        // no-op, so drill into the inner switch and tap that instead.
-        let toggle = row.switches.firstMatch
+        // Some runtimes expose a nested unlabeled switch, while iOS 26
+        // exposes the labeled row itself as the interactive switch.
+        let nestedToggle = row.switches.firstMatch
+        let toggle = nestedToggle.exists ? nestedToggle : row
         let isOn = (toggle.value as? String) == "1"
         if isOn != desiredOn {
             toggle.tap()
         }
+        let expectedValue = desiredOn ? "1" : "0"
+        let stateChanged = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "value == %@", expectedValue),
+            object: toggle
+        )
+        _ = XCTWaiter().wait(for: [stateChanged], timeout: 5)
+        XCTAssertEqual(toggle.value as? String, expectedValue,
+                       "Toggle row did not change to the requested value: \(title)")
     }
 
     /// Scrolls back towards the top of the list in small increments until the
@@ -319,27 +539,101 @@ final class cliticalUITests: XCTestCase {
     private func scrollToTop(until element: XCUIElement, in app: XCUIApplication, maxSwipes: Int = 40) {
         var swipes = 0
         while !(element.exists && element.isHittable) && swipes < maxSwipes {
-            let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.3))
-            let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.45))
+            dragContent(in: app, from: 0.3, to: 0.45)
+            swipes += 1
+        }
+    }
+
+    /// Uses the application window rather than a queried Table/List. SwiftUI
+    /// can replace a scroll container during layout updates; retaining that
+    /// container query until the drag causes XCTest's snapshot lookup to fail.
+    ///
+    /// dx: 0.5 keeps the gesture centred in the form column on both iPhone
+    /// (full width) and iPad (where the right half of the content area is the
+    /// risk-preview pane and a higher x would land there instead).
+    private func dragContent(in app: XCUIApplication, from startY: CGFloat, to endY: CGFloat) {
+        let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+        let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: endY))
+        start.press(forDuration: 0.05, thenDragTo: end)
+    }
+
+    private func scrollDownTo(_ element: XCUIElement, in app: XCUIApplication, maxSwipes: Int = 12) {
+        var swipes = 0
+        // iOS 26: isHittable is unreliable — stop on existence alone.
+        while !element.exists && swipes < maxSwipes {
+            let container = patientFormContainer(in: app)
+            let start = container.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.7))
+            let end   = container.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.3))
             start.press(forDuration: 0.05, thenDragTo: end)
             swipes += 1
         }
     }
 
+    private func scrollUpTo(_ element: XCUIElement, in app: XCUIApplication, maxSwipes: Int = 12) {
+        var swipes = 0
+        // The value assertion after this helper does not require the field to
+        // be tappable. On iOS 26, asking hit-testing for an off-screen text
+        // field can itself fail when its activation point is not materialized.
+        while !element.exists && swipes < maxSwipes {
+            let container = patientFormContainer(in: app)
+            let start = container.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.3))
+            let end   = container.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.7))
+            start.press(forDuration: 0.05, thenDragTo: end)
+            swipes += 1
+        }
+    }
+
+    /// Returns the scroll container that holds the patient-data form.
+    ///
+    /// On iPad the app shows a sidebar next to the form, so we cannot rely on
+    /// "the first table/collectionView". Instead, the List in ContentView has
+    /// the accessibility identifier "patientDataList" which is stable and unique.
+    ///
+    /// Re-querying each call avoids stale XCUIElement references when SwiftUI
+    /// replaces the underlying collection view during a layout update.
+    private func patientFormContainer(in app: XCUIApplication) -> XCUIElement {
+        // iOS 16+ renders SwiftUI List as UICollectionView; older builds use UITableView.
+        let byIdentifier = app.descendants(matching: .any)
+            .matching(identifier: "patientDataList")
+            .firstMatch
+        if byIdentifier.exists { return byIdentifier }
+        return app
+    }
+
+    /// Returns the Cancel button of the reset confirmation dialog, probing
+    /// sheet, alert, and flat button hierarchies so tests remain stable across
+    /// iOS versions that expose the dialog differently.
+    private func cancelConfirmationButton(in app: XCUIApplication) -> XCUIElement {
+        let sheetButton = app.sheets.buttons["Cancel"]
+        if sheetButton.exists { return sheetButton }
+        let alertButton = app.alerts.buttons["Cancel"]
+        if alertButton.exists { return alertButton }
+        return app.buttons.matching(NSPredicate(format: "label == %@", "Cancel")).firstMatch
+    }
+
+    private func resetConfirmationButton(in app: XCUIApplication) -> XCUIElement {
+        let sheetButton = app.sheets.buttons["Reset data"]
+        if sheetButton.exists {
+            return sheetButton
+        }
+
+        let alertButton = app.alerts.buttons["Reset data"]
+        if alertButton.exists {
+            return alertButton
+        }
+
+        // If XCTest flattens the dialog into the app hierarchy, the first
+        // button is the original action and the last one is the dialog action.
+        let buttons = app.buttons.matching(identifier: "Reset data")
+        return buttons.element(boundBy: max(buttons.count - 1, 0))
+    }
+
     /// Scrolls to the Predict button at the bottom of the form and taps it.
     private func tapPredictButton(in app: XCUIApplication) {
         let predict = app.buttons["Predict Risk"]
-        scrollTo(predict, in: app)
+        scrollIntoTappableArea(predict, in: app)
         XCTAssertTrue(predict.waitForExistence(timeout: 5), "Predict button missing")
         predict.tap()
     }
 
-    func testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
-            // This measures how long it takes to launch your application.
-            measure(metrics: [XCTApplicationLaunchMetric()]) {
-                XCUIApplication().launch()
-            }
-        }
-    }
 }

@@ -15,7 +15,7 @@ struct HeightFormView: View {
         HStack {
             Text("HeightQuestionTitle")
                 .accessibilityHidden(true)
-            TextField("HeightQuestionDescription",
+            TextField("",
                       value: $patientData.height,
                       format: .number)
             .multilineTextAlignment(.trailing)

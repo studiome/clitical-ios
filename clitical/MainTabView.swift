@@ -26,7 +26,96 @@ private struct SafariView: UIViewControllerRepresentable {
 // MARK: - MainTabView
 
 struct MainTabView: View {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @State private var selectedTab: AppSection = .riskCalculation
+    @State private var selectedSection: AppSection? = .riskCalculation
+
     var body: some View {
+        if #available(iOS 18.0, *) {
+            adaptableTabRoot
+        } else if horizontalSizeClass == .regular {
+            NavigationSplitView {
+                sidebar
+            } detail: {
+                splitViewDetail
+            }
+        } else {
+            tabRoot
+        }
+    }
+
+    @available(iOS 18.0, *)
+    private var adaptableTabRoot: some View {
+        TabView(selection: $selectedTab) {
+            Tab("RiskCalculationTab", systemImage: "chart.line.uptrend.xyaxis", value: AppSection.riskCalculation) {
+                RootContentView()
+            }
+            Tab("References", systemImage: "doc.text", value: AppSection.references) {
+                ReferencesView()
+            }
+            Tab("Settings", systemImage: "gearshape", value: AppSection.settings) {
+                SettingsView()
+            }
+        }
+        .tabViewStyle(.sidebarAdaptable)
+    }
+
+    @ViewBuilder
+    private var sidebar: some View {
+        if #available(iOS 17.0, *) {
+            List(AppSection.allCases, selection: $selectedSection) { section in
+                NavigationLink(value: section) {
+                    Label(section.titleKey, systemImage: section.symbolName)
+                }
+                .accessibilityIdentifier(section.rawValue)
+            }
+            .adaptiveSidebarStyle()
+            .navigationTitle(Text(verbatim: AppInfo.name))
+        } else {
+            List {
+                ForEach(AppSection.allCases) { section in
+                    Button {
+                        selectedSection = section
+                    } label: {
+                        Label(section.titleKey, systemImage: section.symbolName)
+                    }
+                    .accessibilityIdentifier(section.rawValue)
+                    .foregroundStyle(.primary)
+                    .listRowBackground(
+                        selectedSection == section ? Color.accentColor.opacity(0.12) : nil
+                    )
+                }
+            }
+            .navigationTitle(Text(verbatim: AppInfo.name))
+        }
+    }
+
+    private var splitViewDetail: some View {
+        ZStack {
+            splitViewSection(.riskCalculation) {
+                RootContentView()
+            }
+            splitViewSection(.references) {
+                ReferencesView()
+            }
+            splitViewSection(.settings) {
+                SettingsView()
+            }
+        }
+    }
+
+    private func splitViewSection<Content: View>(
+        _ section: AppSection,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        let isSelected = selectedSection == section
+        return content()
+            .opacity(isSelected ? 1 : 0)
+            .allowsHitTesting(isSelected)
+            .accessibilityHidden(!isSelected)
+    }
+
+    private var tabRoot: some View {
         TabView {
             RootContentView()
                 .tabItem {
@@ -44,12 +133,78 @@ struct MainTabView: View {
     }
 }
 
+@available(iOS 17.0, *)
+private extension View {
+    func adaptiveSidebarStyle() -> some View {
+        contentMargins(.horizontal, 8, for: .scrollContent)
+    }
+}
+
+private enum AppSection: String, CaseIterable, Identifiable {
+    case riskCalculation
+    case references
+    case settings
+
+    var id: Self { self }
+
+    var titleKey: LocalizedStringKey {
+        switch self {
+        case .riskCalculation: "RiskCalculationTab"
+        case .references: "References"
+        case .settings: "Settings"
+        }
+    }
+
+    var symbolName: String {
+        switch self {
+        case .riskCalculation: "chart.line.uptrend.xyaxis"
+        case .references: "doc.text"
+        case .settings: "gearshape"
+        }
+    }
+
+}
+
 // MARK: - App metadata
 
 /// Bundle-provided app identity, read once and shared by Settings and About.
 enum AppInfo {
     static let name = "CLiTICAL"
-    static let termsURL = URL(string: "https://studiome.github.io/clti_risk/")!
+
+    enum LegalDocument: CaseIterable, Identifiable, Hashable {
+        case terms
+        case privacy
+        case support
+
+        var id: Self { self }
+
+        var titleKey: LocalizedStringKey {
+            switch self {
+            case .terms: "AppTerms"
+            case .privacy: "AppPrivacyPolicy"
+            case .support: "AppSupport"
+            }
+        }
+
+        var symbolName: String {
+            switch self {
+            case .terms: "doc.text"
+            case .privacy: "hand.raised"
+            case .support: "questionmark.circle"
+            }
+        }
+    }
+
+    static func legalURL(for document: LegalDocument, language: AppLanguage) -> URL {
+        let page: String
+        switch document {
+        case .terms: page = "terms"
+        case .privacy: page = "privacy"
+        case .support: page = "support"
+        }
+        let locale = language == .ja ? "ja" : "en"
+        return URL(string: "https://studiome.github.io/clitical-legal/\(page)/\(locale)/")!
+    }
 
     static var version: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—"
@@ -65,12 +220,10 @@ enum AppInfo {
 struct SettingsView: View {
     @EnvironmentObject var localization: LocalizationManager
 
-    private let termsURL = AppInfo.termsURL
-
-    @State private var isShowingTerms = false
+    @State private var selectedLegalDocument: AppInfo.LegalDocument?
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 Section(header: Text("Language")) {
                     Picker("Language", selection: $localization.language) {
@@ -82,144 +235,29 @@ struct SettingsView: View {
                     .labelsHidden()
                 }
                 Section {
-                    Button {
-                        isShowingTerms = true
-                    } label: {
-                        Label("AppTerms", systemImage: "hand.raised")
+                    ForEach(AppInfo.LegalDocument.allCases) { document in
+                        Button {
+                            selectedLegalDocument = document
+                        } label: {
+                            Label(document.titleKey, systemImage: document.symbolName)
+                        }
                     }
                 }
                 Section(header: Text("About"), footer: Text("AppLegalese")) {
-                    NavigationLink {
-                        AboutView()
-                    } label: {
-                        HStack {
-                            Text(verbatim: AppInfo.name)
-                            Spacer()
-                            Text(verbatim: AppInfo.version)
-                                .foregroundStyle(.secondary)
-                        }
+                    HStack {
+                        Text(verbatim: AppInfo.name)
+                        Spacer()
+                        Text(verbatim: AppInfo.version)
+                            .foregroundStyle(.secondary)
                     }
                 }
             }
             .navigationTitle(Text(verbatim: localization.string(forKey: "Settings")))
-            .sheet(isPresented: $isShowingTerms) {
-                SafariView(url: termsURL)
+            .sheet(item: $selectedLegalDocument) { document in
+                SafariView(url: AppInfo.legalURL(for: document, language: localization.language))
                     .ignoresSafeArea()
             }
         }
-    }
-}
-
-// MARK: - About
-
-/// Detail screen behind the Settings > About row: what the app does, what it
-/// predicts, where the models come from, and the legal/credit fine print.
-struct AboutView: View {
-    @EnvironmentObject var localization: LocalizationManager
-
-    private struct Prediction: Identifiable {
-        let id: String
-        let icon: String
-        var title: LocalizedStringKey { LocalizedStringKey(id) }
-    }
-
-    /// The predicted indices, mirroring the order and symbols used on the
-    /// results screen so the two read as the same list.
-    private let predictions: [Prediction] = [
-        Prediction(id: "30DDeathOrAmputation", icon: "staroflife"),
-        Prediction(id: "30DMALE", icon: "bed.double"),
-        Prediction(id: "2YOS", icon: "staroflife"),
-        Prediction(id: "2YAFS", icon: "figure.walk"),
-        Prediction(id: "GeriatricNutritionalRiskIndex", icon: "flame"),
-    ]
-
-    var body: some View {
-        List {
-            Section {
-                header
-            }
-            Section(header: Text("AboutOverview")) {
-                Text("AboutOverviewBody")
-                    .font(.callout)
-            }
-            Section(header: Text("AboutPredictions"),
-                    footer: Text("AboutPredictionsFooter")) {
-                ForEach(predictions) { prediction in
-                    Label {
-                        Text(prediction.title)
-                            .font(.callout)
-                    } icon: {
-                        Image(systemName: prediction.icon)
-                            .foregroundColor(.accentColor)
-                    }
-                    // The symbol only echoes the title, so VoiceOver reads
-                    // the row as a single label.
-                    .accessibilityElement(children: .combine)
-                }
-            }
-            Section(header: Text("AboutModelSource")) {
-                Text("AboutModelSourceBody")
-                    .font(.callout)
-            }
-            Section(header: Text("AboutPrivacy")) {
-                Text("AboutPrivacyBody")
-                    .font(.callout)
-            }
-            Section(header: Text("AboutDisclaimer")) {
-                Text("AboutDisclaimerBody")
-                    .font(.callout)
-            }
-            Section(header: Text("AboutCredits")) {
-                creditRow(label: "AboutPublisher", value: "AboutPublisherName")
-                creditRow(label: "AboutDeveloper", value: "AboutDeveloperName")
-                creditRow(label: "AboutVersion", verbatim: AppInfo.version)
-                creditRow(label: "AboutBuild", verbatim: AppInfo.build)
-            }
-        }
-        .navigationTitle(Text(verbatim: localization.string(forKey: "About")))
-        .navigationBarTitleDisplayMode(.inline)
-    }
-
-    private var header: some View {
-        VStack(spacing: 8.0) {
-            Image(systemName: "chart.line.uptrend.xyaxis")
-                .font(.system(size: 40.0))
-                .foregroundColor(.accentColor)
-                .accessibilityHidden(true)
-            Text(verbatim: AppInfo.name)
-                .font(.title.weight(.semibold))
-            Text("AboutTagline")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 8.0)
-        .accessibilityElement(children: .combine)
-    }
-
-    /// A label/value pair. Stacked vertically rather than side by side so long
-    /// organisation names stay readable at large Dynamic Type sizes.
-    private func creditRow(label: LocalizedStringKey, value: LocalizedStringKey) -> some View {
-        VStack(alignment: .leading, spacing: 2.0) {
-            Text(label)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            Text(value)
-                .font(.callout)
-        }
-        .accessibilityElement(children: .combine)
-    }
-
-    private func creditRow(label: LocalizedStringKey, verbatim value: String) -> some View {
-        VStack(alignment: .leading, spacing: 2.0) {
-            Text(label)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            Text(verbatim: value)
-                .font(.callout)
-        }
-        .accessibilityElement(children: .combine)
     }
 }
 
@@ -248,7 +286,7 @@ struct ReferencesView: View {
     @State private var selectedReference: Reference?
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 Section(footer: Text("TapToOpenLink")) {
                     ForEach(references) { reference in
@@ -284,12 +322,4 @@ struct ReferencesView: View {
     MainTabView()
         .environmentObject(LocalizationManager())
         .environment(\.locale, .init(identifier: "ja"))
-}
-
-#Preview("About") {
-    NavigationView {
-        AboutView()
-    }
-    .environmentObject(LocalizationManager())
-    .environment(\.locale, .init(identifier: "ja"))
 }

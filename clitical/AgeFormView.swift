@@ -15,7 +15,7 @@ struct AgeFormView: View {
         HStack {
             Text("AgeQuestionTitle")
                 .accessibilityHidden(true)
-            TextField("AgeQuestionDescription",
+            TextField("",
                       value: $patientData.age,
                       format: .number)
             .multilineTextAlignment(.trailing)

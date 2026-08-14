@@ -24,7 +24,10 @@
 		2196DF7A296DC20600A9FF81 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2196DF7C296DC20600A9FF81 /* Localizable.strings */; };
 		21AA010000000000000000A2 /* LocalizationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AA010000000000000000A1 /* LocalizationManager.swift */; };
 		21AA010000000000000000B2 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AA010000000000000000B1 /* MainTabView.swift */; };
-		21C78F8E2951F4CF0054A045 /* CLPatientData in Frameworks */ = {isa = PBXBuildFile; productRef = 21C78F8D2951F4CF0054A045 /* CLPatientData */; };
+		21FB98E7302E9DED008432ED /* CLPatientData in Frameworks */ = {isa = PBXBuildFile; productRef = 21FB98E6302E9DED008432ED /* CLPatientData */; };
+		21FB99030000000000000001 /* PatientDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FB99010000000000000001 /* PatientDataTests.swift */; };
+		21FB99040000000000000001 /* PatientRiskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FB99020000000000000001 /* PatientRiskTests.swift */; };
+		21FB99060000000000000001 /* CLPatientData in Frameworks */ = {isa = PBXBuildFile; productRef = 21FB99050000000000000001 /* CLPatientData */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,7 +61,9 @@
 		2196DF7D296DC21400A9FF81 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		21AA010000000000000000A1 /* LocalizationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationManager.swift; sourceTree = "<group>"; };
 		21AA010000000000000000B1 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
-		21C78F8B2951F4180054A045 /* CLPatientData */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CLPatientData; sourceTree = "<group>"; };
+		21FB99010000000000000001 /* PatientDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = clitical/CLPatientData/Tests/CLPatientDataTests/PatientDataTests.swift; sourceTree = SOURCE_ROOT; };
+		21FB99020000000000000001 /* PatientRiskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = clitical/CLPatientData/Tests/CLPatientDataTests/PatientRiskTests.swift; sourceTree = SOURCE_ROOT; };
+		21FB990A0000000000000001 /* CLPatientDataLocalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CLPatientDataLocalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,7 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				21C78F8E2951F4CF0054A045 /* CLPatientData in Frameworks */,
+				21FB98E7302E9DED008432ED /* CLPatientData in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,6 +79,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		21FB99070000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				21FB99060000000000000001 /* CLPatientData in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,6 +99,7 @@
 				2196DF7C296DC20600A9FF81 /* Localizable.strings */,
 				212A1FC32951B38000508396 /* clitical */,
 				212A1FDE2951B38000508396 /* cliticalUITests */,
+				21FB990B0000000000000001 /* CLPatientDataLocalTests */,
 				212A1FC22951B38000508396 /* Products */,
 				21C78F8C2951F4CF0054A045 /* Frameworks */,
 			);
@@ -96,6 +110,7 @@
 			children = (
 				212A1FC12951B38000508396 /* clitical-ios.app */,
 				212A1FDB2951B38000508396 /* clitical-iosUITests.xctest */,
+				21FB990A0000000000000001 /* CLPatientDataLocalTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -103,7 +118,6 @@
 		212A1FC32951B38000508396 /* clitical */ = {
 			isa = PBXGroup;
 			children = (
-				21C78F8B2951F4180054A045 /* CLPatientData */,
 				212A1FC42951B38000508396 /* CliticalApp.swift */,
 				212A1FC62951B38000508396 /* ContentView.swift */,
 				218C5C222983BDEA006A4592 /* PredictedRiskView.swift */,
@@ -139,6 +153,15 @@
 			path = cliticalUITests;
 			sourceTree = "<group>";
 		};
+		21FB990B0000000000000001 /* CLPatientDataLocalTests */ = {
+			isa = PBXGroup;
+			children = (
+				21FB99010000000000000001 /* PatientDataTests.swift */,
+				21FB99020000000000000001 /* PatientRiskTests.swift */,
+			);
+			name = CLPatientDataLocalTests;
+			sourceTree = "<group>";
+		};
 		21C78F8C2951F4CF0054A045 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -163,7 +186,7 @@
 			);
 			name = "clitical-ios";
 			packageProductDependencies = (
-				21C78F8D2951F4CF0054A045 /* CLPatientData */,
+				21FB98E6302E9DED008432ED /* CLPatientData */,
 			);
 			productName = clitical;
 			productReference = 212A1FC12951B38000508396 /* clitical-ios.app */;
@@ -187,6 +210,25 @@
 			productReference = 212A1FDB2951B38000508396 /* clitical-iosUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		21FB99080000000000000001 /* CLPatientDataLocalTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 21FB990D0000000000000001 /* Build configuration list for PBXNativeTarget "CLPatientDataLocalTests" */;
+			buildPhases = (
+				21FB99090000000000000001 /* Sources */,
+				21FB99070000000000000001 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CLPatientDataLocalTests;
+			packageProductDependencies = (
+				21FB99050000000000000001 /* CLPatientData */,
+			);
+			productName = CLPatientDataLocalTests;
+			productReference = 21FB990A0000000000000001 /* CLPatientDataLocalTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -195,7 +237,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1420;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 2660;
 				TargetAttributes = {
 					212A1FC02951B38000508396 = {
 						CreatedOnToolsVersion = 14.2;
@@ -205,6 +247,9 @@
 						TestTargetID = 212A1FC02951B38000508396;
 					};
 				};
+				21FB99080000000000000001 = {
+					CreatedOnToolsVersion = 2660;
+				};
 			};
 			buildConfigurationList = 212A1FBC2951B38000508396 /* Build configuration list for PBXProject "clitical-ios" */;
 			compatibilityVersion = "Xcode 14.0";
@@ -213,14 +258,19 @@
 			knownRegions = (
 				en,
 				ja,
+				Base,
 			);
 			mainGroup = 212A1FB82951B38000508396;
+			packageReferences = (
+				21FB98E5302E9DED008432ED /* CLPatientData */,
+			);
 			productRefGroup = 212A1FC22951B38000508396 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				212A1FC02951B38000508396 /* clitical-ios */,
 				212A1FDA2951B38000508396 /* clitical-iosUITests */,
+				21FB99080000000000000001 /* CLPatientDataLocalTests */,
 			);
 		};
 /* End PBXProject section */
@@ -274,6 +324,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		21FB99090000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				21FB99030000000000000001 /* PatientDataTests.swift in Sources */,
+				21FB99040000000000000001 /* PatientRiskTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -301,6 +360,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -331,8 +391,10 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 7XT4A4J2HC;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -352,6 +414,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -361,6 +424,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -391,8 +455,10 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 7XT4A4J2HC;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -405,6 +471,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
@@ -420,31 +487,30 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"clitical/Preview Content\"";
-				DEVELOPMENT_TEAM = 7XT4A4J2HC;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = CLiTICAL2;
+				INFOPLIST_KEY_CFBundleDisplayName = CLiTICAL;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.studiomexx.clitical-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -457,53 +523,50 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"clitical/Preview Content\"";
-				DEVELOPMENT_TEAM = 7XT4A4J2HC;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = CLiTICAL2;
+				INFOPLIST_KEY_CFBundleDisplayName = CLiTICAL;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.studiomexx.clitical-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
 		212A1FEC2951B38000508396 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7XT4A4J2HC;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.studiomexx.cliticalUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "clitical-ios";
 			};
 			name = Debug;
@@ -511,23 +574,49 @@
 		212A1FED2951B38000508396 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7XT4A4J2HC;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.studiomexx.cliticalUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "clitical-ios";
+			};
+			name = Release;
+		};
+		21FB990E0000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.studiomexx.clitical.CLPatientDataLocalTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		21FB990F0000000000000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.studiomexx.clitical.CLPatientDataLocalTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -561,11 +650,33 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		21FB990D0000000000000001 /* Build configuration list for PBXNativeTarget "CLPatientDataLocalTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				21FB990E0000000000000001 /* Debug */,
+				21FB990F0000000000000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		21FB98E5302E9DED008432ED /* CLPatientData */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = clitical/CLPatientData;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
-		21C78F8D2951F4CF0054A045 /* CLPatientData */ = {
+		21FB98E6302E9DED008432ED /* CLPatientData */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 21FB98E5302E9DED008432ED /* CLPatientData */;
+			productName = CLPatientData;
+		};
+		21FB99050000000000000001 /* CLPatientData */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 21FB98E5302E9DED008432ED /* CLPatientData */;
 			productName = CLPatientData;
 		};
 /* End XCSwiftPackageProductDependency section */

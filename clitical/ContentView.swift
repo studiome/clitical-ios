@@ -10,6 +10,7 @@ import CLPatientData
 
 struct RootContentView: View {
     @EnvironmentObject var localization: LocalizationManager
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @State private var patientData = PatientData()
     @FocusState var isActive: Bool
     @State private var failure = false
@@ -17,193 +18,340 @@ struct RootContentView: View {
     @State private var errorMessage = ""
     @State private var risk: PatientRisk?
     @State private var confirmingReset = false
+    @State private var predictionRequestID = UUID()
 
     var body: some View {
-        NavigationView {
-            VStack {
-                List {
-                    Section(header: Text("BasicInfo")) {
-                        AgeFormView(patientData: $patientData).focused($isActive)
-                        SegmentedRow(title: "SexQuestionTitle",
-                                  options: Sex.allCases,
-                                  label: \.label,
-                                  selection: $patientData.sex)
-                        HeightFormView(patientData: $patientData).focused($isActive)
-                        WeightFormView(patientData: $patientData).focused($isActive)
-                    }
-                    Section(header: Text("SocialHistory")) {
-                        ToggleRow(title: "SmokingQuestionTitle",
-                                  footer: "SmokingQuestionDescription",
-                                  selection: $patientData.isSmoking)
-                        MenuChoiceRow(title: "ActivityQuestionTitle",
-                                  options: Activity.allCases,
-                                  label: \.label,
-                                  selection: $patientData.activity)
-                    }
-                    Section(header: Text("ClinicalInfo")) {
-                        AlbFormView(patientData: $patientData).focused($isActive)
-                        MenuChoiceRow(title: "CKDQuestionTitle",
-                                  footer: "CKDQuestionDescription",
-                                  options: CKD.allCases,
-                                  label: \.label,
-                                  selection: $patientData.ckd)
-                        SegmentedRow(title: "UrgencyQuestionTitle",
-                                  options: [true, false],
-                                  label: { $0 ? "UrgencyUrgent" : "UrgencyElective" },
-                                  selection: $patientData.isUrgent)
-                        ToggleRow(title: "FeverQuestionTitle",
-                                  footer: "FeverQuestionDescription",
-                                  selection: $patientData.hasFever)
-                        ToggleRow(title: "WBCQuestionTitle",
-                                  footer: "WBCQuestionDescription",
-                                  selection: $patientData.hasAbnormalWBC)
-                        ToggleRow(title: "LocalInfectionQuestionTitle",
-                                  footer: "LocalInfectionQuestionDescription",
-                                  selection: $patientData.hasLocalInfection)
-                        MenuChoiceRow(title: "RutherfordClassQuestionTitle",
-                                  options: RutherfordClassification.allCases,
-                                  label: \.label,
-                                  selection: $patientData.rutherford)
-                    }
-                    Section(header: Text("LesionInfo")) {
-                        ToggleRow(title: "AILesionQuestionTitle",
-                                  footer: "AILesionQuestionDescription",
-                                  selection: $patientData.hasAILesion)
-                        ToggleRow(title: "FPLesionQuestionTitle",
-                                  footer: "FPLesionQuestionDescription",
-                                  selection: $patientData.hasFPLesion)
-                        ToggleRow(title: "BKLesionQuestionTitle",
-                                  footer: "BKLesionQuestionDescription",
-                                  selection: $patientData.hasBKLesion)
-                    }
-                    Section(header: Text("OtherLesionInfo")) {
-                        ToggleRow(title: "ContralateralQuestionTitle",
-                                  footer: "ContralateralQuestionDescription",
-                                  selection: $patientData.hasContraLateralLesion)
-                        ToggleRow(title: "OtherVDQuestionTitle",
-                                  footer: "OtherVDQuestionDescription",
-                                  selection: $patientData.hasOtherVD)
-                    }
-                    Section(header: Text("Complications")) {
-                        ToggleRow(title: "CHFQuestionTitle",
-                                  footer: "CHFQuestionDescription",
-                                  selection: $patientData.hasCHF)
-                        ToggleRow(title: "CADQuestionTitle",
-                                  footer: "CADQuestionDescription",
-                                  selection: $patientData.hasCAD)
-                        ToggleRow(title: "CVDQuestionTitle",
-                                  footer: "CVDQuestionDescription",
-                                  selection: $patientData.hasCVD)
-                        ToggleRow(title: "DLQuestionTitle",
-                                  footer: "DLQuestionDescription",
-                                  selection: $patientData.hasDyslipidemia)
-                        MenuChoiceRow(title: "MalignancyQuestionTitle",
-                                  options: MalignantNeoplasm.allCases,
-                                  label: \.label,
-                                  selection: $patientData.malignantNeoplasm)
-                    }
-                    Section {
-                        Button("PredictRisks") {
-                            predictRisks()
-                        }
-                        .alert("ErrorTitle", isPresented: $failure) {
-                        } message: {
-                            Text(LocalizedStringKey(errorMessage))
-                        }
-                        // Hidden programmatic-navigation link.  Attached as the
-                        // button's background so it lives inside a list cell
-                        // (measuring it outside one triggers the "Invalid frame
-                        // dimension" runtime warning) without occupying a row of
-                        // its own, which would leave a dangling separator and an
-                        // empty sliver at the bottom of the section.
-                        .background(
-                            NavigationLink(destination: PredictedRiskView(risk: risk),
-                                           isActive: $riskCalculated) {
-                                EmptyView()
-                            }
-                            .opacity(0)
-                            .accessibilityHidden(true)
-                        )
-                        // Destructive role (not a bare red tint) so VoiceOver
-                        // announces it as destructive, and a confirmation
-                        // dialog because the wipe cannot be undone.
-                        Button("RESET", role: .destructive) {
-                            confirmingReset = true
-                        }
-                        .confirmationDialog("ResetConfirmationTitle",
-                                            isPresented: $confirmingReset,
-                                            titleVisibility: .visible) {
-                            Button("RESET", role: .destructive) {
-                                patientData.clear()
-                            }
-                            // Explicit cancel: the automatic one resolves its
-                            // label through the overridden Bundle.main (see
-                            // LocalizationManager) and comes out unlabeled,
-                            // and this also keeps it in the app's language.
-                            Button("CANCEL", role: .cancel) {}
-                        }
-                    }
-                }
-                .toolbar {
-                    // A bare Spacer as a keyboard toolbar item makes SwiftUI log
-                    // "Invalid frame dimension (negative or non-finite)"; laying
-                    // out inside a single HStack item avoids it.
-                    ToolbarItem(placement: .keyboard) {
-                        HStack {
-                            Spacer()
-                            Button("DONE") {
-                                isActive = false
-                            }
-                        }
-                    }
-                }
-                .navigationTitle(Text(verbatim: localization.string(forKey: "PatientDataTitle")))
+        Group {
+            if horizontalSizeClass == .regular {
+                regularBody
+            } else {
+                compactBody
             }
-            .listStyle(.insetGrouped)
+        }
+        .onChange(of: patientData) { _ in
+            invalidatePrediction()
+        }
+    }
+
+    private var compactBody: some View {
+        NavigationStack {
+            List {
+                patientDataSections
+                actionSection
+            }
+            // iOS 16 caches LocalizedStringKey values inside List rows. Rebuild
+            // only the list when the in-app language changes so section headers
+            // re-resolve without discarding the parent view's patient data.
+            .id(localization.language)
+            .accessibilityIdentifier("patientDataList")
+            .riskAssessmentListStyle()
+            .keyboardDoneToolbar {
+                isActive = false
+            }
+            .navigationTitle(Text(verbatim: localization.string(forKey: "PatientDataTitle")))
+            .navigationDestination(isPresented: $riskCalculated) {
+                PredictedRiskView(risk: risk)
+            }
+        }
+    }
+
+    private var regularBody: some View {
+        NavigationStack {
+            HStack(spacing: 0) {
+                List {
+                    patientDataSections
+                    actionSection
+                }
+                // Keep the same language-refresh behavior in the regular-width
+                // layout while preserving RootContentView's state.
+                .id(localization.language)
+                .accessibilityIdentifier("patientDataList")
+                .riskAssessmentListStyle()
+                .frame(minWidth: 360, idealWidth: 480, maxWidth: 560)
+
+                Divider()
+
+                RiskPreviewPane(risk: risk)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            .background(Color(.systemGroupedBackground))
+            .keyboardDoneToolbar {
+                isActive = false
+            }
+            .navigationTitle(Text(verbatim: localization.string(forKey: "PatientDataTitle")))
+        }
+    }
+
+    @ViewBuilder
+    private var patientDataSections: some View {
+        Section(header: localizedText("BasicInfo")) {
+            AgeFormView(patientData: $patientData).focused($isActive)
+            SegmentedRow(
+                title: "SexQuestionTitle",
+                options: Sex.allCases,
+                label: \.label,
+                selection: $patientData.sex)
+            HeightFormView(patientData: $patientData).focused($isActive)
+            WeightFormView(patientData: $patientData).focused($isActive)
+        }
+        Section(header: localizedText("SocialHistory")) {
+            ToggleRow(
+                title: "SmokingQuestionTitle",
+                footer: "SmokingQuestionDescription",
+                selection: $patientData.isSmoking)
+            MenuChoiceRow(
+                title: "ActivityQuestionTitle",
+                options: Activity.allCases,
+                label: \.label,
+                selection: $patientData.activity)
+        }
+        Section(header: localizedText("ClinicalInfo")) {
+            AlbFormView(patientData: $patientData).focused($isActive)
+            MenuChoiceRow(
+                title: "CKDQuestionTitle",
+                footer: "CKDQuestionDescription",
+                options: CKD.allCases,
+                label: \.label,
+                selection: $patientData.ckd)
+            SegmentedRow(
+                title: "UrgencyQuestionTitle",
+                options: [true, false],
+                label: { $0 ? "UrgencyUrgent" : "UrgencyElective" },
+                selection: $patientData.isUrgent)
+            ToggleRow(
+                title: "FeverQuestionTitle",
+                footer: "FeverQuestionDescription",
+                selection: $patientData.hasFever)
+            ToggleRow(
+                title: "WBCQuestionTitle",
+                footer: "WBCQuestionDescription",
+                selection: $patientData.hasAbnormalWBC)
+            ToggleRow(
+                title: "LocalInfectionQuestionTitle",
+                footer: "LocalInfectionQuestionDescription",
+                selection: $patientData.hasLocalInfection)
+            MenuChoiceRow(
+                title: "RutherfordClassQuestionTitle",
+                options: RutherfordClassification.allCases,
+                label: \.label,
+                selection: $patientData.rutherford)
+        }
+        Section(header: localizedText("LesionInfo")) {
+            ToggleRow(
+                title: "AILesionQuestionTitle",
+                footer: "AILesionQuestionDescription",
+                selection: $patientData.hasAILesion)
+            ToggleRow(
+                title: "FPLesionQuestionTitle",
+                footer: "FPLesionQuestionDescription",
+                selection: $patientData.hasFPLesion)
+            ToggleRow(
+                title: "BKLesionQuestionTitle",
+                footer: "BKLesionQuestionDescription",
+                selection: $patientData.hasBKLesion)
+        }
+        Section(header: localizedText("OtherLesionInfo")) {
+            ToggleRow(
+                title: "ContralateralQuestionTitle",
+                footer: "ContralateralQuestionDescription",
+                selection: $patientData.hasContraLateralLesion)
+            ToggleRow(
+                title: "OtherVDQuestionTitle",
+                footer: "OtherVDQuestionDescription",
+                selection: $patientData.hasOtherVD)
+        }
+        Section(header: localizedText("Complications")) {
+            ToggleRow(
+                title: "CHFQuestionTitle",
+                footer: "CHFQuestionDescription",
+                selection: $patientData.hasCHF)
+            ToggleRow(
+                title: "CADQuestionTitle",
+                footer: "CADQuestionDescription",
+                selection: $patientData.hasCAD)
+            ToggleRow(
+                title: "CVDQuestionTitle",
+                footer: "CVDQuestionDescription",
+                selection: $patientData.hasCVD)
+            ToggleRow(
+                title: "DLQuestionTitle",
+                footer: "DLQuestionDescription",
+                selection: $patientData.hasDyslipidemia)
+            MenuChoiceRow(
+                title: "MalignancyQuestionTitle",
+                options: MalignantNeoplasm.allCases,
+                label: \.label,
+                selection: $patientData.malignantNeoplasm)
+        }
+    }
+
+    private var actionSection: some View {
+        Section {
+            Button("PredictRisks") {
+                predictRisks()
+            }
+            .alert("ErrorTitle", isPresented: $failure) {
+            } message: {
+                Text(LocalizedStringKey(errorMessage))
+            }
+            // Destructive role (not a bare red tint) so VoiceOver
+            // announces it as destructive, and a confirmation
+            // dialog because the wipe cannot be undone.
+            Button("RESET", role: .destructive) {
+                confirmingReset = true
+            }
+            .confirmationDialog(
+                "ResetConfirmationTitle",
+                isPresented: $confirmingReset,
+                titleVisibility: .visible
+            ) {
+                Button("RESET", role: .destructive) {
+                    patientData.clear()
+                    invalidatePrediction()
+                }
+                // Explicit cancel: the automatic one resolves its
+                // label through the overridden Bundle.main (see
+                // LocalizationManager) and comes out unlabeled,
+                // and this also keeps it in the app's language.
+                Button("CANCEL", role: .cancel) {}
+                    .accessibilityIdentifier("resetConfirmationCancel")
+            }
         }
     }
 
     private func predictRisks() {
         guard patientData.age != nil,
-              patientData.height != nil,
-              patientData.weight != nil,
-              patientData.alb != nil else {
+            patientData.height != nil,
+            patientData.weight != nil,
+            patientData.alb != nil
+        else {
             fail(with: .numberFormIsNil)
             return
         }
-        guard patientData.hasAILesion
+        guard
+            patientData.hasAILesion
                 || patientData.hasFPLesion
-                || patientData.hasBKLesion else {
+                || patientData.hasBKLesion
+        else {
             fail(with: .irrelevantLesion)
             return
         }
         let newRisk = PatientRisk(of: patientData)
         guard newRisk.gnri != nil,
-              newRisk.gnriRisk != nil,
-              newRisk.predicted2YOS != nil,
-              newRisk.predicted30DDeathOrAmputation != nil,
-              newRisk.predicted30DMALE != nil,
-              newRisk.predicted2YOSRisk != nil,
-              newRisk.predicted2YAFS != nil else {
+            newRisk.gnriRisk != nil,
+            newRisk.predicted2YOS != nil,
+            newRisk.predicted30DDeathOrAmputation != nil,
+            newRisk.predicted30DMALE != nil,
+            newRisk.predicted2YOSRisk != nil,
+            newRisk.predicted2YAFS != nil
+        else {
             fail(with: .defaultError)
             return
         }
         risk = newRisk
         failure = false
-        // Deferred to the next run loop turn: if a keyboard dismissal or
-        // other transition-coordinator transaction just completed, it may
-        // not have settled yet. Flipping isActive synchronously in that
-        // window can be silently dropped by SwiftUI's
-        // NavigationLink(isActive:), so the push never happens.
-        DispatchQueue.main.async {
-            riskCalculated = true
+        if horizontalSizeClass == .regular {
+            riskCalculated = false
+        } else {
+            let requestID = UUID()
+            predictionRequestID = requestID
+            DispatchQueue.main.async {
+                guard predictionRequestID == requestID, risk != nil else { return }
+                riskCalculated = true
+            }
         }
     }
 
     private func fail(with error: QuestionError) {
+        predictionRequestID = UUID()
         errorMessage = error.message
         failure = true
         riskCalculated = false
+    }
+
+    private func invalidatePrediction() {
+        predictionRequestID = UUID()
+        risk = nil
+        riskCalculated = false
+    }
+
+    private func localizedText(_ key: String) -> Text {
+        Text(verbatim: localization.string(forKey: key))
+    }
+}
+
+// These literal localizable API calls ensure Xcode includes the dynamically
+// resolved section-header keys when exporting localization catalogs.
+private enum SectionHeaderLocalizationKeys {
+    static let basicInfo = String(localized: "BasicInfo")
+    static let socialHistory = String(localized: "SocialHistory")
+    static let clinicalInfo = String(localized: "ClinicalInfo")
+    static let lesionInfo = String(localized: "LesionInfo")
+    static let otherLesionInfo = String(localized: "OtherLesionInfo")
+    static let complications = String(localized: "Complications")
+}
+
+private struct RiskPreviewPane: View {
+    let risk: PatientRisk?
+
+    var body: some View {
+        Group {
+            if risk != nil {
+                PredictedRiskView(risk: risk, showsNavigationTitle: false)
+            } else {
+                VStack(spacing: 12) {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                        .font(.system(size: 44))
+                        .foregroundStyle(.secondary)
+                        .accessibilityHidden(true)
+                    Text("RiskPreviewEmptyTitle")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                    Text("RiskPreviewEmptyMessage")
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: 360)
+                }
+                .padding()
+            }
+        }
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func riskAssessmentListStyle() -> some View {
+        if #available(iOS 17.0, *) {
+            self
+                .listStyle(.insetGrouped)
+                .scrollDismissesKeyboard(.immediately)
+                .contentMargins(.horizontal, 16, for: .scrollContent)
+        } else {
+            self
+                .listStyle(.insetGrouped)
+                .scrollDismissesKeyboard(.immediately)
+        }
+    }
+
+    /// Places the keyboard-dismiss button in the keyboard's own accessory bar.
+    ///
+    /// This used to insert and remove a bottom `safeAreaInset` as the focus
+    /// state changed. Adding a safe-area inset while the keyboard is animating
+    /// changes the layout that the keyboard and scroll insets are derived from,
+    /// which on iPad kept the app reporting itself as animating: XCUITest's
+    /// "wait for the app to idle" then burned its full 60 second timeout on
+    /// every interaction until the test blew its 10 minute allowance. Letting
+    /// UIKit own the accessory bar keeps the app's layout out of that loop.
+    func keyboardDoneToolbar(dismiss: @escaping () -> Void) -> some View {
+        toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("KeyboardDone") {
+                    dismiss()
+                }
+            }
+        }
     }
 }
 

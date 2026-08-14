@@ -23,13 +23,9 @@
 "AILesionQuestionTitle" = "大動脈・腸骨動脈領域";
 "AILesionQuestionDescription" = "大動脈・腸骨動脈領域病変の有無";
 "AgeQuestionTitle" = "年齢 [歳]";
-"AgeQuestionDescription" = "年齢 [歳]を入力してください。";
 "WeightQuestionTitle" = "体重 [kg]";
-"WeightQuestionDescription" = "体重 [kg]を入力してください。";
 "HeightQuestionTitle" = "身長 [cm]";
-"HeightQuestionDescription" = "身長 [cm]を入力してください。";
 "AlbQuestionTitle" = "アルブミン値 [g/dl]";
-"AlbQuestionDescription" = "アルブミン値 [g/dl]を入力してください。";
 "ActivityQuestionTitle" = "ADL";
 "ActivityAmbulatory" = "独歩";
 "ActivityWheelchair" = "車いす";
@@ -72,7 +68,7 @@
 "MalignancyNo" = "なし";
 "MalignancyPast" = "既往歴あり";
 "MalignancyTreatment" = "治療中";
-"DONE" = "完了";
+"KeyboardDone" = "完了";
 "PredictRisks" = "リスクを予測";
 "GNRINoRisk" = "リスクなし";
 "GNRILowRisk" = "軽度栄養リスク";
@@ -99,6 +95,8 @@
 "2YOS" = "予測2年OS(全生存率)";
 "2YAFS" = "予測2年AFS(大切断回避生存率)";
 "RiskViewTitle"  = "予測リスク";
+"RiskPreviewEmptyTitle" = "予測結果";
+"RiskPreviewEmptyMessage" = "患者データを入力すると、ここに予測リスクが表示されます。";
 
 /* Bottom tab menu */
 "RiskCalculationTab" = "リスク計算";
@@ -107,6 +105,8 @@
 "References" = "参考文献";
 "About" = "アプリ情報";
 "AppTerms" = "利用規約";
+"AppPrivacyPolicy" = "プライバシーポリシー";
+"AppSupport" = "サポート";
 "TapToOpenLink" = "論文サイトを開きます。";
 "AppLegalese" = "2022 発行: 特定非営利活動法人日本血管外科学会、JCLIMB委員会、ソフトウェア制作: 宮原和洋";
 
@@ -122,6 +122,7 @@
 "AboutPrivacyBody" = "入力された患者データは端末内でのみ処理され、外部への送信・保存は行いません。アプリ内に保存されるのは選択した言語の設定だけです。";
 "AboutDisclaimer" = "免責事項";
 "AboutDisclaimerBody" = "本アプリは医療従事者の臨床判断を支援することを目的としています。算出される値は統計モデルによる推定であり、診断や治療方針を決定するものではありません。最終的な判断は担当医師の責任において行ってください。";
+"AboutLegalAndSupport" = "法務・サポート";
 "AboutCredits" = "クレジット";
 "AboutPublisher" = "発行";
 "AboutPublisherName" = "特定非営利活動法人 日本血管外科学会 / JCLIMB委員会";

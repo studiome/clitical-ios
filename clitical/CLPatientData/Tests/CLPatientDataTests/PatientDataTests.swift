@@ -1,52 +1,53 @@
-import Testing
+import Foundation
+import XCTest
 @testable import CLPatientData
 
-@Suite struct PatientDataTests {
-    @Test func testInit() {
+final class PatientDataTests: XCTestCase {
+    func testInit() {
         let pd = PatientData()
-        #expect(pd.sex == .female)
-        #expect(pd.age == nil)
-        #expect(pd.height == nil)
-        #expect(pd.weight == nil)
-        #expect(pd.alb == nil)
-        #expect(pd.activity == .ambulatory)
-        #expect(pd.hasCHF == false)
-        #expect(pd.hasCAD == false)
-        #expect(pd.hasCVD == false)
-        #expect(pd.ckd == .normal)
-        #expect(pd.malignantNeoplasm == .no)
-        #expect(pd.hasAILesion == false)
-        #expect(pd.hasFPLesion == false)
-        #expect(pd.hasBKLesion == false)
-        #expect(pd.isUrgent == false)
-        #expect(pd.hasFever == false)
-        #expect(pd.hasAbnormalWBC == false)
-        #expect(pd.hasLocalInfection == false)
-        #expect(pd.hasDyslipidemia == false)
-        #expect(pd.isSmoking == false)
-        #expect(pd.hasContraLateralLesion == false)
-        #expect(pd.hasOtherVD == false)
-        #expect(pd.rutherford == .class4)
+        XCTAssertEqual(pd.sex, .female)
+        XCTAssertNil(pd.age)
+        XCTAssertNil(pd.height)
+        XCTAssertNil(pd.weight)
+        XCTAssertNil(pd.alb)
+        XCTAssertEqual(pd.activity, .ambulatory)
+        XCTAssertFalse(pd.hasCHF)
+        XCTAssertFalse(pd.hasCAD)
+        XCTAssertFalse(pd.hasCVD)
+        XCTAssertEqual(pd.ckd, .normal)
+        XCTAssertEqual(pd.malignantNeoplasm, .no)
+        XCTAssertFalse(pd.hasAILesion)
+        XCTAssertFalse(pd.hasFPLesion)
+        XCTAssertFalse(pd.hasBKLesion)
+        XCTAssertFalse(pd.isUrgent)
+        XCTAssertFalse(pd.hasFever)
+        XCTAssertFalse(pd.hasAbnormalWBC)
+        XCTAssertFalse(pd.hasLocalInfection)
+        XCTAssertFalse(pd.hasDyslipidemia)
+        XCTAssertFalse(pd.isSmoking)
+        XCTAssertFalse(pd.hasContraLateralLesion)
+        XCTAssertFalse(pd.hasOtherVD)
+        XCTAssertEqual(pd.rutherford, .class4)
     }
 
-    @Test func testValueSemantics() {
+    func testValueSemantics() {
         var original = PatientData()
         original.age = 70
         var copy = original
         copy.age = 80
-        #expect(original.age == 70)
-        #expect(copy.age == 80)
+        XCTAssertEqual(original.age, 70)
+        XCTAssertEqual(copy.age, 80)
     }
 
-    @Test func testClearResetsToInitialState() {
+    func testClearResetsToInitialState() {
         var pd = PatientData()
         pd.age = 70
         pd.height = 160.0
         pd.hasCHF = true
         pd.clear()
-        #expect(pd.age == nil)
-        #expect(pd.height == nil)
-        #expect(pd.hasCHF == false)
-        #expect(pd.sex == .female)
+        XCTAssertNil(pd.age)
+        XCTAssertNil(pd.height)
+        XCTAssertFalse(pd.hasCHF)
+        XCTAssertEqual(pd.sex, .female)
     }
 }

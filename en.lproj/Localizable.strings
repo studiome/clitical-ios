@@ -22,13 +22,9 @@
 "AILesionQuestionTitle" = "Aorto-Iliac";
 "AILesionQuestionDescription" = "Aorto-Iliac occlusive lesion present or absent";
 "AgeQuestionTitle" = "Age [year-old]";
-"AgeQuestionDescription" = "Enter Age [year-old].";
 "WeightQuestionTitle" = "Body Weight [kg]";
-"WeightQuestionDescription" = "Enter Body Weight [kg].";
 "HeightQuestionTitle" = "Body Height [cm]";
-"HeightQuestionDescription" = "Enter Body Height [cm].";
 "AlbQuestionTitle" = "Albumin [g/dl]";
-"AlbQuestionDescription" = "Enter Albumin [g/dl].";
 "ActivityQuestionTitle" = "Activity";
 "ActivityAmbulatory" = "Ambulatory";
 "ActivityWheelchair" = "Wheelchair";
@@ -71,7 +67,7 @@
 "MalignancyNo" = "No";
 "MalignancyPast" = "Past history";
 "MalignancyTreatment" = "Under treatment";
-"DONE" = "Done";
+"KeyboardDone" = "Done";
 "PredictRisks" = "Predict Risk";
 "GNRINoRisk" = "No Risk";
 "GNRILowRisk" = "Low Risk";
@@ -98,6 +94,8 @@
 "2YOS" = "Predicted 2-year Overall Survival";
 "2YAFS" = "Predicted 2-year Amputation Free Survival";
 "RiskViewTitle"  = "Predicted Risks";
+"RiskPreviewEmptyTitle" = "Predicted Risks";
+"RiskPreviewEmptyMessage" = "Enter the patient data to show the predicted risks here.";
 
 /* Bottom tab menu */
 "RiskCalculationTab" = "Risk Assessment";
@@ -105,7 +103,9 @@
 "Language" = "Language";
 "References" = "References";
 "About" = "About";
-"AppTerms" = "Terms of service";
+"AppTerms" = "Terms of Use";
+"AppPrivacyPolicy" = "Privacy Policy";
+"AppSupport" = "Support";
 "TapToOpenLink" = "Tap to open link.";
 "AppLegalese" = "2022 Kazuhiro Miyahara, JSVS, JCLIMB";
 
@@ -121,6 +121,7 @@
 "AboutPrivacyBody" = "Patient data is processed on this device only and is never sent or stored elsewhere. The only thing the app saves is the language you select.";
 "AboutDisclaimer" = "Disclaimer";
 "AboutDisclaimerBody" = "This app is intended to support the clinical judgement of healthcare professionals. The values it calculates are estimates from statistical models and do not determine diagnosis or treatment. The final decision remains the responsibility of the attending physician.";
+"AboutLegalAndSupport" = "Legal and Support";
 "AboutCredits" = "Credits";
 "AboutPublisher" = "Published by";
 "AboutPublisherName" = "Japanese Society for Vascular Surgery / JCLIMB Committee";
