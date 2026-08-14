@@ -38,6 +38,7 @@ struct RootContentView: View {
             // only the list when the in-app language changes so section headers
             // re-resolve without discarding the parent view's patient data.
             .id(localization.language)
+            .accessibilityIdentifier("patientDataList")
             .riskAssessmentListStyle()
             .keyboardDoneInset(isActive: isActive) {
                 isActive = false
@@ -59,6 +60,7 @@ struct RootContentView: View {
                 // Keep the same language-refresh behavior in the regular-width
                 // layout while preserving RootContentView's state.
                 .id(localization.language)
+                .accessibilityIdentifier("patientDataList")
                 .riskAssessmentListStyle()
                 .frame(minWidth: 360, idealWidth: 480, maxWidth: 560)
 

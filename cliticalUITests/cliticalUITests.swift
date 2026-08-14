@@ -165,10 +165,10 @@ final class cliticalUITests: XCTestCase {
 
         tapPredictButton(in: app)
 
-        XCTAssertTrue(app.navigationBars["Predicted Risks"].waitForExistence(timeout: 5),
-                      "Predicted risk screen did not appear")
-        // In landscape the list viewport is shorter, so both the 2-year and
-        // GNRI sections may be off-screen until scrolled into view.
+        // On compact width (iPhone) the results are pushed as a dedicated
+        // "Predicted Risks" screen. On regular width (iPad) they render inline
+        // in the preview pane — no navigation bar. Assert the content texts
+        // directly so the test covers both layouts.
         let twoYearTitle = app.staticTexts["Predicted 2-year Overall Survival"]
         scrollTo(twoYearTitle, in: app)
         XCTAssertTrue(twoYearTitle.waitForExistence(timeout: 5),
@@ -320,23 +320,29 @@ final class cliticalUITests: XCTestCase {
         return toggle.exists ? toggle : app.buttons[label]
     }
 
-    /// Scrolls up in small increments until the element is on screen and
-    /// tappable.
+    /// Scrolls the patient-data form down in small increments until the
+    /// element appears in the accessibility tree.
     ///
-    /// app.swipeUp() drags nearly the full screen height in one gesture. On
-    /// a short screen (e.g. iPhone SE) that single jump can skip clean over
-    /// a target row's position between the before/after existence checks, so
-    /// the loop never observes it as hittable and scrolls all the way to the
-    /// bottom of the list. A short, fixed-distance drag lands more precisely
-    /// at the cost of needing more iterations, which the higher cap covers.
+    /// The form container is re-queried every iteration so a SwiftUI layout
+    /// update that replaces the underlying collection view mid-scroll does not
+    /// leave a stale element reference.  Container-relative coordinates keep
+    /// the gesture inside the form column on both iPhone (full-width) and iPad
+    /// (where the right portion of RootContentView is the risk-preview pane).
+    ///
+    /// On iOS 26, isHittable can return false for on-screen elements whose
+    /// activation point has not yet been materialized, so the loop stops on
+    /// existence alone — matching scrollUpTo's behaviour.
     private func scrollTo(
         _ element: XCUIElement,
         in app: XCUIApplication,
         maxSwipes: Int = 40
     ) {
         var swipes = 0
-        while !(element.exists && element.isHittable) && swipes < maxSwipes {
-            dragContent(in: app, from: 0.7, to: 0.55)
+        while !element.exists && swipes < maxSwipes {
+            let container = patientFormContainer(in: app)
+            let start = container.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.7))
+            let end   = container.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            start.press(forDuration: 0.05, thenDragTo: end)
             swipes += 1
         }
     }
@@ -415,16 +421,24 @@ final class cliticalUITests: XCTestCase {
     /// Uses the application window rather than a queried Table/List. SwiftUI
     /// can replace a scroll container during layout updates; retaining that
     /// container query until the drag causes XCTest's snapshot lookup to fail.
+    ///
+    /// dx: 0.5 keeps the gesture centred in the form column on both iPhone
+    /// (full width) and iPad (where the right half of the content area is the
+    /// risk-preview pane and a higher x would land there instead).
     private func dragContent(in app: XCUIApplication, from startY: CGFloat, to endY: CGFloat) {
-        let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.75, dy: startY))
-        let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.75, dy: endY))
+        let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+        let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: endY))
         start.press(forDuration: 0.05, thenDragTo: end)
     }
 
     private func scrollDownTo(_ element: XCUIElement, in app: XCUIApplication, maxSwipes: Int = 12) {
         var swipes = 0
-        while !(element.exists && element.isHittable) && swipes < maxSwipes {
-            dragContent(in: app, from: 0.7, to: 0.3)
+        // iOS 26: isHittable is unreliable — stop on existence alone.
+        while !element.exists && swipes < maxSwipes {
+            let container = patientFormContainer(in: app)
+            let start = container.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.7))
+            let end   = container.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.3))
+            start.press(forDuration: 0.05, thenDragTo: end)
             swipes += 1
         }
     }
@@ -435,9 +449,29 @@ final class cliticalUITests: XCTestCase {
         // be tappable. On iOS 26, asking hit-testing for an off-screen text
         // field can itself fail when its activation point is not materialized.
         while !element.exists && swipes < maxSwipes {
-            dragContent(in: app, from: 0.3, to: 0.7)
+            let container = patientFormContainer(in: app)
+            let start = container.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.3))
+            let end   = container.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.7))
+            start.press(forDuration: 0.05, thenDragTo: end)
             swipes += 1
         }
+    }
+
+    /// Returns the scroll container that holds the patient-data form.
+    ///
+    /// On iPad the app shows a sidebar next to the form, so we cannot rely on
+    /// "the first table/collectionView". Instead, the List in ContentView has
+    /// the accessibility identifier "patientDataList" which is stable and unique.
+    ///
+    /// Re-querying each call avoids stale XCUIElement references when SwiftUI
+    /// replaces the underlying collection view during a layout update.
+    private func patientFormContainer(in app: XCUIApplication) -> XCUIElement {
+        // iOS 16+ renders SwiftUI List as UICollectionView; older builds use UITableView.
+        let byIdentifier = app.descendants(matching: .any)
+            .matching(identifier: "patientDataList")
+            .firstMatch
+        if byIdentifier.exists { return byIdentifier }
+        return app
     }
 
     /// Returns the Cancel button of the reset confirmation dialog, probing
