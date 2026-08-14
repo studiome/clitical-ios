@@ -211,18 +211,14 @@ final class cliticalUITests: XCTestCase {
         XCTAssertTrue(reset.waitForExistence(timeout: 5), "Reset button missing")
         reset.tap()
 
-        // Dismissing the confirmation without confirming must keep the data.
-        // On this OS the dialog presents as a popover, where the cancel-role
-        // button is omitted and tapping outside dismisses (per HIG).
-        let dialog = app.sheets.firstMatch
-        XCTAssertTrue(dialog.waitForExistence(timeout: 5),
+        // A confirmation dialog is exposed as a sheet on some runtimes and
+        // an alert on others. Its explicit Cancel action is stable across
+        // both representations, unlike the container type or a tap outside
+        // the dialog.
+        let cancel = app.buttons["Cancel"]
+        XCTAssertTrue(cancel.waitForExistence(timeout: 5),
                       "Reset confirmation dialog did not appear")
-        app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.15)).tap()
-        let dialogGone = XCTNSPredicateExpectation(
-            predicate: NSPredicate(format: "exists == false"),
-            object: dialog
-        )
-        _ = XCTWaiter().wait(for: [dialogGone], timeout: 5)
+        cancel.tap()
 
         let ageField = app.textFields["Age [year-old]"]
         scrollUpTo(ageField, in: app)
@@ -232,9 +228,9 @@ final class cliticalUITests: XCTestCase {
         // Confirming must clear the data (the placeholder shows again).
         scrollDownTo(reset, in: app)
         reset.tap()
-        XCTAssertTrue(dialog.waitForExistence(timeout: 5),
+        XCTAssertTrue(cancel.waitForExistence(timeout: 5),
                       "Reset confirmation dialog did not appear")
-        dialog.buttons["Reset data"].tap()
+        resetConfirmationButton(in: app).tap()
 
         scrollUpTo(ageField, in: app)
         XCTAssertEqual((ageField.value as? String) ?? "", "",
@@ -330,16 +326,22 @@ final class cliticalUITests: XCTestCase {
             .firstMatch
         scrollTo(row, in: app)
         XCTAssertTrue(row.waitForExistence(timeout: 5), "Missing toggle row: \(title)")
-        // SwiftUI exposes the row as two nested Switch elements: an outer one
-        // combining the row's title+footer text as its label, and an inner
-        // (unlabelled) one that is the real interactive control backing the
-        // accessibility activate action. Tapping the outer element is a
-        // no-op, so drill into the inner switch and tap that instead.
-        let toggle = row.switches.firstMatch
+        // Some runtimes expose a nested unlabeled switch, while iOS 26
+        // exposes the labeled row itself as the interactive switch.
+        let nestedToggle = row.switches.firstMatch
+        let toggle = nestedToggle.exists ? nestedToggle : row
         let isOn = (toggle.value as? String) == "1"
         if isOn != desiredOn {
             toggle.tap()
         }
+        let expectedValue = desiredOn ? "1" : "0"
+        let stateChanged = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "value == %@", expectedValue),
+            object: toggle
+        )
+        _ = XCTWaiter().wait(for: [stateChanged], timeout: 5)
+        XCTAssertEqual(toggle.value as? String, expectedValue,
+                       "Toggle row did not change to the requested value: \(title)")
     }
 
     /// Scrolls back towards the top of the list in small increments until the
@@ -391,10 +393,30 @@ final class cliticalUITests: XCTestCase {
 
     private func scrollUpTo(_ element: XCUIElement, in app: XCUIApplication, maxSwipes: Int = 12) {
         var swipes = 0
-        while !(element.exists && element.isHittable) && swipes < maxSwipes {
+        // The value assertion after this helper does not require the field to
+        // be tappable. On iOS 26, asking hit-testing for an off-screen text
+        // field can itself fail when its activation point is not materialized.
+        while !element.exists && swipes < maxSwipes {
             scrollContainer(in: app).swipeDown()
             swipes += 1
         }
+    }
+
+    private func resetConfirmationButton(in app: XCUIApplication) -> XCUIElement {
+        let sheetButton = app.sheets.buttons["Reset data"]
+        if sheetButton.exists {
+            return sheetButton
+        }
+
+        let alertButton = app.alerts.buttons["Reset data"]
+        if alertButton.exists {
+            return alertButton
+        }
+
+        // If XCTest flattens the dialog into the app hierarchy, the first
+        // button is the original action and the last one is the dialog action.
+        let buttons = app.buttons.matching(identifier: "Reset data")
+        return buttons.element(boundBy: max(buttons.count - 1, 0))
     }
 
     /// Scrolls to the Predict button at the bottom of the form and taps it.
