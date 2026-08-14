@@ -209,6 +209,7 @@ struct RootContentView: View {
                 // LocalizationManager) and comes out unlabeled,
                 // and this also keeps it in the app's language.
                 Button("CANCEL", role: .cancel) {}
+                    .accessibilityIdentifier("resetConfirmationCancel")
             }
         }
     }

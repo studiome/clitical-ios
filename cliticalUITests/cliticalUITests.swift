@@ -230,11 +230,10 @@ final class cliticalUITests: XCTestCase {
         XCTAssertTrue(reset.waitForExistence(timeout: 5), "Reset button missing")
         reset.tap()
 
-        // A confirmation dialog is exposed as a sheet on some runtimes and
-        // an alert on others. Its explicit Cancel action is stable across
-        // both representations, unlike the container type or a tap outside
-        // the dialog.
-        let cancel = app.buttons["Cancel"]
+        // Confirmation dialogs use different container types and may expose
+        // their localized labels inconsistently between iOS releases. Use
+        // the app-owned identifier instead of the system accessibility label.
+        let cancel = app.buttons["resetConfirmationCancel"]
         XCTAssertTrue(cancel.waitForExistence(timeout: 5),
                       "Reset confirmation dialog did not appear")
         cancel.tap()
