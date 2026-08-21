@@ -156,6 +156,61 @@ final class cliticalUITests: XCTestCase {
                       "Validation alert did not appear")
     }
 
+    /// Numeric input must remain visible and large enough to operate when
+    /// people choose an accessibility Dynamic Type size.
+    func testAccessibilityExtraLargeTextKeepsNumberFieldsUsable() throws {
+        let app = XCUIApplication()
+        app.launchArguments += [
+            "-app_language", "en",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL",
+        ]
+        app.launch()
+
+        for label in ["Age [year-old]", "Body Height [cm]", "Body Weight [kg]", "Albumin [g/dl]"] {
+            let field = app.textFields[label]
+            scrollIntoTappableArea(field, in: app)
+            XCTAssertTrue(field.waitForExistence(timeout: 5), "Missing field: \(label)")
+            XCTAssertGreaterThanOrEqual(
+                field.frame.width,
+                44,
+                "\(label) needs a visible, tappable input area at accessibility text sizes"
+            )
+        }
+    }
+
+    /// A validation alert must name the first missing numeric field so people
+    /// can recover without searching the entire form.
+    func testPredictWithEmptyFormNamesFirstMissingNumberField() throws {
+        let app = XCUIApplication()
+        app.launchArguments += ["-app_language", "en"]
+        app.launch()
+
+        tapPredictButton(in: app)
+
+        let alert = app.alerts.firstMatch
+        XCTAssertTrue(alert.waitForExistence(timeout: 5), "Validation alert did not appear")
+        XCTAssertTrue(
+            alert.staticTexts["Enter a value for Age [year-old]."].exists,
+            "The alert should name the first field that needs attention"
+        )
+    }
+
+    func testPredictWithOnlyAgeNamesHeightAsNextMissingNumberField() throws {
+        let app = XCUIApplication()
+        app.launchArguments += ["-app_language", "en"]
+        app.launch()
+
+        fillAgeField(in: app)
+        tapPredictButton(in: app)
+
+        let alert = app.alerts.firstMatch
+        XCTAssertTrue(alert.waitForExistence(timeout: 5), "Validation alert did not appear")
+        XCTAssertTrue(
+            alert.staticTexts["Enter a value for Body Height [cm]."].exists,
+            "The alert should name the next missing field"
+        )
+    }
+
     /// Happy path: filling every required field and marking one artery lesion
     /// pushes the predicted-risk screen with the 2-year and GNRI results.
     func testPredictWithValidDataShowsRiskResults() throws {

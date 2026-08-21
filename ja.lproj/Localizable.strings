@@ -79,6 +79,10 @@
 "2YOSHighRisk" = "高リスク";
 "ErrorTitle"  = "リスクを予測できません";
 "NumberFieldErrorMessage" = "数値入力を確認してください。";
+"AgeRequiredErrorMessage" = "年齢を入力してください。";
+"HeightRequiredErrorMessage" = "身長を入力してください。";
+"WeightRequiredErrorMessage" = "体重を入力してください。";
+"AlbuminRequiredErrorMessage" = "アルブミン値を入力してください。";
 "IrrelevantLesionMessage" = "動脈病変部位の選択を確認してください。少なくとも一つの部位をオンにする必要があります。";
 "RESET" = "データをリセット";
 "ResetConfirmationTitle" = "入力したデータをすべてリセットしますか？";

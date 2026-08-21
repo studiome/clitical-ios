@@ -220,12 +220,20 @@ struct RootContentView: View {
     }
 
     private func predictRisks() {
-        guard patientData.age != nil,
-            patientData.height != nil,
-            patientData.weight != nil,
-            patientData.alb != nil
-        else {
-            fail(with: .numberFormIsNil)
+        guard patientData.age != nil else {
+            fail(with: .ageIsNil)
+            return
+        }
+        guard patientData.height != nil else {
+            fail(with: .heightIsNil)
+            return
+        }
+        guard patientData.weight != nil else {
+            fail(with: .weightIsNil)
+            return
+        }
+        guard patientData.alb != nil else {
+            fail(with: .albuminIsNil)
             return
         }
         guard

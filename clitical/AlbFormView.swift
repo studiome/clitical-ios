@@ -10,18 +10,34 @@ import CLPatientData
 
 struct AlbFormView: View {
     @Binding var patientData: PatientData
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
-        HStack {
-            Text("AlbQuestionTitle")
-                .accessibilityHidden(true)
-            TextField("",
-                      value: $patientData.alb,
-                      format: .number)
+        if dynamicTypeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: 8) {
+                label
+                field
+                    .textFieldStyle(.roundedBorder)
+                    .frame(maxWidth: .infinity, minHeight: 44)
+            }
+        } else {
+            HStack {
+                label
+                field
+            }
+        }
+    }
+
+    private var label: some View {
+        Text("AlbQuestionTitle")
+            .accessibilityHidden(true)
+    }
+
+    private var field: some View {
+        TextField("", value: $patientData.alb, format: .number)
             .multilineTextAlignment(.trailing)
             .keyboardType(.decimalPad)
             .accessibilityLabel(Text("AlbQuestionTitle"))
-        }
     }
 }
 

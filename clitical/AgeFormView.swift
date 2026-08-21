@@ -10,18 +10,34 @@ import CLPatientData
 
 struct AgeFormView: View {
     @Binding var patientData: PatientData
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
-        HStack {
-            Text("AgeQuestionTitle")
-                .accessibilityHidden(true)
-            TextField("",
-                      value: $patientData.age,
-                      format: .number)
+        if dynamicTypeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: 8) {
+                label
+                field
+                    .textFieldStyle(.roundedBorder)
+                    .frame(maxWidth: .infinity, minHeight: 44)
+            }
+        } else {
+            HStack {
+                label
+                field
+            }
+        }
+    }
+
+    private var label: some View {
+        Text("AgeQuestionTitle")
+            .accessibilityHidden(true)
+    }
+
+    private var field: some View {
+        TextField("", value: $patientData.age, format: .number)
             .multilineTextAlignment(.trailing)
             .keyboardType(.numberPad)
             .accessibilityLabel(Text("AgeQuestionTitle"))
-        }
     }
 }
 

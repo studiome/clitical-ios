@@ -78,6 +78,10 @@
 "2YOSHighRisk" = "High Risk";
 "ErrorTitle"  = "Cannot Predict Risk";
 "NumberFieldErrorMessage" = "Check the number fields.";
+"AgeRequiredErrorMessage" = "Enter a value for Age [year-old].";
+"HeightRequiredErrorMessage" = "Enter a value for Body Height [cm].";
+"WeightRequiredErrorMessage" = "Enter a value for Body Weight [kg].";
+"AlbuminRequiredErrorMessage" = "Enter a value for Albumin [g/dl].";
 "IrrelevantLesionMessage" = "Check the artery lesion sites. At least one lesion must be turned on.";
 "RESET" = "Reset data";
 "ResetConfirmationTitle" = "Reset all entered data?";
