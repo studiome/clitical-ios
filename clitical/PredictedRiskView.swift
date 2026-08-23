@@ -53,6 +53,19 @@ struct PredictedRiskView: View {
                                       color: risk.gnriRisk?.color)
                     }
                 }
+                // The figures above are the part of the app most likely to be
+                // read out of context, so what they are — and are not —
+                // is restated beside them rather than left to Settings.
+                Section {
+                    Label {
+                        Text("DisclaimerShortNotice")
+                            .font(.footnote)
+                    } icon: {
+                        Image(systemName: "exclamationmark.triangle")
+                    }
+                    .foregroundStyle(.secondary)
+                    .accessibilityElement(children: .combine)
+                }
             }
             .conditionalNavigationTitle(
                 showsNavigationTitle,

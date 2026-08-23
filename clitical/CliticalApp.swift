@@ -13,9 +13,11 @@ struct CliticalApp: App {
 
     var body: some Scene {
         WindowGroup {
-            MainTabView()
-                .environmentObject(localization)
-                .environment(\.locale, localization.locale)
+            IntendedUseGate {
+                MainTabView()
+            }
+            .environmentObject(localization)
+            .environment(\.locale, localization.locale)
         }
     }
 }
