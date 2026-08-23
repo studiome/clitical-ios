@@ -13,11 +13,12 @@
   Apple が求めているのは「承認書」そのものではなく、**なぜ承認が不要なのかを示す文書**でも受理される。
   多くの臨床スコア計算アプリはこの経路で通っている。
 - **カテゴリー変更では解決しない**。1.4.1 は機能に対して適用される。→ §5
-- やることは 3 つ:
+- **配信地域はすでに日本のみ**なので、適用される規制は日本の薬機法だけ。EU MDR も FDA も
+  論点にならない。これは返信の冒頭で明示して論点を絞る（§3.3）。裏を返せば、
+  手札は**薬機法上の非該当を示す文書 1 点**に集約される。
+- やることは 2 つ:
   1. App Store Connect の **App Review Information に非該当を示す文書を添付**し、返信する（§3・§4）
-  2. **配信地域を絞る**（Apple の "subject to all of the local regulatory laws where the
-     app is available" への直接の答え）（§3.3）
-  3. **アプリ内の開示を戻す**（2.1.0 で失われている。すでに本ブランチで実装済み）（§2）
+  2. **アプリ内の開示を戻す**（2.1.0 で失われている。すでに本ブランチで実装済み）（§2）
 
 ## 2. まず直すべき退行: アプリ内の開示が 2.1.0 で消えていた
 
@@ -73,41 +74,38 @@
 
 レビュアーは臨床医ではない。**アプリが何をしていないか**を先に書く。§4 に文案。
 
-### 3.3 配信地域を絞る（強く推奨）
+### 3.3 配信地域はすでに日本のみ（対応済み・ただし言い方が変わる）
 
-Apple の *"subject to all of the local regulatory laws where the app is available"* は、
-「全世界配信のままだと EU MDR も含めて全部説明しろ」という意味になる。
-予測モデル自体が **日本の JCLIMB レジストリから導出されていて日本の患者にしか妥当性がない**
-のだから、配信地域を **日本のみ**（必要なら日本語圏の学会員向けに数か国）に絞るのが、
-臨床的にも規制的にも筋が通る。EU MDR Annex VIII Rule 11 の議論を丸ごと回避できる。
+配信地域は当初から **日本のみ**。したがってこれは「これから打つ手」ではなく、
+**返信で最初に書くべき前提**になる。
 
-#### 手順
+意味は 2 つある:
 
-1. App Store Connect > **App**（Apps）> CLiTICAL を開く
-2. 左サイドバー > **価格および配信状況**（Pricing and Availability）
-3. **App 配信可能な国または地域**（App Availability）セクションの **管理**（Manage）
-4. 「配信状況」の **配信可能な国または地域を管理**（Manage Availability）
-5. ダイアログで**すべての選択を解除**してから **日本**のみにチェック
-6. リスト最下部の**「今後 App Store に追加される国または地域で自動的に配信する」チェックボックスを
-   外す**（外し忘れると Apple が新規ストアフロントを勝手に追加する）
-7. **次へ**（Next）→ 確認
+- Apple の *"subject to all of the local regulatory laws where the app is available"* は、
+  本アプリでは **日本の薬機法だけ**を指す。EU MDR も FDA も論点にならない。
+  レビュアーが全世界配信を前提に定型文を送ってきている可能性が高いので、
+  **「配信は日本のみである」を返信の冒頭で明示**して論点を絞る。
+- 一方で、こちらの手札は **薬機法上の非該当を示す 1 点に集約される**。
+  地域を絞るという追加のカードはもう切ってあるので、§3.1 の文書の質がそのまま勝負になる。
 
-#### 注意点
+念のため App Store Connect > 価格および配信状況 > App 配信可能な国または地域 で、
+**「今後 App Store に追加される国または地域で自動的に配信する」のチェックが外れている**ことだけ
+確認しておく（入っていると新規ストアフロントが自動追加され、前提が崩れる）。
+確認できたらその画面をスクリーンショットし、返信に添付する。
 
-- **審査とは独立した設定**で、新しいビルドもバージョン提出も不要。**返信する前に先に変更しておく**
-  こと。そうすれば返信文で「すでに日本のみに限定した」と書ける。
-- 反映は即時、全ユーザーへの反映まで最大 24 時間。
-- 外した国の**既存ユーザーはアプリを失わない**。アップデートは引き続き受け取れるし、購入履歴からの
-  再ダウンロードも可能。新規ダウンロードだけが止まる。
-- **いつでも元に戻せる**。
-- 実行前に「販売とトレンド」/「Analytics」で**日本国外のダウンロード実績**を確認しておくこと。
-  無視できない数がいるなら、日本のみにする判断は改めて検討する。
-- **英語ローカライズは残す**。レビュアーは英語で読むし、日本ストアフロントでも英語表記は使える。
-  配信地域を絞ることと、対応言語を絞ることは別の話。
-- 無料アプリなので「価格スケジュール」は触らない。
-- 変更後の画面をスクリーンショットしておき、返信と Review Notes の両方でこの変更に触れる。
-  Apple の *"subject to all of the local regulatory laws where the app is available"* に
-  直接答えたことになる。
+#### 日本のみなら「該当性照会」の回答書を取りに行く価値がある
+
+配信が日本に閉じているので、**日本の規制当局から非該当の回答を文書で得られれば、それが Apple に
+出せる最強の資料**になる（学会名義の見解書より一段強い。第三者の判断だから）。
+
+- **都道府県の薬務主管課への該当性照会** — 一般的な窓口。事業者所在地の都道府県に、
+  使用目的・機能・出力を書いた資料を出して非該当かどうかを照会する。回答は文書やメールで残る。
+- **PMDA のプログラム医療機器に関する相談窓口** — 該当性の相談を受け付けている。
+  現在の窓口名・手数料・所要期間は変わるので、申し込み前に PMDA のサイトで確認すること。
+
+時間がかかるなら、**先に §6 の学会名義の見解書で返信し、照会の回答が出たら追加で提出する**
+という二段構えでよい。「現在、所轄の薬務主管課に該当性を照会中です」と返信に書いておくと、
+Apple 側が待ってくれることがある。
 
 ### 3.4 メタデータの見直し
 
@@ -156,10 +154,11 @@ App Store Connect の当該メッセージにそのまま返信する。英語�
 > signed statement from the publisher, the Japanese Society for Vascular Surgery (JCLIMB
 > Committee), setting out this position, together with the two source articles.
 >
-> **Availability.** The prediction models were derived from the JCLIMB registry of
-> patients treated in Japan and are only validated for that population. We have therefore
-> limited the app's availability to Japan, so that no other jurisdiction's medical device
-> regulation is engaged.
+> **Availability.** The app is, and has always been, available in Japan only — it is not
+> offered on any other App Store storefront. The prediction models were derived from the
+> JCLIMB registry of patients treated in Japan and are validated only for that population,
+> so Japan is the only market in which the app is clinically meaningful. Japanese medical
+> device regulation is therefore the only regulatory framework that applies to it.
 >
 > We would be glad to provide anything further that would help. Thank you.
 
@@ -190,9 +189,10 @@ App Store Connect の当該メッセージにそのまま返信する。英語�
 > 存在しません。発行元である特定非営利活動法人 日本血管外科学会（JCLIMB 委員会）名義の
 > 見解書を、原著論文 2 編とあわせて添付しております。
 >
-> **配信地域**: 予測モデルは日本国内で治療された患者の JCLIMB レジストリから導出されており、
-> その集団以外では妥当性が担保されません。したがって配信地域を日本のみに限定し、他法域の
-> 医療機器規制が及ばないようにいたしました。
+> **配信地域**: 本アプリは当初より**日本国内のみ**で配信しており、他のストアフロントでは提供して
+> おりません。予測モデルは日本国内で治療された患者の JCLIMB レジストリから導出されたもので、
+> その集団以外では妥当性が担保されないため、臨床的に意味を持つ市場は日本のみです。したがって
+> 本アプリに適用される医療機器規制は、日本の薬機法のみです。
 >
 > 追加で必要な資料がございましたらお知らせください。
 
@@ -206,7 +206,7 @@ App Store Connect の当該メッセージにそのまま返信する。英語�
 - 臨床医が App Store で探すのは Medical カテゴリー。ユーザー到達性の面でも下げる理由がない。
 
 **結論: Primary = Medical のまま。効くのは「カテゴリー」ではなく「Review Notes + 添付文書 +
-配信地域 + アプリ内開示」。**
+アプリ内開示」。**
 
 Secondary Category を設定していないなら、`Medical` + `Reference` にするのは無害で、
 「参考情報を提示するツール」という位置づけの補強にはなる。ただしこれは主要因ではない。
@@ -232,7 +232,7 @@ Secondary Category を設定していないなら、`Medical` + `Reference` に�
 > 5. **規制上の位置づけ**: 上記の機能・使用目的に鑑み、本アプリは医薬品医療機器等法に定める
 >    医療機器プログラムに該当しないものと判断する。したがって、医療機器としての承認・認証・
 >    届出は行っておらず、これに対応する承認書等は存在しない。
-> 6. **配信地域**: 予測モデルの導出集団に鑑み、日本国内のみを配信対象とする。
+> 6. **配信地域**: 予測モデルの導出集団に鑑み、当初より日本国内のみを配信対象としている。
 >
 > （署名 / 役職 / 連絡先）
 
@@ -240,9 +240,11 @@ Secondary Category を設定していないなら、`Medical` + `Reference` に�
 
 - [ ] 学会名義の見解書（署名・日付入り PDF）を用意した
 - [ ] 薬事の担当者に非該当の判断を確認した
+- [ ] 都道府県薬務主管課への該当性照会を出した（回答待ちなら返信でその旨を書く）
 - [ ] App Review Information > Attachment に見解書・論文 2 編・告知画面のスクリーンショットを添付した
 - [ ] App Review Information > Notes に §4 の要旨を記載した
-- [ ] 配信地域を日本のみに変更した
+- [ ] 配信地域が日本のみであること、および「新しい国または地域で自動的に配信する」が
+      オフであることを確認し、スクリーンショットを取った
 - [ ] 説明文の 1 行目を「医療従事者向け・医療機器ではない」の告知にした
 - [ ] 説明文・キーワードから「診断」「治療方針の決定」を想起させる語を外した
 - [ ] 本ブランチのアプリ内変更（告知画面・結果画面の注意書き・About 復活）を含むビルドを上げた
