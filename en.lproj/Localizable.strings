@@ -78,6 +78,10 @@
 "2YOSHighRisk" = "High Risk";
 "ErrorTitle"  = "Cannot Predict Risk";
 "NumberFieldErrorMessage" = "Check the number fields.";
+"AgeRequiredErrorMessage" = "Enter a value for Age [year-old].";
+"HeightRequiredErrorMessage" = "Enter a value for Body Height [cm].";
+"WeightRequiredErrorMessage" = "Enter a value for Body Weight [kg].";
+"AlbuminRequiredErrorMessage" = "Enter a value for Albumin [g/dl].";
 "IrrelevantLesionMessage" = "Check the artery lesion sites. At least one lesion must be turned on.";
 "RESET" = "Reset data";
 "ResetConfirmationTitle" = "Reset all entered data?";
@@ -109,14 +113,38 @@
 "TapToOpenLink" = "Tap to open link.";
 "AppLegalese" = "2022 Kazuhiro Miyahara, JSVS, JCLIMB";
 
+/* Intended use notice, shown before the app itself on first launch */
+"DisclaimerTitle" = "Before you begin";
+"DisclaimerHeadline" = "A reference tool for healthcare professionals";
+"DisclaimerIntendedUser" = "Who this app is for";
+"DisclaimerIntendedUserBody" = "This app is intended for use by physicians and other healthcare professionals involved in the care of chronic limb-threatening ischaemia (CLTI). It is not intended for patients or their families to assess their own condition.";
+"DisclaimerNotADevice" = "This is not a medical device";
+"DisclaimerNotADeviceBody" = "This app is not a medical device and performs no diagnosis, treatment or disease prevention. It has not been approved, certified or registered as a medical device in any country or region.";
+"DisclaimerValues" = "About the values it shows";
+"DisclaimerValuesBody" = "The values shown are population-level estimates obtained by applying your entries to statistical models published in peer-reviewed journals. They are not measurements, and they neither predict nor guarantee the outcome of any individual patient.";
+"DisclaimerPopulation" = "Scope and limitations";
+"DisclaimerPopulationBody" = "The prediction models were derived from patients who underwent revascularisation for CLTI in Japan and were registered in the JCLIMB registry of the Japanese Society for Vascular Surgery. Accuracy is not assured for other populations, procedures or care settings.";
+"DisclaimerResponsibility" = "The final decision";
+"DisclaimerResponsibilityBody" = "Diagnosis and treatment decisions remain the responsibility of the attending physician, based on an overall assessment of the patient. Nothing this app displays replaces clinical judgement.";
+"DisclaimerReadTerms" = "Read the Terms of Use and disclaimer";
+"DisclaimerAcknowledge" = "I understand";
+"DisclaimerAcknowledgeFooter" = "By tapping “I understand” you agree to the above and to the Terms of Use, and may then use the app.";
+"DisclaimerShortNotice" = "This app is not a medical device. The values above are population-level estimates from published statistical models; diagnosis and treatment decisions remain with the attending physician.";
+
 /* About screen */
 "AboutTagline" = "CLTI revascularisation risk prediction";
 "AboutOverview" = "Overview";
 "AboutOverviewBody" = "CLiTICAL predicts post-operative risks of revascularisation for chronic limb-threatening ischaemia (CLTI) from patient data, using prediction models built on the JCLIMB registry of the Japanese Society for Vascular Surgery.";
 "AboutPredictions" = "What it predicts";
 "AboutPredictionsFooter" = "Enter the patient data, then tap Predict risks to calculate.";
+"AboutIntendedUse" = "Intended use";
+"AboutIntendedUseBody" = "This app presents healthcare professionals with reference information on peri-operative and mid-term outcomes after revascularisation for CLTI, based on published prediction models. It performs no diagnosis, treatment or disease prevention, and has not been approved, certified or registered as a medical device.";
 "AboutModelSource" = "Model source";
 "AboutModelSourceBody" = "The prediction equations are based on two peer-reviewed papers. The original articles are available from the References tab.";
+"AboutMethodology" = "How the values are calculated";
+"AboutMethodologyBody" = "The 30-day death or major amputation rate and the 30-day MALE rate are calculated with logistic regression; two-year OS and AFS with Cox proportional hazards models (baseline survival 0.922 for OS and 0.876 for AFS). GNRI is 14.89 × Alb + 41.7 × min(weight / (22 × height\U00B2), 1.0), classified as no risk at 98 or above, mild at 92–98, moderate at 82–92 and major below 82. Every explanatory variable and regression coefficient is taken as published in the original articles.";
+"AboutLimitations" = "Scope and limitations";
+"AboutLimitationsBody" = "The models were derived from patients who underwent revascularisation for CLTI in Japan and were registered in the JCLIMB registry of the Japanese Society for Vascular Surgery. Accuracy is not assured for other populations, procedures or care settings. The values are population-level estimates and do not describe the outcome of an individual patient.";
 "AboutPrivacy" = "Privacy";
 "AboutPrivacyBody" = "Patient data is processed on this device only and is never sent or stored elsewhere. The only thing the app saves is the language you select.";
 "AboutDisclaimer" = "Disclaimer";

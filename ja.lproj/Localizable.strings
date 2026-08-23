@@ -79,6 +79,10 @@
 "2YOSHighRisk" = "高リスク";
 "ErrorTitle"  = "リスクを予測できません";
 "NumberFieldErrorMessage" = "数値入力を確認してください。";
+"AgeRequiredErrorMessage" = "年齢を入力してください。";
+"HeightRequiredErrorMessage" = "身長を入力してください。";
+"WeightRequiredErrorMessage" = "体重を入力してください。";
+"AlbuminRequiredErrorMessage" = "アルブミン値を入力してください。";
 "IrrelevantLesionMessage" = "動脈病変部位の選択を確認してください。少なくとも一つの部位をオンにする必要があります。";
 "RESET" = "データをリセット";
 "ResetConfirmationTitle" = "入力したデータをすべてリセットしますか？";
@@ -110,14 +114,38 @@
 "TapToOpenLink" = "論文サイトを開きます。";
 "AppLegalese" = "2022 発行: 特定非営利活動法人日本血管外科学会、JCLIMB委員会、ソフトウェア制作: 宮原和洋";
 
+/* Intended use notice, shown before the app itself on first launch */
+"DisclaimerTitle" = "ご利用にあたって";
+"DisclaimerHeadline" = "本アプリは医療従事者向けの参考ツールです";
+"DisclaimerIntendedUser" = "対象となる利用者";
+"DisclaimerIntendedUserBody" = "本アプリは、包括的高度慢性下肢虚血 (CLTI) の診療に携わる医師をはじめとする医療従事者による利用を前提としています。患者ご本人やご家族が、ご自身の状態を判断するために使用することを意図したものではありません。";
+"DisclaimerNotADevice" = "医療機器ではありません";
+"DisclaimerNotADeviceBody" = "本アプリは医療機器ではなく、診断・治療・疾病の予防を行う機能を持ちません。いずれの国・地域においても、医療機器としての承認・認証・届出を受けたものではありません。";
+"DisclaimerValues" = "算出される値について";
+"DisclaimerValuesBody" = "表示される値は、査読付き論文として公表された統計モデルに入力値を当てはめて得られる集団レベルの推定値です。測定値ではなく、また個々の患者の転帰を予測・保証するものでもありません。";
+"DisclaimerPopulation" = "適用範囲と限界";
+"DisclaimerPopulationBody" = "予測モデルは、日本血管外科学会 JCLIMB レジストリに登録された、日本国内で血行再建術を受けた CLTI 患者のデータから導出されています。対象集団・術式・診療体制が異なる場合、推定の精度は保証されません。";
+"DisclaimerResponsibility" = "最終的な判断";
+"DisclaimerResponsibilityBody" = "診断および治療方針の決定は、患者の状態を総合的に評価したうえで、担当医師の責任において行ってください。本アプリの表示は臨床判断を代替するものではありません。";
+"DisclaimerReadTerms" = "利用規約・免責事項を読む";
+"DisclaimerAcknowledge" = "内容を理解しました";
+"DisclaimerAcknowledgeFooter" = "「内容を理解しました」をタップすると、上記および利用規約に同意したうえで本アプリを利用することになります。";
+"DisclaimerShortNotice" = "本アプリは医療機器ではありません。表示値は公表論文の統計モデルによる集団レベルの推定であり、診断・治療方針の判断は担当医師が行ってください。";
+
 /* About screen */
 "AboutTagline" = "CLTI血行再建リスク予測";
 "AboutOverview" = "概要";
 "AboutOverviewBody" = "CLiTICALは、包括的高度慢性下肢虚血 (CLTI) に対する血行再建術の術後リスクを、患者データから予測するアプリです。日本血管外科学会のJCLIMBレジストリをもとに構築された予測モデルを実装しています。";
 "AboutPredictions" = "予測できる指標";
 "AboutPredictionsFooter" = "患者データを入力し、「リスクを予測」をタップすると算出されます。";
+"AboutIntendedUse" = "使用目的";
+"AboutIntendedUseBody" = "本アプリは、CLTI に対する血行再建術の周術期および中期予後について、公表された予測モデルに基づく参考情報を医療従事者に提示することを目的としています。診断・治療・疾病の予防を行う機能はなく、医療機器としての承認・認証・届出を受けたものではありません。";
 "AboutModelSource" = "モデルの出典";
 "AboutModelSourceBody" = "予測式は査読付き論文2編に基づいています。原著は「参考文献」タブから参照できます。";
+"AboutMethodology" = "算出方法";
+"AboutMethodologyBody" = "術後30日の死亡・大切断率および MALE 発生率はロジスティック回帰、2年 OS・AFS は Cox 比例ハザードモデル (基準生存率 OS 0.922、AFS 0.876) で算出します。GNRI は 14.89 × Alb + 41.7 × min(体重 / (22 × 身長\U00B2), 1.0) で算出し、98以上＝リスクなし、92〜98＝軽度、82〜92＝中等度、82未満＝高度に分類します。説明変数と回帰係数は、いずれも原著論文に記載された値をそのまま用いています。";
+"AboutLimitations" = "適用範囲と限界";
+"AboutLimitationsBody" = "予測モデルは、日本血管外科学会 JCLIMB レジストリに登録された、日本国内で血行再建術を受けた CLTI 患者のデータから導出されたものです。対象集団・術式・診療体制が異なる場合、推定の精度は保証されません。表示値は集団レベルの推定であり、個々の患者の転帰を示すものではありません。";
 "AboutPrivacy" = "プライバシー";
 "AboutPrivacyBody" = "入力された患者データは端末内でのみ処理され、外部への送信・保存は行いません。アプリ内に保存されるのは選択した言語の設定だけです。";
 "AboutDisclaimer" = "免責事項";

@@ -10,18 +10,34 @@ import CLPatientData
 
 struct WeightFormView: View {
     @Binding var patientData: PatientData
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
-        HStack {
-            Text("WeightQuestionTitle")
-                .accessibilityHidden(true)
-            TextField("",
-                      value: $patientData.weight,
-                      format: .number)
+        if dynamicTypeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: 8) {
+                label
+                field
+                    .textFieldStyle(.roundedBorder)
+                    .frame(maxWidth: .infinity, minHeight: 44)
+            }
+        } else {
+            HStack {
+                label
+                field
+            }
+        }
+    }
+
+    private var label: some View {
+        Text("WeightQuestionTitle")
+            .accessibilityHidden(true)
+    }
+
+    private var field: some View {
+        TextField("", value: $patientData.weight, format: .number)
             .multilineTextAlignment(.trailing)
             .keyboardType(.decimalPad)
             .accessibilityLabel(Text("WeightQuestionTitle"))
-        }
     }
 }
 
