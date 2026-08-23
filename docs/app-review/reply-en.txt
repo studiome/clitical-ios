@@ -1,0 +1,53 @@
+Submission ID: da073f65-715a-4352-b8b3-f4b82701d485
+Guideline 1.4.1 — Safety — Physical Harm
+
+Thank you for the review. We would like to clarify the nature of the app, as we
+believe it does not fall within the scope of the regulatory clearance requirement,
+and to describe what we have changed in the build we are submitting, 2.1.0 (126).
+
+Availability. The app is, and has always been, available in Japan only — it is not
+offered on any other App Store storefront. The prediction models were derived from
+the JCLIMB registry of patients treated in Japan and are validated only for that
+population, so Japan is the only market in which the app is clinically meaningful.
+Japanese medical device regulation is therefore the only regulatory framework that
+applies to it.
+
+CLiTICAL is a calculator for licensed healthcare professionals, not a medical device.
+
+- The app performs no measurement and no data acquisition. It takes no input from
+  the device's sensors, from HealthKit, from an image, or from any diagnostic
+  instrument. Every value is typed in manually by the clinician.
+- The app produces no diagnosis and no treatment recommendation. It does not name a
+  condition, propose a procedure, or advise for or against an intervention.
+- What it displays are population-level statistical estimates, produced by applying
+  the clinician's entries to prediction models published in two peer-reviewed
+  journals (British Journal of Surgery 2022 and European Journal of Vascular and
+  Endovascular Surgery 2022, both attached). Every explanatory variable and
+  regression coefficient is taken as published; the app adds no model of its own.
+- The intended user is a vascular surgeon or other healthcare professional. The app
+  is not intended for patients.
+
+What we changed in 2.1.0 (126). We agree that the previous build did not state any
+of this clearly enough inside the app, and we have corrected that:
+
+- The app now opens on an intended-use notice that must be acknowledged before the
+  app can be used. It states who the app is for, that it is not a medical device,
+  that the figures are population-level estimates from published models, the limits
+  of the derivation cohort, and that diagnosis and treatment decisions remain with
+  the attending physician. (Attachments 01-04, Japanese and English.)
+- The same notice, in short form, is shown beside the calculated figures themselves.
+  (Attachment 07.)
+- Settings > CLiTICAL > About now discloses the intended use, the methodology (model
+  types, baseline survivals, the GNRI formula) and the scope and limitations of the
+  models, and names the source articles, which are also linked from the References
+  tab. (Attachments 05-06.)
+
+Regulatory status. Because the app only presents already-published knowledge to a
+healthcare professional who makes the clinical decision themselves, it is not a
+regulated medical device program under Japan's Pharmaceuticals and Medical Devices
+Act, and therefore no approval or certification document exists to attach. We have
+attached a signed statement from the publisher, the Japanese Society for Vascular
+Surgery (JCLIMB Committee), setting out this position, together with the two source
+articles.
+
+We would be glad to provide anything further that would help. Thank you.

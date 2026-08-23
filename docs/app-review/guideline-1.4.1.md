@@ -54,10 +54,16 @@
 §6 にテンプレートを置いた。同時に添付するもの:
 
 1. 非該当に関する説明書（学会名義、署名入り、日付入り）
+   → 日英 2 ページの草案を [`attachments/jsvs-non-device-statement-draft.pdf`](attachments/jsvs-non-device-statement-draft.pdf)
+     に用意した。**学会の確認・署名・日付を入れてから提出すること**
 2. 原著論文 2 編の PDF または DOI
    - Miyata T. et al. *Br J Surg.* 2022;109(11):1123. <https://doi.org/10.1093/bjs/znab036>
    - Miyata T. et al. *Eur J Vasc Endovasc Surg.* 2022. <https://doi.org/10.1016/j.ejvs.2022.05.038>
 3. アプリ内の告知画面のスクリーンショット（ja/en）
+   → [`attachments/`](attachments/) に 7 枚。レビュー機と同じ iPad Air 11-inch (M3) /
+     iOS 26.5 で 2.1.0 (126) を撮影。告知画面のほか、算出結果の数値の直下に出る注意書き
+     （`07-results-notice-en.png`）と算出方法の開示（`05`〜`06`）も含む。
+     一覧は [`attachments/README.md`](attachments/README.md)
 
 > 事前に**薬事の専門家か学会の担当者に非該当の判断を確認**し、その裏付けを取ってから
 > 文書を出すこと。以下は判断の枠組みの整理であって、法的助言ではない。
@@ -119,6 +125,9 @@ Apple 側が待ってくれることがある。
 ## 4. 返信文案
 
 App Store Connect の当該メッセージにそのまま返信する。英語のほうが往復が早い。
+
+**そのまま貼れる最終版を用意した**（下の文案に 2.1.0 (126) の変更点と添付ファイルの参照を
+足したもの）: [`reply-en.txt`](reply-en.txt) / [`reply-ja.txt`](reply-ja.txt)
 
 ### 英語
 
@@ -238,16 +247,29 @@ Secondary Category を設定していないなら、`Medical` + `Reference` に�
 
 ## 7. 再提出前チェックリスト
 
-- [ ] 学会名義の見解書（署名・日付入り PDF）を用意した
+済:
+
+- [x] 見解書の草案を作成した（[`attachments/jsvs-non-device-statement-draft.pdf`](attachments/jsvs-non-device-statement-draft.pdf)、日英 2 ページ）
+- [x] 添付用スクリーンショットを撮影した（[`attachments/`](attachments/) 7 枚、
+      iPad Air 11-inch (M3) / iOS 26.5、2.1.0 (126)）
+- [x] 返信文の最終版を用意した（[`reply-en.txt`](reply-en.txt) / [`reply-ja.txt`](reply-ja.txt)）
+- [x] アプリ内変更（告知画面・結果画面の注意書き・About 復活）を main にマージした
+- [x] ビルド番号を 126 に上げた（`CURRENT_PROJECT_VERSION`。ただし Xcode Cloud は
+      自前のビルド番号で上書きするので、Xcode Cloud で上げる場合は 126 を超えていることを確認）
+
+残り（App Store Connect 側・人手が要るもの）:
+
 - [ ] 薬事の担当者に非該当の判断を確認した
+- [ ] 見解書を学会名義で発行してもらった（草案を確認 → 日付・署名・役職・連絡先を記入 → PDF 化）
 - [ ] 都道府県薬務主管課への該当性照会を出した（回答待ちなら返信でその旨を書く）
-- [ ] App Review Information > Attachment に見解書・論文 2 編・告知画面のスクリーンショットを添付した
+- [ ] 原著論文 2 編の PDF または DOI を用意した
+- [ ] App Review Information > Attachment に見解書・論文 2 編・スクリーンショットを添付した
 - [ ] App Review Information > Notes に §4 の要旨を記載した
-- [ ] 配信地域が日本のみであること、および「新しい国または地域で自動的に配信する」が
-      オフであることを確認し、スクリーンショットを取った
+- [ ] 配信地域が日本のみであること、および「今後 App Store に追加される国または地域で
+      自動的に配信する」がオフであることを確認し、スクリーンショットを取った
 - [ ] 説明文の 1 行目を「医療従事者向け・医療機器ではない」の告知にした
 - [ ] 説明文・キーワードから「診断」「治療方針の決定」を想起させる語を外した
-- [ ] 本ブランチのアプリ内変更（告知画面・結果画面の注意書き・About 復活）を含むビルドを上げた
-- [ ] スクリーンショットを更新した（先頭を告知画面または入力画面に）
+- [ ] 2.1.0 (126) のビルドを上げた
+- [ ] App Store 用スクリーンショットを更新した（先頭を告知画面または入力画面に）
 - [ ] Primary Category は Medical のまま
 - [ ] 上記メッセージに返信した（添付は返信前に完了させる）
