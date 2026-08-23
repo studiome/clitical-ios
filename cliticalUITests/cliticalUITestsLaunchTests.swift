@@ -19,6 +19,7 @@ final class cliticalUITestsLaunchTests: XCTestCase {
 
     func testLaunch() throws {
         let app = XCUIApplication()
+        app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
         // Insert steps here to perform after app launch but before taking a screenshot,

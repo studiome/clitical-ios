@@ -7,6 +7,14 @@
 
 import XCTest
 
+/// Launch arguments that start the app past the first-run intended-use notice,
+/// which these tests are not about. Mirrors
+/// `IntendedUseDisclaimer.currentVersion` in the app target, which the UI test
+/// bundle cannot import; bump both together.
+let acknowledgedDisclaimerArguments = [
+    "-intended_use_disclaimer_version", "2026-08",
+]
+
 final class cliticalUITests: XCTestCase {
 
     override func setUpWithError() throws {
@@ -25,11 +33,33 @@ final class cliticalUITests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    /// The intended-use notice stands in front of the app until it is
+    /// acknowledged: no risk form, no tabs, no calculated values.
+    func testIntendedUseNoticeGatesTheAppUntilAcknowledged() throws {
+        let app = XCUIApplication()
+        app.launchArguments += ["-app_language", "en"]
+        // Force the notice regardless of what an earlier run on this simulator
+        // acknowledged: the argument domain wins over the persisted value.
+        app.launchArguments += ["-intended_use_disclaimer_version", "unacknowledged"]
+        app.launch()
+
+        let notice = app.descendants(matching: .any)
+            .matching(identifier: "intendedUseNotice")
+            .firstMatch
+        XCTAssertTrue(notice.waitForExistence(timeout: 5),
+                      "Intended-use notice did not appear on launch")
+        XCTAssertTrue(app.buttons["acknowledgeDisclaimer"].waitForExistence(timeout: 5),
+                      "Acknowledgement button is missing from the notice")
+        XCTAssertFalse(topLevelItem("Risk Assessment", in: app).exists,
+                       "The app is reachable before the notice is acknowledged")
+    }
+
     /// Verifies the bottom tab menu exists and that selecting English in the
     /// Language tab re-localizes the whole UI live (no relaunch).
     func testLanguageTabSwitchesLocaleLive() throws {
         let app = XCUIApplication()
         app.launchArguments += ["-app_language", "ja"]
+        app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
         // Three top-level destinations, starting in Japanese. On iPad and
@@ -84,6 +114,7 @@ final class cliticalUITests: XCTestCase {
     func testReferencesAndSettingsTabsRenderContent() throws {
         let app = XCUIApplication()
         app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
         tapTopLevelItem("References", in: app)
@@ -118,6 +149,7 @@ final class cliticalUITests: XCTestCase {
     func testSwitchingSectionsPreservesPatientData() throws {
         let app = XCUIApplication()
         app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
         fillAgeField(in: app)
@@ -143,6 +175,7 @@ final class cliticalUITests: XCTestCase {
     func testRiskCalculationTabPredictShowsValidationAlert() throws {
         let app = XCUIApplication()
         app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
         tapTopLevelItem("Risk Assessment", in: app)
@@ -164,6 +197,7 @@ final class cliticalUITests: XCTestCase {
             "-app_language", "en",
             "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL",
         ]
+        app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
         for label in ["Age [year-old]", "Body Height [cm]", "Body Weight [kg]", "Albumin [g/dl]"] {
@@ -183,6 +217,7 @@ final class cliticalUITests: XCTestCase {
     func testPredictWithEmptyFormNamesFirstMissingNumberField() throws {
         let app = XCUIApplication()
         app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
         tapPredictButton(in: app)
@@ -198,6 +233,7 @@ final class cliticalUITests: XCTestCase {
     func testPredictWithOnlyAgeNamesHeightAsNextMissingNumberField() throws {
         let app = XCUIApplication()
         app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
         fillAgeField(in: app)
@@ -216,6 +252,7 @@ final class cliticalUITests: XCTestCase {
     func testPredictWithValidDataShowsRiskResults() throws {
         let app = XCUIApplication()
         app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
         fillRequiredNumberFields(in: app)
@@ -242,6 +279,7 @@ final class cliticalUITests: XCTestCase {
     func testEditingPatientDataClearsPredictedRiskPreview() throws {
         let app = XCUIApplication()
         app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
         let emptyPreviewMessage = app.staticTexts[
@@ -276,6 +314,7 @@ final class cliticalUITests: XCTestCase {
     func testUrgencyQuestionIsSegmentedControlWithBothLabels() throws {
         let app = XCUIApplication()
         app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
         tapTopLevelItem("Risk Assessment", in: app)
@@ -293,6 +332,7 @@ final class cliticalUITests: XCTestCase {
     func testPredictWithoutLesionShowsLesionAlert() throws {
         let app = XCUIApplication()
         app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
         fillRequiredNumberFields(in: app)
@@ -310,6 +350,7 @@ final class cliticalUITests: XCTestCase {
     func testResetAsksForConfirmationBeforeClearingData() throws {
         let app = XCUIApplication()
         app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
         fillAgeField(in: app)
