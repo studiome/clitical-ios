@@ -19,7 +19,8 @@
   6 セクションに分けて入力
 - **リスク予測** — 入力値から 5 つの指標を算出
 - **参考文献** — 予測モデルの原著論文を `SFSafariViewController` で表示
-- **設定** — 日本語／英語の切り替え（アプリ内で即時反映）、利用規約、アプリ情報
+- **設定** — 日本語／英語の切り替え（アプリ内で即時反映）、利用規約・プライバシーポリシー・
+  サポート、アプリ情報
 - **アクセシビリティ** — VoiceOver 対応、Dynamic Type、色に依存しないリスク表示
 
 ## 予測できる指標
@@ -44,7 +45,7 @@ GNRI は `14.89 × Alb + 41.7 × min(体重 / (22 × 身長²), 1.0)` で算出�
 
 - iOS 16.0 以降（iPhone・iPad対応）
 - Xcode 15 以降 / Swift 5.9
-- 外部依存パッケージなし（ネットワーク通信は文献・規約リンクの表示のみ）
+- 外部依存パッケージなし（ネットワーク通信は文献・法務ページのリンク表示のみ）
 
 ## プロジェクト構成
 
@@ -134,10 +135,30 @@ Xcode プロジェクトのビルド設定で管理しています。表示バ�
    Eur J Vasc Endovasc Surg. 2022 Jun 7;S1078-5884(22)00340-9.
    <https://doi.org/10.1016/j.ejvs.2022.05.038>
 
+## 利用規約
+
+法務関連の文書はアプリ外でホストしており、「設定」から `SFSafariViewController` で
+表示します。表示言語は設定で選択中の言語に従います。
+
+- **利用規約** — [日本語](https://studiome.github.io/clitical-legal/terms/ja/) /
+  [English](https://studiome.github.io/clitical-legal/terms/en/)
+- **プライバシーポリシー** — [日本語](https://studiome.github.io/clitical-legal/privacy/ja/) /
+  [English](https://studiome.github.io/clitical-legal/privacy/en/)
+- **サポート** — [日本語](https://studiome.github.io/clitical-legal/support/ja/) /
+  [English](https://studiome.github.io/clitical-legal/support/en/)
+
+URL は `MainTabView.swift` の `AppInfo.legalURL(for:language:)` で組み立てています。
+
+初回起動時はアプリ本体の代わりに「意図された使用目的」の通知を表示し、そこから利用規約を
+開けます。「内容を理解しました」をタップすると、通知および利用規約に同意したものとして
+記録します。同意内容は `UserDefaults` の `intended_use_disclaimer_version` に、同意した
+通知のバージョン（`IntendedUseDisclaimer.currentVersion`）として保存され、文言を実質的に
+変更した場合は再度同意を求めます。
+
 ## プライバシー
 
 入力された患者データは端末内でのみ処理され、外部への送信・保存は行いません。
-アプリ内に保存されるのは選択言語の設定のみです。
+アプリ内に保存されるのは、選択言語の設定と、同意済みの通知バージョンのみです。
 
 ## ライセンス
 
@@ -150,4 +171,4 @@ MIT License はソフトウェアの実装にのみ適用されます。
 
 - 発行: 特定非営利活動法人 日本血管外科学会 / JCLIMB 委員会（2022）
 - ソフトウェア制作: 宮原和洋
-- 利用規約: <https://studiome.github.io/clti_risk/>
+- 利用規約: <https://studiome.github.io/clitical-legal/terms/ja/>
