@@ -47,7 +47,7 @@ classification.
 ## Requirements
 
 - iOS 16.0 or later (iPhone and iPad)
-- Xcode 15 or later / Swift 5.9
+- Xcode 16 or later / Swift 6.0
 - No third-party dependencies (the only networking is opening the reference papers and the
   legal pages)
 
