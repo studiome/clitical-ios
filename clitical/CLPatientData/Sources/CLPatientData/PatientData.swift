@@ -1,5 +1,7 @@
 public struct PatientData: Equatable {
-    public var sex: Sex = .female
+    /// No default: sex is a covariate of every prediction, so leaving it
+    /// unanswered has to be distinguishable from a deliberate answer.
+    public var sex: Sex?
     public var age: Int?
     public var height: Double? //cm
     public var weight: Double? //kg

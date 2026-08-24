@@ -41,6 +41,9 @@ struct PatientRiskTests {
     @Test
     func testExtremelyLowRiskCase() throws {
         var pd = PatientData()
+        // Sex has no default any more; these expectations were recorded for
+        // a female patient.
+        pd.sex = .female
         pd.age = 65
         pd.weight = 50.0
         pd.height = 150.0
@@ -60,6 +63,31 @@ struct PatientRiskTests {
         #expect(risk.predicted2YOSRisk == .low)
         let p2YAFS = try #require(risk.predicted2YAFS)
         #expect(String(format: "%.2f", p2YAFS) == "0.88")
+    }
+
+    /// Sex is a covariate of every regression here, so an unanswered sex
+    /// must leave the predictions unavailable rather than silently fall back
+    /// to one of the two categories. GNRI does not use sex, so it still
+    /// resolves.
+    @Test
+    func testUnansweredSexLeavesPredictionsUnavailable() throws {
+        var pd = PatientData()
+        pd.age = 70
+        pd.height = 165.0
+        pd.weight = 60.0
+        pd.alb = 3.5
+        pd.hasBKLesion = true
+
+        let risk = PatientRisk(of: pd)
+        #expect(risk.gnri != nil)
+        #expect(risk.gnriRisk != nil)
+        // The 30-day death/amputation model has no sex term, so it still
+        // resolves; the form refuses the prediction as a whole.
+        #expect(risk.predicted30DDeathOrAmputation != nil)
+        #expect(risk.predicted30DMALE == nil)
+        #expect(risk.predicted2YOS == nil)
+        #expect(risk.predicted2YOSRisk == nil)
+        #expect(risk.predicted2YAFS == nil)
     }
 
     @Test
@@ -193,6 +221,9 @@ struct PatientRiskTests {
     @Test
     func testUrgentWithNormalWBC() throws {
         var pd = PatientData()
+        // Sex has no default any more; these expectations were recorded for
+        // a female patient.
+        pd.sex = .female
         pd.age = 65
         pd.weight = 50.0
         pd.height = 150.0
@@ -216,6 +247,9 @@ struct PatientRiskTests {
     @Test
     func testNonUrgentWithAbnormalWBC() throws {
         var pd = PatientData()
+        // Sex has no default any more; these expectations were recorded for
+        // a female patient.
+        pd.sex = .female
         pd.age = 65
         pd.weight = 50.0
         pd.height = 150.0

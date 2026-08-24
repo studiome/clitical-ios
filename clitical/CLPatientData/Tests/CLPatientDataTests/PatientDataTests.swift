@@ -6,7 +6,9 @@ struct PatientDataTests {
     @Test
     func testInit() {
         let pd = PatientData()
-        #expect(pd.sex == .female)
+        // Sex has no clinically safe default: it must be chosen explicitly,
+        // so an untouched form is distinguishable from a deliberate answer.
+        #expect(pd.sex == nil)
         #expect(pd.age == nil)
         #expect(pd.height == nil)
         #expect(pd.weight == nil)
@@ -47,10 +49,11 @@ struct PatientDataTests {
         pd.age = 70
         pd.height = 160.0
         pd.hasCHF = true
+        pd.sex = .male
         pd.clear()
         #expect(pd.age == nil)
         #expect(pd.height == nil)
         #expect(!pd.hasCHF)
-        #expect(pd.sex == .female)
+        #expect(pd.sex == nil)
     }
 }

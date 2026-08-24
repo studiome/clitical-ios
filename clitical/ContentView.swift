@@ -88,8 +88,12 @@ struct RootContentView: View {
             AgeFormView(patientData: $patientData).focused($isActive)
             SegmentedRow(
                 title: "SexQuestionTitle",
-                options: Sex.allCases,
-                label: \.label,
+                // The hint appears only while the question is unanswered, so
+                // a required field that was skipped is visible on the form
+                // rather than only in the alert after tapping Predict.
+                footer: patientData.sex == nil ? "SexRequiredHint" : nil,
+                options: Sex.allCases.map(Optional.init),
+                label: { $0?.label ?? "" },
                 selection: $patientData.sex)
             HeightFormView(patientData: $patientData).focused($isActive)
             WeightFormView(patientData: $patientData).focused($isActive)
@@ -139,15 +143,12 @@ struct RootContentView: View {
         Section(header: localizedText("LesionInfo")) {
             ToggleRow(
                 title: "AILesionQuestionTitle",
-                footer: "AILesionQuestionDescription",
                 selection: $patientData.hasAILesion)
             ToggleRow(
                 title: "FPLesionQuestionTitle",
-                footer: "FPLesionQuestionDescription",
                 selection: $patientData.hasFPLesion)
             ToggleRow(
                 title: "BKLesionQuestionTitle",
-                footer: "BKLesionQuestionDescription",
                 selection: $patientData.hasBKLesion)
         }
         Section(header: localizedText("OtherLesionInfo")) {
@@ -185,15 +186,33 @@ struct RootContentView: View {
         }
     }
 
+    /// The primary action, styled prominently per HIG so it reads as the
+    /// call to action rather than as one more list row.
+    @ViewBuilder
     private var actionSection: some View {
         Section {
-            Button("PredictRisks") {
+            Button {
                 predictRisks()
+            } label: {
+                Text("PredictRisks")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity, minHeight: 28.0)
+                    .foregroundStyle(Color.prominentButtonLabel)
             }
+            .buttonStyle(.borderedProminent)
+            .accessibilityIdentifier("predictRisks")
+            .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
+            .listRowBackground(Color.clear)
             .alert("ErrorTitle", isPresented: $failure) {
             } message: {
-                Text(LocalizedStringKey(errorMessage))
+                // Already resolved against the current language, and may carry
+                // a formatted range, so it is not a localization key.
+                Text(verbatim: errorMessage)
             }
+        }
+        // Reset sits in its own section: a destructive action directly below
+        // the primary one invites mistaps.
+        Section {
             // Destructive role (not a bare red tint) so VoiceOver
             // announces it as destructive, and a confirmation
             // dialog because the wipe cannot be undone.
@@ -220,28 +239,10 @@ struct RootContentView: View {
     }
 
     private func predictRisks() {
-        guard patientData.age != nil else {
-            fail(with: .ageIsNil)
-            return
-        }
-        guard patientData.height != nil else {
-            fail(with: .heightIsNil)
-            return
-        }
-        guard patientData.weight != nil else {
-            fail(with: .weightIsNil)
-            return
-        }
-        guard patientData.alb != nil else {
-            fail(with: .albuminIsNil)
-            return
-        }
-        guard
-            patientData.hasAILesion
-                || patientData.hasFPLesion
-                || patientData.hasBKLesion
-        else {
-            fail(with: .irrelevantLesion)
+        // Range checks matter as much as presence checks here: a height typed
+        // in metres produces a perfectly plausible looking risk otherwise.
+        if let error = patientData.validate() {
+            fail(with: error.message(using: localization))
             return
         }
         let newRisk = PatientRisk(of: patientData)
@@ -253,7 +254,7 @@ struct RootContentView: View {
             newRisk.predicted2YOSRisk != nil,
             newRisk.predicted2YAFS != nil
         else {
-            fail(with: .defaultError)
+            fail(with: localization.string(forKey: "DefaultError"))
             return
         }
         risk = newRisk
@@ -270,9 +271,9 @@ struct RootContentView: View {
         }
     }
 
-    private func fail(with error: QuestionError) {
+    private func fail(with message: String) {
         predictionRequestID = UUID()
-        errorMessage = error.message
+        errorMessage = message
         failure = true
         riskCalculated = false
     }
@@ -357,26 +358,14 @@ private extension View {
     ) -> some View {
         toolbar {
             if isActive {
-                if #available(iOS 17.0, *) {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-                            dismiss()
-                        } label: {
-                            Image(systemName: "keyboard.chevron.compact.down")
-                        }
-                        .accessibilityLabel(Text("DismissKeyboard"))
-                        .accessibilityIdentifier("dismissKeyboard")
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "keyboard.chevron.compact.down")
                     }
-                } else {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            dismiss()
-                        } label: {
-                            Image(systemName: "keyboard.chevron.compact.down")
-                        }
-                        .accessibilityLabel(Text("DismissKeyboard"))
-                        .accessibilityIdentifier("dismissKeyboard")
-                    }
+                    .accessibilityLabel(Text("DismissKeyboard"))
+                    .accessibilityIdentifier("dismissKeyboard")
                 }
             }
         }

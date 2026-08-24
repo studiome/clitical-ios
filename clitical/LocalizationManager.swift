@@ -64,9 +64,12 @@ final class LocalizationManager: ObservableObject {
         return AppLanguage(rawValue: raw)
     }
 
+    /// Japanese for Japanese speakers, English for everyone else — the app
+    /// ships only these two, and defaulting a French or Korean speaker to
+    /// Japanese leaves them with a UI they cannot read.
     private static func systemLanguage() -> AppLanguage {
-        let preferred = Locale.preferredLanguages.first ?? "ja"
-        return preferred.hasPrefix("en") ? .en : .ja
+        let preferred = Locale.preferredLanguages.first ?? "en"
+        return preferred.hasPrefix("ja") ? .ja : .en
     }
 }
 

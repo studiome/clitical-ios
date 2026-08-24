@@ -36,7 +36,7 @@ Flutter/Android version of CLiTICAL.
 | GNRI | Geriatric Nutritional Risk Index, with a four-level classification |
 
 GNRI is calculated as `14.89 × Alb + 41.7 × min(weight / (22 × height²), 1.0)` and
-classified as no risk (≥98), low (92–98), moderate (82–92), or major (<82).
+classified as no malnutrition risk (≥98), mild (92–98), moderate (82–92), or major (<82).
 The 30-day risks use logistic regression; 2-year OS/AFS use Cox proportional hazards models
 (baseline survival 0.922 for OS and 0.876 for AFS).
 
@@ -44,10 +44,18 @@ At least one arterial lesion site must be selected — AI (aortoiliac), FP (femo
 or BK (below the knee) — and the most proximal selected site determines the lesion
 classification.
 
+### Entry validation
+
+Age, sex, height, weight and albumin are all required, and sex has no default. The numeric
+entries are range checked so that a unit mix-up — a height typed in metres, albumin in g/L —
+is refused rather than turned into a plausible looking result: age 18–120 years,
+height 100–250 cm, weight 20–300 kg, albumin 1.0–6.0 g/dL. An out-of-range entry shows an
+alert quoting the accepted range and no prediction is made.
+
 ## Requirements
 
 - iOS 16.0 or later (iPhone and iPad)
-- Xcode 16 or later / Swift 6.0
+- Xcode 16 or later / Swift 5 language mode
 - No third-party dependencies (the only networking is opening the reference papers and the
   legal pages)
 
