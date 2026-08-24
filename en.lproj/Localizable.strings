@@ -67,7 +67,7 @@
 "MalignancyNo" = "No";
 "MalignancyPast" = "Past history";
 "MalignancyTreatment" = "Under treatment";
-"KeyboardDone" = "Done";
+"DismissKeyboard" = "Dismiss Keyboard";
 "PredictRisks" = "Predict Risk";
 "GNRINoRisk" = "No Risk";
 "GNRILowRisk" = "Low Risk";

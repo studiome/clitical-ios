@@ -45,7 +45,7 @@ struct RootContentView: View {
             .id(localization.language)
             .accessibilityIdentifier("patientDataList")
             .riskAssessmentListStyle()
-            .keyboardDoneToolbar {
+            .keyboardDismissButton(isActive: isActive) {
                 isActive = false
             }
             .navigationTitle(Text(verbatim: localization.string(forKey: "PatientDataTitle")))
@@ -75,7 +75,7 @@ struct RootContentView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .background(Color(.systemGroupedBackground))
-            .keyboardDoneToolbar {
+            .keyboardDismissButton(isActive: isActive) {
                 isActive = false
             }
             .navigationTitle(Text(verbatim: localization.string(forKey: "PatientDataTitle")))
@@ -342,21 +342,41 @@ private extension View {
         }
     }
 
-    /// Places the keyboard-dismiss button in the keyboard's own accessory bar.
+    /// Places a keyboard-dismiss button in the navigation bar. Keeping it out
+    /// of the keyboard accessory layout avoids transient negative frames while
+    /// SwiftUI is presenting or dismissing a numeric keyboard on iOS 26.
     ///
-    /// This used to insert and remove a bottom `safeAreaInset` as the focus
-    /// state changed. Adding a safe-area inset while the keyboard is animating
-    /// changes the layout that the keyboard and scroll insets are derived from,
-    /// which on iPad kept the app reporting itself as animating: XCUITest's
-    /// "wait for the app to idle" then burned its full 60 second timeout on
-    /// every interaction until the test blew its 10 minute allowance. Letting
-    /// UIKit own the accessory bar keeps the app's layout out of that loop.
-    func keyboardDoneToolbar(dismiss: @escaping () -> Void) -> some View {
+    /// This replaces both the old dynamic `safeAreaInset` and keyboard
+    /// accessory item. Both participate in the keyboard's transient layout;
+    /// on iOS 26 that could publish a negative frame during focus changes.
+    /// A navigation-bar item remains available without changing keyboard
+    /// geometry, and avoids the resulting XCUITest runtime issue.
+    func keyboardDismissButton(
+        isActive: Bool,
+        dismiss: @escaping () -> Void
+    ) -> some View {
         toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("KeyboardDone") {
-                    dismiss()
+            if isActive {
+                if #available(iOS 17.0, *) {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "keyboard.chevron.compact.down")
+                        }
+                        .accessibilityLabel(Text("DismissKeyboard"))
+                        .accessibilityIdentifier("dismissKeyboard")
+                    }
+                } else {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "keyboard.chevron.compact.down")
+                        }
+                        .accessibilityLabel(Text("DismissKeyboard"))
+                        .accessibilityIdentifier("dismissKeyboard")
+                    }
                 }
             }
         }

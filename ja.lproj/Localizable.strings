@@ -68,7 +68,7 @@
 "MalignancyNo" = "なし";
 "MalignancyPast" = "既往歴あり";
 "MalignancyTreatment" = "治療中";
-"KeyboardDone" = "完了";
+"DismissKeyboard" = "キーボードを閉じる";
 "PredictRisks" = "リスクを予測";
 "GNRINoRisk" = "リスクなし";
 "GNRILowRisk" = "軽度栄養リスク";

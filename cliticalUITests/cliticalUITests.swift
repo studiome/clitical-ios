@@ -595,8 +595,17 @@ final class cliticalUITests: XCTestCase {
                            "\(placeholder) did not accept the typed value")
         }
 
-        let done = app.buttons["Done"]
-        if done.exists { done.tap() }
+        let dismissKeyboard = app.buttons["dismissKeyboard"]
+        XCTAssertTrue(
+            dismissKeyboard.waitForExistence(timeout: 5),
+            "Keyboard dismiss button is missing"
+        )
+        XCTAssertEqual(
+            dismissKeyboard.label,
+            "Dismiss Keyboard",
+            "Keyboard dismiss button must expose the English VoiceOver label"
+        )
+        dismissKeyboard.tap()
     }
 
     /// Sets an inline Bool question row's Toggle to the desired Yes/No state.
