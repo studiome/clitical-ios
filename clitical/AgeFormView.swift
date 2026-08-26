@@ -34,7 +34,10 @@ struct AgeFormView: View {
     }
 
     private var field: some View {
-        TextField("", value: $patientData.age, format: .number)
+        // A placeholder is what makes an empty row read as an input
+        // field at all: without it the row is simply blank.
+        TextField("", value: $patientData.age, format: .number,
+                  prompt: Text(verbatim: "--"))
             .multilineTextAlignment(.trailing)
             .keyboardType(.numberPad)
             .accessibilityLabel(Text("AgeQuestionTitle"))

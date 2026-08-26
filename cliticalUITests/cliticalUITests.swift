@@ -15,6 +15,11 @@ let acknowledgedDisclaimerArguments = [
     "-intended_use_disclaimer_version", "2026-08",
 ]
 
+/// What an empty numeric field reports. The fields carry a placeholder so an
+/// untouched row reads as an input field rather than as blank space, and
+/// XCUITest surfaces that placeholder as the field's value.
+let emptyNumberFieldValue = "--"
+
 final class cliticalUITests: XCTestCase {
 
     override func setUpWithError() throws {
@@ -157,7 +162,7 @@ final class cliticalUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Tap to open link."].waitForExistence(timeout: 5))
 
         tapTopLevelItem("Risk Assessment", in: app)
-        let ageField = app.textFields["Age [year-old]"]
+        let ageField = app.textFields["Age [years]"]
         scrollUpTo(ageField, in: app)
         XCTAssertEqual(ageField.value as? String, "70",
                        "Changing sections must preserve entered patient data")
@@ -200,7 +205,7 @@ final class cliticalUITests: XCTestCase {
         app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
-        for label in ["Age [year-old]", "Body Height [cm]", "Body Weight [kg]", "Albumin [g/dl]"] {
+        for label in ["Age [years]", "Body Height [cm]", "Body Weight [kg]", "Albumin [g/dL]"] {
             let field = app.textFields[label]
             scrollIntoTappableArea(field, in: app)
             XCTAssertTrue(field.waitForExistence(timeout: 5), "Missing field: \(label)")
@@ -225,12 +230,14 @@ final class cliticalUITests: XCTestCase {
         let alert = app.alerts.firstMatch
         XCTAssertTrue(alert.waitForExistence(timeout: 5), "Validation alert did not appear")
         XCTAssertTrue(
-            alert.staticTexts["Enter a value for Age [year-old]."].exists,
+            alert.staticTexts["Enter a value for Age [years]."].exists,
             "The alert should name the first field that needs attention"
         )
     }
 
-    func testPredictWithOnlyAgeNamesHeightAsNextMissingNumberField() throws {
+    /// Validation walks the form from the top, so the question after age is
+    /// sex — which has no default and must be answered explicitly.
+    func testPredictWithOnlyAgeNamesSexAsNextMissingAnswer() throws {
         let app = XCUIApplication()
         app.launchArguments += ["-app_language", "en"]
         app.launchArguments += acknowledgedDisclaimerArguments
@@ -242,9 +249,50 @@ final class cliticalUITests: XCTestCase {
         let alert = app.alerts.firstMatch
         XCTAssertTrue(alert.waitForExistence(timeout: 5), "Validation alert did not appear")
         XCTAssertTrue(
+            alert.staticTexts["Choose a value for Sex."].exists,
+            "The alert should name the next unanswered question"
+        )
+    }
+
+    func testPredictWithAgeAndSexNamesHeightAsNextMissingNumberField() throws {
+        let app = XCUIApplication()
+        app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += acknowledgedDisclaimerArguments
+        app.launch()
+
+        fillAgeField(in: app)
+        selectSex("Male", in: app)
+        tapPredictButton(in: app)
+
+        let alert = app.alerts.firstMatch
+        XCTAssertTrue(alert.waitForExistence(timeout: 5), "Validation alert did not appear")
+        XCTAssertTrue(
             alert.staticTexts["Enter a value for Body Height [cm]."].exists,
             "The alert should name the next missing field"
         )
+    }
+
+    /// The regression this whole range check exists for: a height typed in
+    /// metres used to produce a plausible looking risk instead of an error.
+    func testHeightEnteredInMetresIsRejected() throws {
+        let app = XCUIApplication()
+        app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += acknowledgedDisclaimerArguments
+        app.launch()
+
+        fillAgeField(in: app)
+        selectSex("Male", in: app)
+        fillNumberField("Body Height [cm]", with: "1.7", in: app)
+        fillNumberField("Body Weight [kg]", with: "60", in: app)
+        fillNumberField("Albumin [g/dL]", with: "3.5", in: app)
+        setToggle(row: "Infrapopliteal", to: "Yes", in: app)
+        tapPredictButton(in: app)
+
+        let alert = app.alerts.firstMatch
+        XCTAssertTrue(alert.waitForExistence(timeout: 5),
+                      "A height of 1.7 cm must not produce a prediction")
+        XCTAssertFalse(app.staticTexts["Geriatric Nutritional Risk Index"].exists,
+                       "No risk value may be shown for an out-of-range height")
     }
 
     /// Happy path: filling every required field and marking one artery lesion
@@ -255,7 +303,7 @@ final class cliticalUITests: XCTestCase {
         app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
-        fillRequiredNumberFields(in: app)
+        fillRequiredFields(in: app)
         setToggle(row: "Infrapopliteal", to: "Yes", in: app)
 
         tapPredictButton(in: app)
@@ -289,7 +337,7 @@ final class cliticalUITests: XCTestCase {
             throw XCTSkip("The predicted-risk preview is only present in regular width")
         }
 
-        fillRequiredNumberFields(in: app)
+        fillRequiredFields(in: app)
         setToggle(row: "Infrapopliteal", to: "Yes", in: app)
         tapPredictButton(in: app)
 
@@ -335,7 +383,7 @@ final class cliticalUITests: XCTestCase {
         app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
-        fillRequiredNumberFields(in: app)
+        fillRequiredFields(in: app)
         tapPredictButton(in: app)
 
         let alert = app.alerts.firstMatch
@@ -377,7 +425,7 @@ final class cliticalUITests: XCTestCase {
             app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.1)).tap()
         }
 
-        let ageField = app.textFields["Age [year-old]"]
+        let ageField = app.textFields["Age [years]"]
         scrollUpTo(ageField, in: app)
         XCTAssertEqual(ageField.value as? String, "70",
                        "Dismissing the confirmation must not clear the data")
@@ -392,7 +440,7 @@ final class cliticalUITests: XCTestCase {
         resetConfirmationButton(in: app).tap()
 
         scrollUpTo(ageField, in: app)
-        XCTAssertEqual((ageField.value as? String) ?? "", "",
+        XCTAssertEqual(ageField.value as? String, emptyNumberFieldValue,
                        "Confirming the dialog must clear the data")
     }
 
@@ -545,22 +593,31 @@ final class cliticalUITests: XCTestCase {
         }
     }
 
-    /// Enters age, height, weight, and albumin, then dismisses the keyboard.
-    private func fillRequiredNumberFields(in app: XCUIApplication) {
-        let values = [
-            ("Age [year-old]", "70"),
-            ("Body Height [cm]", "160"),
-            ("Body Weight [kg]", "55"),
-            ("Albumin [g/dl]", "4"),
-        ]
-        for (placeholder, value) in values {
-            fillNumberField(placeholder, with: value, in: app)
-        }
+    /// Fills every required entry, including the sex question, which has no
+    /// default and must be answered before a prediction is possible.
+    ///
+    /// Answers run in form order. The scroll helpers only ever search
+    /// downwards, so reaching sex — which sits just below age — after the
+    /// albumin field near the bottom would cost 40 fruitless swipes.
+    private func fillRequiredFields(in app: XCUIApplication) {
+        fillNumberField("Age [years]", with: "70", in: app)
+        selectSex("Male", in: app)
+        fillNumberField("Body Height [cm]", with: "160", in: app)
+        fillNumberField("Body Weight [kg]", with: "55", in: app)
+        fillNumberField("Albumin [g/dL]", with: "4", in: app)
+    }
+
+    /// Selects one segment of the Sex segmented control.
+    private func selectSex(_ option: String, in app: XCUIApplication) {
+        let segment = app.buttons[option]
+        scrollIntoTappableArea(segment, in: app)
+        XCTAssertTrue(segment.waitForExistence(timeout: 5), "Missing sex option: \(option)")
+        segment.tap()
     }
 
     /// Enters only age for reset behavior checks that do not need valid risk data.
     private func fillAgeField(in app: XCUIApplication) {
-        fillNumberField("Age [year-old]", with: "70", in: app)
+        fillNumberField("Age [years]", with: "70", in: app)
     }
 
     private func fillNumberField(
@@ -595,8 +652,17 @@ final class cliticalUITests: XCTestCase {
                            "\(placeholder) did not accept the typed value")
         }
 
-        let done = app.buttons["Done"]
-        if done.exists { done.tap() }
+        let dismissKeyboard = app.buttons["dismissKeyboard"]
+        XCTAssertTrue(
+            dismissKeyboard.waitForExistence(timeout: 5),
+            "Keyboard dismiss button is missing"
+        )
+        XCTAssertEqual(
+            dismissKeyboard.label,
+            "Dismiss Keyboard",
+            "Keyboard dismiss button must expose the English VoiceOver label"
+        )
+        dismissKeyboard.tap()
     }
 
     /// Sets an inline Bool question row's Toggle to the desired Yes/No state.

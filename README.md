@@ -20,8 +20,8 @@ Flutter/Android version of CLiTICAL.
   information, arterial lesion sites, other vascular lesions, and comorbidities
 - **Risk prediction** — five indices calculated from the entered data
 - **References** — the source papers opened in an `SFSafariViewController`
-- **Settings** — Japanese/English switching applied instantly in-app, terms of service,
-  and app information
+- **Settings** — Japanese/English switching applied instantly in-app, the Terms of Use,
+  Privacy Policy and Support pages, and app information
 - **Accessibility** — VoiceOver support, Dynamic Type, and risk levels never conveyed by
   colour alone
 
@@ -36,7 +36,7 @@ Flutter/Android version of CLiTICAL.
 | GNRI | Geriatric Nutritional Risk Index, with a four-level classification |
 
 GNRI is calculated as `14.89 × Alb + 41.7 × min(weight / (22 × height²), 1.0)` and
-classified as no risk (≥98), low (92–98), moderate (82–92), or major (<82).
+classified as no malnutrition risk (≥98), mild (92–98), moderate (82–92), or major (<82).
 The 30-day risks use logistic regression; 2-year OS/AFS use Cox proportional hazards models
 (baseline survival 0.922 for OS and 0.876 for AFS).
 
@@ -44,11 +44,20 @@ At least one arterial lesion site must be selected — AI (aortoiliac), FP (femo
 or BK (below the knee) — and the most proximal selected site determines the lesion
 classification.
 
+### Entry validation
+
+Age, sex, height, weight and albumin are all required, and sex has no default. The numeric
+entries are range checked so that a unit mix-up — a height typed in metres, albumin in g/L —
+is refused rather than turned into a plausible looking result: age 18–120 years,
+height 100–250 cm, weight 20–300 kg, albumin 1.0–6.0 g/dL. An out-of-range entry shows an
+alert quoting the accepted range and no prediction is made.
+
 ## Requirements
 
 - iOS 16.0 or later (iPhone and iPad)
-- Xcode 15 or later / Swift 5.9
-- No third-party dependencies (the only networking is opening reference and terms links)
+- Xcode 16 or later / Swift 5 language mode
+- No third-party dependencies (the only networking is opening the reference papers and the
+  legal pages)
 
 ## Project layout
 
@@ -140,10 +149,31 @@ Settings > About.
    Eur J Vasc Endovasc Surg. 2022 Jun 7;S1078-5884(22)00340-9.
    <https://doi.org/10.1016/j.ejvs.2022.05.038>
 
+## Terms of use
+
+The legal documents are hosted outside the app and opened in an `SFSafariViewController`
+from Settings, in whichever language is selected there:
+
+- **Terms of Use** — [Japanese](https://studiome.github.io/clitical-legal/terms/ja/) /
+  [English](https://studiome.github.io/clitical-legal/terms/en/)
+- **Privacy Policy** — [Japanese](https://studiome.github.io/clitical-legal/privacy/ja/) /
+  [English](https://studiome.github.io/clitical-legal/privacy/en/)
+- **Support** — [Japanese](https://studiome.github.io/clitical-legal/support/ja/) /
+  [English](https://studiome.github.io/clitical-legal/support/en/)
+
+The URLs are built by `AppInfo.legalURL(for:language:)` in `MainTabView.swift`.
+
+On first launch an intended-use notice is shown in place of the app, with the Terms of Use
+reachable from it; tapping "I understand" records agreement to both. The acknowledgement is
+stored in `UserDefaults` under `intended_use_disclaimer_version` as the version of the
+notice that was accepted (`IntendedUseDisclaimer.currentVersion`), so a material change to
+the wording asks again.
+
 ## Privacy
 
 Patient data is processed on this device only and is never sent or stored elsewhere. The
-only thing the app saves is the selected language.
+app saves the selected language and the acknowledged version of the intended-use notice,
+and nothing else.
 
 ## License
 
@@ -156,4 +186,4 @@ References; the MIT License applies to the software implementation only.
 
 - Published by: Japanese Society for Vascular Surgery / JCLIMB Committee (2022)
 - Developed by: Kazuhiro Miyahara
-- Terms of service: <https://studiome.github.io/clti_risk/>
+- Terms of Use: <https://studiome.github.io/clitical-legal/terms/ja/>

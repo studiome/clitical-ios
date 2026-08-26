@@ -142,6 +142,7 @@ struct IntendedUseDisclaimerView: View {
                 Text("DisclaimerAcknowledge")
                     .font(.headline)
                     .frame(maxWidth: .infinity, minHeight: 28.0)
+                    .foregroundStyle(Color.prominentButtonLabel)
             }
             .buttonStyle(.borderedProminent)
             .accessibilityIdentifier("acknowledgeDisclaimer")
@@ -153,6 +154,14 @@ struct IntendedUseDisclaimerView: View {
         .padding()
         .background(.bar)
     }
+}
+
+/// Label colour for `.borderedProminent` buttons. The style fills with the
+/// accent colour and draws its label in white, which drops to roughly 1.7:1
+/// against the light accent used in dark mode; the background colour tracks
+/// the appearance and stays legible in both.
+extension Color {
+    static var prominentButtonLabel: Color { Color(uiColor: .systemBackground) }
 }
 
 // MARK: - MainTabView
@@ -248,19 +257,22 @@ struct MainTabView: View {
     }
 
     private var tabRoot: some View {
-        TabView {
+        TabView(selection: $selectedTab) {
             RootContentView()
                 .tabItem {
                     Label("RiskCalculationTab", systemImage: "chart.line.uptrend.xyaxis")
                 }
+                .tag(AppSection.riskCalculation)
             ReferencesView()
                 .tabItem {
                     Label("References", systemImage: "doc.text")
                 }
+                .tag(AppSection.references)
             SettingsView()
                 .tabItem {
                     Label("Settings", systemImage: "gearshape")
                 }
+                .tag(AppSection.settings)
         }
     }
 }
@@ -417,10 +429,10 @@ struct AboutView: View {
     /// results screen so the two read as the same list.
     private let predictions: [Prediction] = [
         Prediction(id: "30DDeathOrAmputation", icon: "staroflife"),
-        Prediction(id: "30DMALE", icon: "bed.double"),
-        Prediction(id: "2YOS", icon: "staroflife"),
+        Prediction(id: "30DMALE", icon: "bandage"),
+        Prediction(id: "2YOS", icon: "heart.text.square"),
         Prediction(id: "2YAFS", icon: "figure.walk"),
-        Prediction(id: "GeriatricNutritionalRiskIndex", icon: "flame"),
+        Prediction(id: "GeriatricNutritionalRiskIndex", icon: "fork.knife"),
     ]
 
     var body: some View {

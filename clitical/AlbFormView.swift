@@ -34,7 +34,10 @@ struct AlbFormView: View {
     }
 
     private var field: some View {
-        TextField("", value: $patientData.alb, format: .number)
+        // A placeholder is what makes an empty row read as an input
+        // field at all: without it the row is simply blank.
+        TextField("", value: $patientData.alb, format: .number,
+                  prompt: Text(verbatim: "--"))
             .multilineTextAlignment(.trailing)
             .keyboardType(.decimalPad)
             .accessibilityLabel(Text("AlbQuestionTitle"))

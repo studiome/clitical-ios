@@ -71,7 +71,7 @@ public struct PatientRisk {
         guard let heightCM = patientData.height,
               let weight = patientData.weight,
               let alb = patientData.alb,
-              heightCM != 0.0 else {
+              heightCM > 0.0, weight > 0.0, alb > 0.0 else {
             return nil
         }
         let heightM = heightCM / 100.0
@@ -91,7 +91,9 @@ public struct PatientRisk {
     }
 
     private func calcPredicted30DMALE() -> Double? {
-        guard let age = patientData.age, let gnriRisk else {
+        // `applies(to:)` reads sex as "female or not", which would quietly
+        // treat an unanswered sex as male, so require it explicitly.
+        guard let age = patientData.age, patientData.sex != nil, let gnriRisk else {
             return nil
         }
         let sigma = ThirtyDayMALEQuestions.allCases
@@ -102,7 +104,7 @@ public struct PatientRisk {
     }
 
     private func calcPredicted2YOS() -> Double? {
-        guard let age = patientData.age, let gnriRisk else {
+        guard let age = patientData.age, patientData.sex != nil, let gnriRisk else {
             return nil
         }
         let sigma = TwoYearOSQuestions.allCases
@@ -113,7 +115,7 @@ public struct PatientRisk {
     }
 
     private func calcPredicted2YAFS() -> Double? {
-        guard let age = patientData.age, let gnriRisk else {
+        guard let age = patientData.age, patientData.sex != nil, let gnriRisk else {
             return nil
         }
         let sigma = TwoYearAFSQuestions.allCases

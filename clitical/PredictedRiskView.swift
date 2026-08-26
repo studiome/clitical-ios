@@ -28,13 +28,13 @@ struct PredictedRiskView: View {
                         percentText(risk.predicted30DDeathOrAmputation,
                                     fractionDigits: 1)
                     }
-                    RiskRow(icon: "bed.double",
+                    RiskRow(icon: "bandage",
                             title: "30DMALE") {
                         percentText(risk.predicted30DMALE, fractionDigits: 1)
                     }
                 }
                 Section(header: Text("2YearPrediction")) {
-                    RiskRow(icon: "staroflife",
+                    RiskRow(icon: "heart.text.square",
                             title: "2YOS") {
                         percentText(risk.predicted2YOS, fractionDigits: 0)
                         riskLabelText(risk.predicted2YOSRisk?.label,
@@ -46,7 +46,7 @@ struct PredictedRiskView: View {
                     }
                 }
                 Section(header: Text("GNRI")) {
-                    RiskRow(icon: "flame",
+                    RiskRow(icon: "fork.knife",
                             title: "GeriatricNutritionalRiskIndex") {
                         valueText(risk.gnri, fractionDigits: 1)
                         riskLabelText(risk.gnriRisk?.label,
@@ -131,12 +131,29 @@ private extension View {
     }
 }
 
+/// Severity colours. `.green` and `.orange` reach only about 2:1 against a
+/// white list background — below the 3:1 the HIG asks for even at large text
+/// sizes — so light mode uses darker variants. Dark mode keeps the system
+/// colours, which are already legible on a dark background.
+private extension Color {
+    static let riskLow = adaptive(light: UIColor(red: 0.08, green: 0.50, blue: 0.24, alpha: 1),
+                                  dark: .systemGreen)
+    static let riskMedium = adaptive(light: UIColor(red: 0.60, green: 0.36, blue: 0.00, alpha: 1),
+                                     dark: .systemOrange)
+    static let riskHigh = adaptive(light: UIColor(red: 0.70, green: 0.15, blue: 0.12, alpha: 1),
+                                   dark: .systemRed)
+
+    private static func adaptive(light: UIColor, dark: UIColor) -> Color {
+        Color(uiColor: UIColor { $0.userInterfaceStyle == .dark ? dark : light })
+    }
+}
+
 private extension TwoYearOSRisk {
     var color: Color {
         switch self {
-        case .low: return .green
-        case .medium: return .orange
-        case .high: return .red
+        case .low: return .riskLow
+        case .medium: return .riskMedium
+        case .high: return .riskHigh
         }
     }
 }
@@ -144,9 +161,9 @@ private extension TwoYearOSRisk {
 private extension GNRIRisk {
     var color: Color {
         switch self {
-        case .noRisk: return .green
-        case .low, .moderate: return .orange
-        case .major: return .red
+        case .noRisk: return .riskLow
+        case .low, .moderate: return .riskMedium
+        case .major: return .riskHigh
         }
     }
 }
@@ -159,24 +176,45 @@ private struct RiskRow<Content: View>: View {
     let title: LocalizedStringKey
     @ViewBuilder let content: Content
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     var body: some View {
-        VStack {
+        VStack(alignment: isAccessibilitySize ? .leading : .center, spacing: 4.0) {
+            header
+            content
+                .frame(maxWidth: .infinity,
+                       alignment: isAccessibilitySize ? .leading : .center)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        // One VoiceOver stop per risk item: title then value, instead of
+        // the decorative icon, title, and value as separate elements.
+        .accessibilityElement(children: .combine)
+    }
+
+    private var isAccessibilitySize: Bool { dynamicTypeSize.isAccessibilitySize }
+
+    @ViewBuilder
+    private var header: some View {
+        if isAccessibilitySize {
+            // The symbol is decorative and only echoes the title, so at these
+            // sizes the width goes to the words instead.
+            titleText
+        } else {
             HStack {
                 Image(systemName: icon)
                     .foregroundColor(.accentColor)
                     .accessibilityHidden(true)
-                Text(title)
-                    .padding(4.0)
-                    .font(.headline)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .fixedSize(horizontal: false, vertical: true)
+                titleText
             }
-            content
         }
-        .frame(maxWidth: .infinity, alignment: .center)
-        // One VoiceOver stop per risk item: title then value, instead of
-        // the decorative icon, title, and value as separate elements.
-        .accessibilityElement(children: .combine)
+    }
+
+    private var titleText: some View {
+        Text(title)
+            .padding(4.0)
+            .font(.headline)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .fixedSize(horizontal: false, vertical: true)
     }
 }
 
@@ -194,6 +232,7 @@ private struct RiskRow<Content: View>: View {
 
 private func previewPatientData() -> PatientData {
     var patientData = PatientData()
+    patientData.sex = .female
     patientData.age = 65
     patientData.height = 150.0
     patientData.weight = 50.0
