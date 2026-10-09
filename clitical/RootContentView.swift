@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  RootContentView.swift
 //  clitical
 //
 //  Created by kmiyahara on 2022/12/20.
@@ -9,16 +9,18 @@ import SwiftUI
 import CLPatientData
 
 struct RootContentView: View {
-    @EnvironmentObject var localization: LocalizationManager
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @ScaledMetric(relativeTo: .headline) private var buttonMinHeight = 28.0
     @State private var patientData = PatientData()
-    @FocusState var isActive: Bool
-    @State private var failure = false
+    @FocusState private var isActive: Bool
     @State private var riskCalculated = false
-    @State private var errorMessage = ""
+    @State private var errorMessage: String?
     @State private var risk: PatientRisk?
     @State private var confirmingReset = false
     @State private var predictionRequestID = UUID()
+    /// Set once a Predict attempt has failed validation, which is when empty
+    /// required fields start to show their inline "required" hint.
+    @State private var hasAttemptedPrediction = false
 
     var body: some View {
         Group {
@@ -28,8 +30,16 @@ struct RootContentView: View {
                 compactBody
             }
         }
-        .onChange(of: patientData) { _ in
+        .onChange(of: patientData) {
             invalidatePrediction()
+        }
+        // Attached here rather than to the Predict row: the toolbar button
+        // can fire while that list row is off screen and not yet built.
+        .alert("ErrorTitle", isPresented: isShowingError, presenting: errorMessage) { _ in
+        } message: { message in
+            // Already localized, and may carry a formatted range, so it
+            // is not a localization key.
+            Text(verbatim: message)
         }
     }
 
@@ -39,16 +49,13 @@ struct RootContentView: View {
                 patientDataSections
                 actionSection
             }
-            // iOS 16 caches LocalizedStringKey values inside List rows. Rebuild
-            // only the list when the in-app language changes so section headers
-            // re-resolve without discarding the parent view's patient data.
-            .id(localization.language)
             .accessibilityIdentifier("patientDataList")
             .riskAssessmentListStyle()
             .keyboardDismissButton(isActive: isActive) {
                 isActive = false
             }
-            .navigationTitle(Text(verbatim: localization.string(forKey: "PatientDataTitle")))
+            .predictRisksToolbarButton(predictRisks)
+            .navigationTitle(Text("PatientDataTitle"))
             .navigationDestination(isPresented: $riskCalculated) {
                 PredictedRiskView(risk: risk)
             }
@@ -62,12 +69,9 @@ struct RootContentView: View {
                     patientDataSections
                     actionSection
                 }
-                // Keep the same language-refresh behavior in the regular-width
-                // layout while preserving RootContentView's state.
-                .id(localization.language)
                 .accessibilityIdentifier("patientDataList")
                 .riskAssessmentListStyle()
-                .frame(minWidth: 360, idealWidth: 480, maxWidth: 560)
+                .frame(minWidth: 320, idealWidth: 420, maxWidth: 520)
 
                 Divider()
 
@@ -78,14 +82,25 @@ struct RootContentView: View {
             .keyboardDismissButton(isActive: isActive) {
                 isActive = false
             }
-            .navigationTitle(Text(verbatim: localization.string(forKey: "PatientDataTitle")))
+            .predictRisksToolbarButton(predictRisks)
+            .navigationTitle(Text("PatientDataTitle"))
         }
     }
 
     @ViewBuilder
     private var patientDataSections: some View {
-        Section(header: localizedText("BasicInfo")) {
-            AgeFormView(patientData: $patientData).focused($isActive)
+        Section(header: Text("BasicInfo")) {
+            NumberFieldRow(title: "AgeQuestionTitle",
+                           unit: "UnitYears",
+                           example: "70",
+                           value: $patientData.age,
+                           keyboard: .numberPad,
+                           errorMessage: inlineError(
+                               isPresent: patientData.age != nil,
+                               isInRange: patientData.age.map(PatientData.validAgeRange.contains) ?? true,
+                               outOfRange: .ageOutOfRange),
+                           errorIdentifier: "ageInlineError")
+                .focused($isActive)
             SegmentedRow(
                 title: "SexQuestionTitle",
                 // The hint appears only while the question is unanswered, so
@@ -95,10 +110,30 @@ struct RootContentView: View {
                 options: Sex.allCases.map(Optional.init),
                 label: { $0?.label ?? "" },
                 selection: $patientData.sex)
-            HeightFormView(patientData: $patientData).focused($isActive)
-            WeightFormView(patientData: $patientData).focused($isActive)
+            NumberFieldRow(title: "HeightQuestionTitle",
+                           unit: "UnitCM",
+                           example: "165",
+                           value: $patientData.height,
+                           keyboard: .decimalPad,
+                           errorMessage: inlineError(
+                               isPresent: patientData.height != nil,
+                               isInRange: patientData.height.map(PatientData.validHeightRange.contains) ?? true,
+                               outOfRange: .heightOutOfRange),
+                           errorIdentifier: "heightInlineError")
+                .focused($isActive)
+            NumberFieldRow(title: "WeightQuestionTitle",
+                           unit: "UnitKG",
+                           example: "60",
+                           value: $patientData.weight,
+                           keyboard: .decimalPad,
+                           errorMessage: inlineError(
+                               isPresent: patientData.weight != nil,
+                               isInRange: patientData.weight.map(PatientData.validWeightRange.contains) ?? true,
+                               outOfRange: .weightOutOfRange),
+                           errorIdentifier: "weightInlineError")
+                .focused($isActive)
         }
-        Section(header: localizedText("SocialHistory")) {
+        Section(header: Text("SocialHistory")) {
             ToggleRow(
                 title: "SmokingQuestionTitle",
                 footer: "SmokingQuestionDescription",
@@ -109,8 +144,18 @@ struct RootContentView: View {
                 label: \.label,
                 selection: $patientData.activity)
         }
-        Section(header: localizedText("ClinicalInfo")) {
-            AlbFormView(patientData: $patientData).focused($isActive)
+        Section(header: Text("ClinicalInfo")) {
+            NumberFieldRow(title: "AlbQuestionTitle",
+                           unit: "UnitGPerDL",
+                           example: "3.5",
+                           value: $patientData.alb,
+                           keyboard: .decimalPad,
+                           errorMessage: inlineError(
+                               isPresent: patientData.alb != nil,
+                               isInRange: patientData.alb.map(PatientData.validAlbuminRange.contains) ?? true,
+                               outOfRange: .albuminOutOfRange),
+                           errorIdentifier: "albuminInlineError")
+                .focused($isActive)
             MenuChoiceRow(
                 title: "CKDQuestionTitle",
                 footer: "CKDQuestionDescription",
@@ -119,7 +164,7 @@ struct RootContentView: View {
                 selection: $patientData.ckd)
             SegmentedRow(
                 title: "UrgencyQuestionTitle",
-                options: [true, false],
+                options: [false, true],
                 label: { $0 ? "UrgencyUrgent" : "UrgencyElective" },
                 selection: $patientData.isUrgent)
             ToggleRow(
@@ -140,7 +185,7 @@ struct RootContentView: View {
                 label: \.label,
                 selection: $patientData.rutherford)
         }
-        Section(header: localizedText("LesionInfo")) {
+        Section(header: Text("LesionInfo"), footer: lesionFooter) {
             ToggleRow(
                 title: "AILesionQuestionTitle",
                 selection: $patientData.hasAILesion)
@@ -151,7 +196,7 @@ struct RootContentView: View {
                 title: "BKLesionQuestionTitle",
                 selection: $patientData.hasBKLesion)
         }
-        Section(header: localizedText("OtherLesionInfo")) {
+        Section(header: Text("OtherLesionInfo")) {
             ToggleRow(
                 title: "ContralateralQuestionTitle",
                 footer: "ContralateralQuestionDescription",
@@ -161,7 +206,7 @@ struct RootContentView: View {
                 footer: "OtherVDQuestionDescription",
                 selection: $patientData.hasOtherVD)
         }
-        Section(header: localizedText("Complications")) {
+        Section(header: Text("Complications")) {
             ToggleRow(
                 title: "CHFQuestionTitle",
                 footer: "CHFQuestionDescription",
@@ -196,19 +241,13 @@ struct RootContentView: View {
             } label: {
                 Text("PredictRisks")
                     .font(.headline)
-                    .frame(maxWidth: .infinity, minHeight: 28.0)
+                    .frame(maxWidth: .infinity, minHeight: buttonMinHeight)
                     .foregroundStyle(Color.prominentButtonLabel)
             }
             .buttonStyle(.borderedProminent)
             .accessibilityIdentifier("predictRisks")
             .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
             .listRowBackground(Color.clear)
-            .alert("ErrorTitle", isPresented: $failure) {
-            } message: {
-                // Already resolved against the current language, and may carry
-                // a formatted range, so it is not a localization key.
-                Text(verbatim: errorMessage)
-            }
         }
         // Reset sits in its own section: a destructive action directly below
         // the primary one invites mistaps.
@@ -226,45 +265,46 @@ struct RootContentView: View {
             ) {
                 Button("RESET", role: .destructive) {
                     patientData.clear()
+                    hasAttemptedPrediction = false
                     invalidatePrediction()
                 }
-                // Explicit cancel: the automatic one resolves its
-                // label through the overridden Bundle.main (see
-                // LocalizationManager) and comes out unlabeled,
-                // and this also keeps it in the app's language.
+                // Explicit cancel: the automatic one has come out
+                // unlabeled in this dialog, so the button is spelled out.
                 Button("CANCEL", role: .cancel) {}
                     .accessibilityIdentifier("resetConfirmationCancel")
             }
         }
     }
 
+    private var isShowingError: Binding<Bool> {
+        Binding(
+            get: { errorMessage != nil },
+            set: { if !$0 { errorMessage = nil } }
+        )
+    }
+
     private func predictRisks() {
+        // The toolbar button can be tapped while a number pad is up; close it
+        // so the alert or the results are not presented under the keyboard.
+        isActive = false
         // Range checks matter as much as presence checks here: a height typed
         // in metres produces a perfectly plausible looking risk otherwise.
         if let error = patientData.validate() {
-            fail(with: error.message(using: localization))
+            fail(with: error.message)
             return
         }
-        let newRisk = PatientRisk(of: patientData)
-        guard newRisk.gnri != nil,
-            newRisk.gnriRisk != nil,
-            newRisk.predicted2YOS != nil,
-            newRisk.predicted30DDeathOrAmputation != nil,
-            newRisk.predicted30DMALE != nil,
-            newRisk.predicted2YOSRisk != nil,
-            newRisk.predicted2YAFS != nil
-        else {
-            fail(with: localization.string(forKey: "DefaultError"))
+        guard let newRisk = PatientRisk(patientData: patientData) else {
+            fail(with: String(localized: "DefaultError"))
             return
         }
         risk = newRisk
-        failure = false
+        errorMessage = nil
         if horizontalSizeClass == .regular {
             riskCalculated = false
         } else {
             let requestID = UUID()
             predictionRequestID = requestID
-            DispatchQueue.main.async {
+            Task { @MainActor in
                 guard predictionRequestID == requestID, risk != nil else { return }
                 riskCalculated = true
             }
@@ -272,9 +312,9 @@ struct RootContentView: View {
     }
 
     private func fail(with message: String) {
+        hasAttemptedPrediction = true
         predictionRequestID = UUID()
         errorMessage = message
-        failure = true
         riskCalculated = false
     }
 
@@ -284,20 +324,30 @@ struct RootContentView: View {
         riskCalculated = false
     }
 
-    private func localizedText(_ key: String) -> Text {
-        Text(verbatim: localization.string(forKey: key))
+    /// The inline message for a number field: an out-of-range value is
+    /// flagged as soon as it is entered; an empty one only after a Predict
+    /// attempt has failed, so a fresh form is not covered in errors.
+    private func inlineError(
+        isPresent: Bool,
+        isInRange: Bool,
+        outOfRange: PatientDataValidationError
+    ) -> String? {
+        if isPresent {
+            return isInRange ? nil : outOfRange.message
+        }
+        return hasAttemptedPrediction ? String(localized: "RequiredFieldHint") : nil
     }
-}
 
-// These literal localizable API calls ensure Xcode includes the dynamically
-// resolved section-header keys when exporting localization catalogs.
-private enum SectionHeaderLocalizationKeys {
-    static let basicInfo = String(localized: "BasicInfo")
-    static let socialHistory = String(localized: "SocialHistory")
-    static let clinicalInfo = String(localized: "ClinicalInfo")
-    static let lesionInfo = String(localized: "LesionInfo")
-    static let otherLesionInfo = String(localized: "OtherLesionInfo")
-    static let complications = String(localized: "Complications")
+    /// Explains the lesion section only once Predict has failed for want of a
+    /// lesion; before that the section is unremarkable.
+    @ViewBuilder
+    private var lesionFooter: some View {
+        if hasAttemptedPrediction && !patientData.hasAILesion
+            && !patientData.hasFPLesion && !patientData.hasBKLesion {
+            InlineErrorLabel(message: PatientDataValidationError.noLesionSelected.message,
+                             identifier: "lesionInlineError")
+        }
+    }
 }
 
 private struct RiskPreviewPane: View {
@@ -305,68 +355,67 @@ private struct RiskPreviewPane: View {
 
     var body: some View {
         Group {
-            if risk != nil {
+            if let risk {
                 PredictedRiskView(risk: risk, showsNavigationTitle: false)
             } else {
-                VStack(spacing: 12) {
-                    Image(systemName: "chart.line.uptrend.xyaxis")
-                        .font(.system(size: 44))
-                        .foregroundStyle(.secondary)
-                        .accessibilityHidden(true)
-                    Text("RiskPreviewEmptyTitle")
-                        .font(.title2)
-                        .fontWeight(.semibold)
+                ContentUnavailableView {
+                    Label("RiskPreviewEmptyTitle", systemImage: "chart.line.uptrend.xyaxis")
+                } description: {
                     Text("RiskPreviewEmptyMessage")
-                        .font(.callout)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: 360)
                 }
-                .padding()
             }
         }
     }
 }
 
 private extension View {
-    @ViewBuilder
     func riskAssessmentListStyle() -> some View {
-        if #available(iOS 17.0, *) {
-            self
-                .listStyle(.insetGrouped)
-                .scrollDismissesKeyboard(.immediately)
-                .contentMargins(.horizontal, 16, for: .scrollContent)
-        } else {
-            self
-                .listStyle(.insetGrouped)
-                .scrollDismissesKeyboard(.immediately)
-        }
+        self
+            .listStyle(.insetGrouped)
+            .scrollDismissesKeyboard(.immediately)
+            .contentMargins(.horizontal, 16, for: .scrollContent)
     }
 
-    /// Places a keyboard-dismiss button in the navigation bar. Keeping it out
-    /// of the keyboard accessory layout avoids transient negative frames while
-    /// SwiftUI is presenting or dismissing a numeric keyboard on iOS 26.
+    /// Places a keyboard-dismiss button at the leading side of the navigation
+    /// bar (the primary action, Predict, takes the trailing side).
     ///
-    /// This replaces both the old dynamic `safeAreaInset` and keyboard
-    /// accessory item. Both participate in the keyboard's transient layout;
-    /// on iOS 26 that could publish a negative frame during focus changes.
-    /// A navigation-bar item remains available without changing keyboard
-    /// geometry, and avoids the resulting XCUITest runtime issue.
+    /// The HIG-standard placement is a "Done" item in a `.keyboard` toolbar.
+    /// That is deliberately not used yet: the keyboard accessory (and the old
+    /// dynamic `safeAreaInset`) participate in the keyboard's transient
+    /// layout, and on iOS 26 that could publish a negative frame during focus
+    /// changes, which also broke XCUITest. A navigation-bar item leaves the
+    /// keyboard geometry alone. Move it back to `.keyboard` once the iOS 26
+    /// negative-frame issue is fixed.
     func keyboardDismissButton(
         isActive: Bool,
         dismiss: @escaping () -> Void
     ) -> some View {
         toolbar {
             if isActive {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "keyboard.chevron.compact.down")
-                    }
-                    .accessibilityLabel(Text("DismissKeyboard"))
-                    .accessibilityIdentifier("dismissKeyboard")
+                ToolbarItem(placement: .topBarLeading) {
+                    keyboardDismissLabel(dismiss)
                 }
+            }
+        }
+    }
+
+    private func keyboardDismissLabel(_ dismiss: @escaping () -> Void) -> some View {
+        Button {
+            dismiss()
+        } label: {
+            Image(systemName: "keyboard.chevron.compact.down")
+        }
+        .accessibilityLabel(Text("DismissKeyboard"))
+        .accessibilityIdentifier("dismissKeyboard")
+    }
+
+    /// The primary action in the navigation bar, so the form's main button is
+    /// reachable without scrolling to the bottom of the long list.
+    func predictRisksToolbarButton(_ action: @escaping () -> Void) -> some View {
+        toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button("PredictRisks", action: action)
+                    .accessibilityIdentifier("predictRisksToolbar")
             }
         }
     }
@@ -374,6 +423,5 @@ private extension View {
 
 #Preview {
     RootContentView()
-        .environmentObject(LocalizationManager())
         .environment(\.locale, .init(identifier: "ja"))
 }

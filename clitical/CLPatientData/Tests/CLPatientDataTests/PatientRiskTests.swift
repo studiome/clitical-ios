@@ -11,35 +11,20 @@ import Testing
 
 @Suite
 struct PatientRiskTests {
-    @Test
-    func testInit() {
-        let pd = PatientData()
-        let risk = PatientRisk(of: pd)
-        #expect(risk.gnri == nil)
-        #expect(risk.gnriRisk == nil)
-        #expect(risk.predicted30DDeathOrAmputation == nil)
-        #expect(risk.predicted30DMALE == nil)
-        #expect(risk.predicted2YOS == nil)
-        #expect(risk.predicted2YOSRisk == nil)
-        #expect(risk.predicted2YAFS == nil)
+    @Test("Empty patient data yields no risk")
+    func emptyDataYieldsNoRisk() {
+        #expect(PatientRisk(patientData: PatientData()) == nil)
     }
 
-    @Test
-    func testErrorCase() {
+    @Test("Zero height yields no risk")
+    func zeroHeightYieldsNoRisk() {
         var pd = PatientData()
         pd.height = 0.0
-        let risk = PatientRisk(of: pd)
-        #expect(risk.gnri == nil)
-        #expect(risk.gnriRisk == nil)
-        #expect(risk.predicted30DDeathOrAmputation == nil)
-        #expect(risk.predicted30DMALE == nil)
-        #expect(risk.predicted2YOS == nil)
-        #expect(risk.predicted2YOSRisk == nil)
-        #expect(risk.predicted2YAFS == nil)
+        #expect(PatientRisk(patientData: pd) == nil)
     }
 
-    @Test
-    func testExtremelyLowRiskCase() throws {
+    @Test("Extremely low risk case")
+    func extremelyLowRisk() throws {
         var pd = PatientData()
         // Sex has no default any more; these expectations were recorded for
         // a female patient.
@@ -50,27 +35,27 @@ struct PatientRiskTests {
         pd.alb = 4.0
         pd.hasAILesion = true
 
-        let risk = PatientRisk(of: pd)
-        let gnri = try #require(risk.gnri)
+        let risk = try #require(PatientRisk(patientData: pd))
+        let gnri = risk.gnri
         #expect(String(format: "%.1f", gnri) == "101.3")
         #expect(risk.gnriRisk == .noRisk)
-        let p30DA = try #require(risk.predicted30DDeathOrAmputation)
+        let p30DA = risk.predicted30DDeathOrAmputation
         #expect(String(format: "%.3f", p30DA) == "0.013")
-        let p30DM = try #require(risk.predicted30DMALE)
+        let p30DM = risk.predicted30DMALE
         #expect(String(format: "%.3f", p30DM) == "0.032")
-        let p2YOS = try #require(risk.predicted2YOS)
+        let p2YOS = risk.predicted2YOS
         #expect(String(format: "%.2f", p2YOS) == "0.92")
         #expect(risk.predicted2YOSRisk == .low)
-        let p2YAFS = try #require(risk.predicted2YAFS)
+        let p2YAFS = risk.predicted2YAFS
         #expect(String(format: "%.2f", p2YAFS) == "0.88")
     }
 
-    /// Sex is a covariate of every regression here, so an unanswered sex
-    /// must leave the predictions unavailable rather than silently fall back
-    /// to one of the two categories. GNRI does not use sex, so it still
-    /// resolves.
-    @Test
-    func testUnansweredSexLeavesPredictionsUnavailable() throws {
+    /// Sex is a covariate of the regressions here, so an unanswered sex must
+    /// leave the prediction unavailable rather than silently fall back to one
+    /// of the two categories. The prediction is refused as a whole, even for
+    /// the models (GNRI, 30-day death/amputation) that do not use sex.
+    @Test("Unanswered sex refuses the whole prediction")
+    func unansweredSexRefusesPrediction() {
         var pd = PatientData()
         pd.age = 70
         pd.height = 165.0
@@ -78,20 +63,11 @@ struct PatientRiskTests {
         pd.alb = 3.5
         pd.hasBKLesion = true
 
-        let risk = PatientRisk(of: pd)
-        #expect(risk.gnri != nil)
-        #expect(risk.gnriRisk != nil)
-        // The 30-day death/amputation model has no sex term, so it still
-        // resolves; the form refuses the prediction as a whole.
-        #expect(risk.predicted30DDeathOrAmputation != nil)
-        #expect(risk.predicted30DMALE == nil)
-        #expect(risk.predicted2YOS == nil)
-        #expect(risk.predicted2YOSRisk == nil)
-        #expect(risk.predicted2YAFS == nil)
+        #expect(PatientRisk(patientData: pd) == nil)
     }
 
-    @Test
-    func testLowRiskCase() throws {
+    @Test("Low risk case")
+    func lowRisk() throws {
         var pd = PatientData()
         pd.sex = .male
         pd.age = 50
@@ -117,23 +93,23 @@ struct PatientRiskTests {
         pd.hasOtherVD = true
         pd.rutherford = .class4
 
-        let risk = PatientRisk(of: pd)
-        let gnri = try #require(risk.gnri)
+        let risk = try #require(PatientRisk(patientData: pd))
+        let gnri = risk.gnri
         #expect(String(format: "%.1f", gnri) == "101.3")
         #expect(risk.gnriRisk == .noRisk)
-        let p30DA = try #require(risk.predicted30DDeathOrAmputation)
+        let p30DA = risk.predicted30DDeathOrAmputation
         #expect(String(format: "%.3f", p30DA) == "0.088")
-        let p30DM = try #require(risk.predicted30DMALE)
+        let p30DM = risk.predicted30DMALE
         #expect(String(format: "%.3f", p30DM) == "0.152")
-        let p2YOS = try #require(risk.predicted2YOS)
+        let p2YOS = risk.predicted2YOS
         #expect(String(format: "%.2f", p2YOS) == "0.91")
         #expect(risk.predicted2YOSRisk == .low)
-        let p2YAFS = try #require(risk.predicted2YAFS)
+        let p2YAFS = risk.predicted2YAFS
         #expect(String(format: "%.2f", p2YAFS) == "0.64")
     }
 
-    @Test
-    func testMediumRiskCase() throws {
+    @Test("Medium risk case")
+    func mediumRisk() throws {
         var pd = PatientData()
         pd.sex = .female
         pd.age = 70
@@ -159,23 +135,23 @@ struct PatientRiskTests {
         pd.hasOtherVD = false
         pd.rutherford = .class5
 
-        let risk = PatientRisk(of: pd)
-        let gnri = try #require(risk.gnri)
+        let risk = try #require(PatientRisk(patientData: pd))
+        let gnri = risk.gnri
         #expect(String(format: "%.1f", gnri) == "93.8")
         #expect(risk.gnriRisk == .low)
-        let p30DA = try #require(risk.predicted30DDeathOrAmputation)
+        let p30DA = risk.predicted30DDeathOrAmputation
         #expect(String(format: "%.3f", p30DA) == "0.170")
-        let p30DM = try #require(risk.predicted30DMALE)
+        let p30DM = risk.predicted30DMALE
         #expect(String(format: "%.3f", p30DM) == "0.175")
-        let p2YOS = try #require(risk.predicted2YOS)
+        let p2YOS = risk.predicted2YOS
         #expect(String(format: "%.2f", p2YOS) == "0.67")
         #expect(risk.predicted2YOSRisk == .medium)
-        let p2YAFS = try #require(risk.predicted2YAFS)
+        let p2YAFS = risk.predicted2YAFS
         #expect(String(format: "%.2f", p2YAFS) == "0.25")
     }
 
-    @Test
-    func testHighRiskCase1() throws {
+    @Test("High risk case 1")
+    func highRisk1() throws {
         var pd = PatientData()
         pd.sex = .male
         pd.age = 85
@@ -201,25 +177,25 @@ struct PatientRiskTests {
         pd.hasOtherVD = false
         pd.rutherford = .class5
 
-        let risk = PatientRisk(of: pd)
-        let gnri = try #require(risk.gnri)
+        let risk = try #require(PatientRisk(patientData: pd))
+        let gnri = risk.gnri
         #expect(String(format: "%.1f", gnri) == "86.2")
         #expect(risk.gnriRisk == .moderate)
-        let p30DA = try #require(risk.predicted30DDeathOrAmputation)
+        let p30DA = risk.predicted30DDeathOrAmputation
         #expect(String(format: "%.3f", p30DA) == "0.100")
-        let p30DM = try #require(risk.predicted30DMALE)
+        let p30DM = risk.predicted30DMALE
         #expect(String(format: "%.3f", p30DM) == "0.043")
-        let p2YOS = try #require(risk.predicted2YOS)
+        let p2YOS = risk.predicted2YOS
         #expect(String(format: "%.2f", p2YOS) == "0.08")
         #expect(risk.predicted2YOSRisk == .high)
-        let p2YAFS = try #require(risk.predicted2YAFS)
+        let p2YAFS = risk.predicted2YAFS
         #expect(String(format: "%.2f", p2YAFS) == "0.03")
     }
 
     // Regression: isUrgent and hasAbnormalWBC must be counted independently.
     // Same base as testExtremelyLowRiskCase, with only isUrgent set.
-    @Test
-    func testUrgentWithNormalWBC() throws {
+    @Test("Urgent with normal WBC counts independently")
+    func urgentWithNormalWBC() throws {
         var pd = PatientData()
         // Sex has no default any more; these expectations were recorded for
         // a female patient.
@@ -232,20 +208,20 @@ struct PatientRiskTests {
         pd.isUrgent = true
         pd.hasAbnormalWBC = false
 
-        let risk = PatientRisk(of: pd)
-        let p30DA = try #require(risk.predicted30DDeathOrAmputation)
+        let risk = try #require(PatientRisk(patientData: pd))
+        let p30DA = risk.predicted30DDeathOrAmputation
         #expect(String(format: "%.3f", p30DA) == "0.024")
-        let p30DM = try #require(risk.predicted30DMALE)
+        let p30DM = risk.predicted30DMALE
         #expect(String(format: "%.3f", p30DM) == "0.040")
-        let p2YOS = try #require(risk.predicted2YOS)
+        let p2YOS = risk.predicted2YOS
         #expect(String(format: "%.2f", p2YOS) == "0.92")
-        let p2YAFS = try #require(risk.predicted2YAFS)
+        let p2YAFS = risk.predicted2YAFS
         #expect(String(format: "%.2f", p2YAFS) == "0.83")
     }
 
     // Same base, with only hasAbnormalWBC set.
-    @Test
-    func testNonUrgentWithAbnormalWBC() throws {
+    @Test("Abnormal WBC without urgency counts independently")
+    func nonUrgentWithAbnormalWBC() throws {
         var pd = PatientData()
         // Sex has no default any more; these expectations were recorded for
         // a female patient.
@@ -258,19 +234,19 @@ struct PatientRiskTests {
         pd.isUrgent = false
         pd.hasAbnormalWBC = true
 
-        let risk = PatientRisk(of: pd)
-        let p30DA = try #require(risk.predicted30DDeathOrAmputation)
+        let risk = try #require(PatientRisk(patientData: pd))
+        let p30DA = risk.predicted30DDeathOrAmputation
         #expect(String(format: "%.3f", p30DA) == "0.023")
-        let p30DM = try #require(risk.predicted30DMALE)
+        let p30DM = risk.predicted30DMALE
         #expect(String(format: "%.3f", p30DM) == "0.053")
-        let p2YOS = try #require(risk.predicted2YOS)
+        let p2YOS = risk.predicted2YOS
         #expect(String(format: "%.2f", p2YOS) == "0.92")
-        let p2YAFS = try #require(risk.predicted2YAFS)
+        let p2YAFS = risk.predicted2YAFS
         #expect(String(format: "%.2f", p2YAFS) == "0.85")
     }
 
-    @Test
-    func testHighRiskCase2() throws {
+    @Test("High risk case 2")
+    func highRisk2() throws {
         var pd = PatientData()
         pd.sex = .female
         pd.age = 90
@@ -296,18 +272,18 @@ struct PatientRiskTests {
         pd.hasOtherVD = true
         pd.rutherford = .class6
 
-        let risk = PatientRisk(of: pd)
-        let gnri = try #require(risk.gnri)
+        let risk = try #require(PatientRisk(patientData: pd))
+        let gnri = risk.gnri
         #expect(String(format: "%.1f", gnri) == "71.3")
         #expect(risk.gnriRisk == .major)
-        let p30DA = try #require(risk.predicted30DDeathOrAmputation)
+        let p30DA = risk.predicted30DDeathOrAmputation
         #expect(String(format: "%.3f", p30DA) == "0.370")
-        let p30DM = try #require(risk.predicted30DMALE)
+        let p30DM = risk.predicted30DMALE
         #expect(String(format: "%.3f", p30DM) == "0.122")
-        let p2YOS = try #require(risk.predicted2YOS)
+        let p2YOS = risk.predicted2YOS
         #expect(String(format: "%.2f", p2YOS) == "0.00")
         #expect(risk.predicted2YOSRisk == .high)
-        let p2YAFS = try #require(risk.predicted2YAFS)
+        let p2YAFS = risk.predicted2YAFS
         #expect(String(format: "%.2f", p2YAFS) == "0.00")
     }
 }

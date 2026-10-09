@@ -71,7 +71,6 @@ clitical-ios/
 │   ├── ChoiceListView.swift      # ToggleRow / SegmentedRow / MenuChoiceRow
 │   ├── AgeFormView.swift, …      # Numeric fields (age, height, weight, Alb)
 │   ├── Labels.swift              # Domain enums → localization keys
-│   ├── LocalizationManager.swift # In-app language switching
 │   ├── QuestionError.swift       # Input error definitions
 │   └── CLPatientData/            # Local Swift package (domain logic)
 │       ├── Sources/CLPatientData/
@@ -91,10 +90,8 @@ clitical-ios/
   coefficients are collected in `Questions.swift` as one `enum` case per predictor.
 - **Patient data as a value type** — `PatientData` is a `struct` passed to the forms through
   `@State` / `@Binding`, and is never persisted.
-- **In-app language switching** — `LocalizationManager` swaps the class of `Bundle.main` so
-  that the selected `.lproj` wins, letting `Text("key")` re-resolve without a restart. Only
-  navigation titles, which UIKit caches, are resolved explicitly via
-  `localization.string(forKey:)`.
+- **System per-app language** — there is no in-app language switch; the app follows the iOS
+  per-app language setting, and Settings has a row that opens it.
 - **HIG-conformant UI** — settings-like items are grouped in a single Settings tab rather
   than holding tabs of their own, and choices use inline `Picker` / `Toggle` controls
   instead of pushed screens.
@@ -130,8 +127,7 @@ xcodebuild -project clitical-ios.xcodeproj -scheme clitical-ios -destination 'pl
 
 Japanese (default) and English are supported. Strings live in
 `ja.lproj/Localizable.strings` and `en.lproj/Localizable.strings`, and the key sets are kept
-identical between the two. The selected language is stored in `UserDefaults` under
-`app_language`; on first launch the app follows the device language.
+identical between the two. The language is the system per-app language (iOS Settings).
 
 ## Versioning
 
@@ -152,7 +148,7 @@ Settings > About.
 ## Terms of use
 
 The legal documents are hosted outside the app and opened in an `SFSafariViewController`
-from Settings, in whichever language is selected there:
+from Settings, in the app's current language:
 
 - **Terms of Use** — [Japanese](https://studiome.github.io/clitical-legal/terms/ja/) /
   [English](https://studiome.github.io/clitical-legal/terms/en/)
@@ -161,7 +157,7 @@ from Settings, in whichever language is selected there:
 - **Support** — [Japanese](https://studiome.github.io/clitical-legal/support/ja/) /
   [English](https://studiome.github.io/clitical-legal/support/en/)
 
-The URLs are built by `AppInfo.legalURL(for:language:)` in `MainTabView.swift`.
+The URLs are built by `AppInfo.legalURL(for:)` in `AppInfo.swift`.
 
 On first launch an intended-use notice is shown in place of the app, with the Terms of Use
 reachable from it; tapping "I understand" records agreement to both. The acknowledgement is
@@ -172,7 +168,7 @@ the wording asks again.
 ## Privacy
 
 Patient data is processed on this device only and is never sent or stored elsewhere. The
-app saves the selected language and the acknowledged version of the intended-use notice,
+app saves the acknowledged version of the intended-use notice,
 and nothing else.
 
 ## License
