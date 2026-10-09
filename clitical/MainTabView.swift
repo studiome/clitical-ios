@@ -47,34 +47,15 @@ struct MainTabView: View {
         .tabViewStyle(.sidebarAdaptable)
     }
 
-    @ViewBuilder
     private var sidebar: some View {
-        if #available(iOS 17.0, *) {
-            List(AppSection.allCases, selection: $selectedSection) { section in
-                NavigationLink(value: section) {
-                    Label(section.titleKey, systemImage: section.symbolName)
-                }
-                .accessibilityIdentifier(section.rawValue)
+        List(AppSection.allCases, selection: $selectedSection) { section in
+            NavigationLink(value: section) {
+                Label(section.titleKey, systemImage: section.symbolName)
             }
-            .adaptiveSidebarStyle()
-            .navigationTitle(Text(verbatim: AppInfo.name))
-        } else {
-            List {
-                ForEach(AppSection.allCases) { section in
-                    Button {
-                        selectedSection = section
-                    } label: {
-                        Label(section.titleKey, systemImage: section.symbolName)
-                    }
-                    .accessibilityIdentifier(section.rawValue)
-                    .foregroundStyle(.primary)
-                    .listRowBackground(
-                        selectedSection == section ? Color.accentColor.opacity(0.12) : nil
-                    )
-                }
-            }
-            .navigationTitle(Text(verbatim: AppInfo.name))
+            .accessibilityIdentifier(section.rawValue)
         }
+        .contentMargins(.horizontal, 8, for: .scrollContent)
+        .navigationTitle(Text(verbatim: AppInfo.name))
     }
 
     private var splitViewDetail: some View {
@@ -120,13 +101,6 @@ struct MainTabView: View {
                 }
                 .tag(AppSection.settings)
         }
-    }
-}
-
-@available(iOS 17.0, *)
-private extension View {
-    func adaptiveSidebarStyle() -> some View {
-        contentMargins(.horizontal, 8, for: .scrollContent)
     }
 }
 

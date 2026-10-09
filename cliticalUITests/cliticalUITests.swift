@@ -438,9 +438,14 @@ final class cliticalUITests: XCTestCase {
 
     /// In a compact-height window (iPhone landscape) the acknowledge button
     /// must not sit in a bottom bar that eats the little height there is; it
-    /// scrolls with the notice and must still be reachable.
+    /// scrolls with the notice and must still be reachable. iPhone only: iPad
+    /// landscape is still regular height, where the bottom bar is correct.
     func testDisclaimerAcknowledgeIsReachableInLandscape() throws {
+        guard UIDevice.current.userInterfaceIdiom == .phone else {
+            throw XCTSkip("Only iPhone landscape has compact height")
+        }
         XCUIDevice.shared.orientation = .landscapeLeft
+        addTeardownBlock { XCUIDevice.shared.orientation = .portrait }
         let app = XCUIApplication()
         app.launchArguments += englishArguments
         app.launchArguments += ["-intended_use_disclaimer_version", "unacknowledged"]
