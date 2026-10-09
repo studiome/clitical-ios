@@ -31,6 +31,7 @@
 		21FB98E7302E9DED008432ED /* CLPatientData in Frameworks */ = {isa = PBXBuildFile; productRef = 21FB98E6302E9DED008432ED /* CLPatientData */; };
 		21FB99030000000000000001 /* clitical/CLPatientData/Tests/CLPatientDataTests/PatientDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FB99010000000000000001 /* clitical/CLPatientData/Tests/CLPatientDataTests/PatientDataTests.swift */; };
 		21FB99040000000000000001 /* clitical/CLPatientData/Tests/CLPatientDataTests/PatientRiskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FB99020000000000000001 /* clitical/CLPatientData/Tests/CLPatientDataTests/PatientRiskTests.swift */; };
+		21FB99A20000000000000001 /* clitical/CLPatientData/Tests/CLPatientDataTests/PatientDataValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FB99A10000000000000001 /* clitical/CLPatientData/Tests/CLPatientDataTests/PatientDataValidationTests.swift */; };
 		21FB99060000000000000001 /* CLPatientData in Frameworks */ = {isa = PBXBuildFile; productRef = 21FB99050000000000000001 /* CLPatientData */; };
 /* End PBXBuildFile section */
 
@@ -71,6 +72,7 @@
 		21AA010000000000000000B1 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		21FB99010000000000000001 /* clitical/CLPatientData/Tests/CLPatientDataTests/PatientDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = clitical/CLPatientData/Tests/CLPatientDataTests/PatientDataTests.swift; sourceTree = SOURCE_ROOT; };
 		21FB99020000000000000001 /* clitical/CLPatientData/Tests/CLPatientDataTests/PatientRiskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = clitical/CLPatientData/Tests/CLPatientDataTests/PatientRiskTests.swift; sourceTree = SOURCE_ROOT; };
+		21FB99A10000000000000001 /* clitical/CLPatientData/Tests/CLPatientDataTests/PatientDataValidationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = clitical/CLPatientData/Tests/CLPatientDataTests/PatientDataValidationTests.swift; sourceTree = SOURCE_ROOT; };
 		21FB990A0000000000000001 /* CLPatientDataLocalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CLPatientDataLocalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -177,6 +179,7 @@
 			children = (
 				21FB99010000000000000001 /* clitical/CLPatientData/Tests/CLPatientDataTests/PatientDataTests.swift */,
 				21FB99020000000000000001 /* clitical/CLPatientData/Tests/CLPatientDataTests/PatientRiskTests.swift */,
+				21FB99A10000000000000001 /* clitical/CLPatientData/Tests/CLPatientDataTests/PatientDataValidationTests.swift */,
 			);
 			name = CLPatientDataLocalTests;
 			sourceTree = "<group>";
@@ -346,6 +349,7 @@
 			files = (
 				21FB99030000000000000001 /* clitical/CLPatientData/Tests/CLPatientDataTests/PatientDataTests.swift in Sources */,
 				21FB99040000000000000001 /* clitical/CLPatientData/Tests/CLPatientDataTests/PatientRiskTests.swift in Sources */,
+				21FB99A20000000000000001 /* clitical/CLPatientData/Tests/CLPatientDataTests/PatientDataValidationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
