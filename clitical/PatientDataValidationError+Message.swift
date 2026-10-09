@@ -32,16 +32,16 @@ extension PatientDataValidationError {
     /// The localization key of the alert message.
     var messageKey: String {
         switch self {
-        case .ageMissing: return "AgeRequiredErrorMessage"
-        case .ageOutOfRange: return "AgeRangeErrorMessage"
-        case .sexMissing: return "SexRequiredErrorMessage"
-        case .heightMissing: return "HeightRequiredErrorMessage"
-        case .heightOutOfRange: return "HeightRangeErrorMessage"
-        case .weightMissing: return "WeightRequiredErrorMessage"
-        case .weightOutOfRange: return "WeightRangeErrorMessage"
-        case .albuminMissing: return "AlbuminRequiredErrorMessage"
-        case .albuminOutOfRange: return "AlbuminRangeErrorMessage"
-        case .noLesionSelected: return "IrrelevantLesionMessage"
+        case .ageMissing: "AgeRequiredErrorMessage"
+        case .ageOutOfRange: "AgeRangeErrorMessage"
+        case .sexMissing: "SexRequiredErrorMessage"
+        case .heightMissing: "HeightRequiredErrorMessage"
+        case .heightOutOfRange: "HeightRangeErrorMessage"
+        case .weightMissing: "WeightRequiredErrorMessage"
+        case .weightOutOfRange: "WeightRangeErrorMessage"
+        case .albuminMissing: "AlbuminRequiredErrorMessage"
+        case .albuminOutOfRange: "AlbuminRangeErrorMessage"
+        case .noLesionSelected: "IrrelevantLesionMessage"
         }
     }
 
@@ -50,16 +50,16 @@ extension PatientDataValidationError {
     private var rangeArguments: [CVarArg]? {
         switch self {
         case .ageOutOfRange:
-            return [PatientData.validAgeRange.lowerBound.formatted(),
-                    PatientData.validAgeRange.upperBound.formatted()]
+            [PatientData.validAgeRange.lowerBound.formatted(),
+             PatientData.validAgeRange.upperBound.formatted()]
         case .heightOutOfRange:
-            return Self.bounds(of: PatientData.validHeightRange)
+            Self.bounds(of: PatientData.validHeightRange)
         case .weightOutOfRange:
-            return Self.bounds(of: PatientData.validWeightRange)
+            Self.bounds(of: PatientData.validWeightRange)
         case .albuminOutOfRange:
-            return Self.bounds(of: PatientData.validAlbuminRange)
+            Self.bounds(of: PatientData.validAlbuminRange)
         default:
-            return nil
+            nil
         }
     }
 

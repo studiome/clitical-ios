@@ -9,7 +9,7 @@ import SwiftUI
 import CLPatientData
 
 struct PredictedRiskView: View {
-    @EnvironmentObject var localization: LocalizationManager
+    @EnvironmentObject private var localization: LocalizationManager
     let risk: PatientRisk?
     let showsNavigationTitle: Bool
 
@@ -37,8 +37,8 @@ struct PredictedRiskView: View {
                     RiskRow(icon: "heart.text.square",
                             title: "2YOS") {
                         percentText(risk.predicted2YOS, fractionDigits: 0)
-                        riskLabelText(risk.predicted2YOSRisk?.label,
-                                      color: risk.predicted2YOSRisk?.color)
+                        riskLabelText(risk.predicted2YOSRisk.label,
+                                      color: risk.predicted2YOSRisk.color)
                     }
                     RiskRow(icon: "figure.walk",
                             title: "2YAFS") {
@@ -49,8 +49,8 @@ struct PredictedRiskView: View {
                     RiskRow(icon: "fork.knife",
                             title: "GeriatricNutritionalRiskIndex") {
                         valueText(risk.gnri, fractionDigits: 1)
-                        riskLabelText(risk.gnriRisk?.label,
-                                      color: risk.gnriRisk?.color)
+                        riskLabelText(risk.gnriRisk.label,
+                                      color: risk.gnriRisk.color)
                     }
                 }
                 // The figures above are the part of the app most likely to be
@@ -84,37 +84,22 @@ struct PredictedRiskView: View {
         }
     }
 
-    @ViewBuilder
-    private func percentText(_ value: Double?, fractionDigits: Int) -> some View {
-        if let value {
-            Text(value, format: .percent.precision(.fractionLength(fractionDigits)))
-                .font(.title)
-        } else {
-            Text("---")
-        }
+    private func percentText(_ value: Double, fractionDigits: Int) -> some View {
+        Text(value, format: .percent.precision(.fractionLength(fractionDigits)))
+            .font(.title)
     }
 
-    @ViewBuilder
-    private func valueText(_ value: Double?, fractionDigits: Int) -> some View {
-        if let value {
-            Text(value, format: .number.precision(.fractionLength(fractionDigits)))
-                .font(.title)
-        } else {
-            Text("---")
-        }
+    private func valueText(_ value: Double, fractionDigits: Int) -> some View {
+        Text(value, format: .number.precision(.fractionLength(fractionDigits)))
+            .font(.title)
     }
 
-    @ViewBuilder
-    private func riskLabelText(_ label: String?, color: Color?) -> some View {
-        if let label {
-            // The severity color is supplementary: the label text itself
-            // states the risk level, so color is never the sole indicator.
-            Text(LocalizedStringKey(label))
-                .font(.title2)
-                .foregroundColor(color ?? .primary)
-        } else {
-            Text("---")
-        }
+    private func riskLabelText(_ label: LocalizedStringKey, color: Color) -> some View {
+        // The severity color is supplementary: the label text itself
+        // states the risk level, so color is never the sole indicator.
+        Text(label)
+            .font(.title2)
+            .foregroundStyle(color)
     }
 }
 
@@ -151,9 +136,9 @@ private extension Color {
 private extension TwoYearOSRisk {
     var color: Color {
         switch self {
-        case .low: return .riskLow
-        case .medium: return .riskMedium
-        case .high: return .riskHigh
+        case .low: .riskLow
+        case .medium: .riskMedium
+        case .high: .riskHigh
         }
     }
 }
@@ -161,9 +146,9 @@ private extension TwoYearOSRisk {
 private extension GNRIRisk {
     var color: Color {
         switch self {
-        case .noRisk: return .riskLow
-        case .low, .moderate: return .riskMedium
-        case .major: return .riskHigh
+        case .noRisk: .riskLow
+        case .low, .moderate: .riskMedium
+        case .major: .riskHigh
         }
     }
 }
@@ -202,7 +187,7 @@ private struct RiskRow<Content: View>: View {
         } else {
             HStack {
                 Image(systemName: icon)
-                    .foregroundColor(.accentColor)
+                    .foregroundStyle(Color.accentColor)
                     .accessibilityHidden(true)
                 titleText
             }
@@ -225,7 +210,7 @@ private struct RiskRow<Content: View>: View {
 }
 
 #Preview("Result") {
-    PredictedRiskView(risk: PatientRisk(of: previewPatientData()))
+    PredictedRiskView(risk: PatientRisk(patientData: previewPatientData()))
         .environmentObject(LocalizationManager())
         .environment(\.locale, .init(identifier: "ja"))
 }

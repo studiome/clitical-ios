@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  RootContentView.swift
 //  clitical
 //
 //  Created by kmiyahara on 2022/12/20.
@@ -9,13 +9,12 @@ import SwiftUI
 import CLPatientData
 
 struct RootContentView: View {
-    @EnvironmentObject var localization: LocalizationManager
+    @EnvironmentObject private var localization: LocalizationManager
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @State private var patientData = PatientData()
-    @FocusState var isActive: Bool
-    @State private var failure = false
+    @FocusState private var isActive: Bool
     @State private var riskCalculated = false
-    @State private var errorMessage = ""
+    @State private var errorMessage: String?
     @State private var risk: PatientRisk?
     @State private var confirmingReset = false
     @State private var predictionRequestID = UUID()
@@ -85,7 +84,10 @@ struct RootContentView: View {
     @ViewBuilder
     private var patientDataSections: some View {
         Section(header: localizedText("BasicInfo")) {
-            AgeFormView(patientData: $patientData).focused($isActive)
+            NumberFieldRow(title: "AgeQuestionTitle",
+                           value: $patientData.age,
+                           keyboard: .numberPad)
+                .focused($isActive)
             SegmentedRow(
                 title: "SexQuestionTitle",
                 // The hint appears only while the question is unanswered, so
@@ -95,8 +97,14 @@ struct RootContentView: View {
                 options: Sex.allCases.map(Optional.init),
                 label: { $0?.label ?? "" },
                 selection: $patientData.sex)
-            HeightFormView(patientData: $patientData).focused($isActive)
-            WeightFormView(patientData: $patientData).focused($isActive)
+            NumberFieldRow(title: "HeightQuestionTitle",
+                           value: $patientData.height,
+                           keyboard: .decimalPad)
+                .focused($isActive)
+            NumberFieldRow(title: "WeightQuestionTitle",
+                           value: $patientData.weight,
+                           keyboard: .decimalPad)
+                .focused($isActive)
         }
         Section(header: localizedText("SocialHistory")) {
             ToggleRow(
@@ -110,7 +118,10 @@ struct RootContentView: View {
                 selection: $patientData.activity)
         }
         Section(header: localizedText("ClinicalInfo")) {
-            AlbFormView(patientData: $patientData).focused($isActive)
+            NumberFieldRow(title: "AlbQuestionTitle",
+                           value: $patientData.alb,
+                           keyboard: .decimalPad)
+                .focused($isActive)
             MenuChoiceRow(
                 title: "CKDQuestionTitle",
                 footer: "CKDQuestionDescription",
@@ -203,11 +214,11 @@ struct RootContentView: View {
             .accessibilityIdentifier("predictRisks")
             .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
             .listRowBackground(Color.clear)
-            .alert("ErrorTitle", isPresented: $failure) {
-            } message: {
+            .alert("ErrorTitle", isPresented: isShowingError, presenting: errorMessage) { _ in
+            } message: { message in
                 // Already resolved against the current language, and may carry
                 // a formatted range, so it is not a localization key.
-                Text(verbatim: errorMessage)
+                Text(verbatim: message)
             }
         }
         // Reset sits in its own section: a destructive action directly below
@@ -238,6 +249,13 @@ struct RootContentView: View {
         }
     }
 
+    private var isShowingError: Binding<Bool> {
+        Binding(
+            get: { errorMessage != nil },
+            set: { if !$0 { errorMessage = nil } }
+        )
+    }
+
     private func predictRisks() {
         // Range checks matter as much as presence checks here: a height typed
         // in metres produces a perfectly plausible looking risk otherwise.
@@ -245,26 +263,18 @@ struct RootContentView: View {
             fail(with: error.message(using: localization))
             return
         }
-        let newRisk = PatientRisk(of: patientData)
-        guard newRisk.gnri != nil,
-            newRisk.gnriRisk != nil,
-            newRisk.predicted2YOS != nil,
-            newRisk.predicted30DDeathOrAmputation != nil,
-            newRisk.predicted30DMALE != nil,
-            newRisk.predicted2YOSRisk != nil,
-            newRisk.predicted2YAFS != nil
-        else {
+        guard let newRisk = PatientRisk(patientData: patientData) else {
             fail(with: localization.string(forKey: "DefaultError"))
             return
         }
         risk = newRisk
-        failure = false
+        errorMessage = nil
         if horizontalSizeClass == .regular {
             riskCalculated = false
         } else {
             let requestID = UUID()
             predictionRequestID = requestID
-            DispatchQueue.main.async {
+            Task { @MainActor in
                 guard predictionRequestID == requestID, risk != nil else { return }
                 riskCalculated = true
             }
@@ -274,7 +284,6 @@ struct RootContentView: View {
     private func fail(with message: String) {
         predictionRequestID = UUID()
         errorMessage = message
-        failure = true
         riskCalculated = false
     }
 
@@ -305,7 +314,7 @@ private struct RiskPreviewPane: View {
 
     var body: some View {
         Group {
-            if risk != nil {
+            if let risk {
                 PredictedRiskView(risk: risk, showsNavigationTitle: false)
             } else {
                 VStack(spacing: 12) {
@@ -358,7 +367,7 @@ private extension View {
     ) -> some View {
         toolbar {
             if isActive {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .primaryAction) {
                     Button {
                         dismiss()
                     } label: {

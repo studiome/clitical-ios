@@ -25,49 +25,56 @@
 
 import Foundation
 
-public struct PatientRisk {
-    private let twoYearOSH0Coeff = 0.922
-    private let twoYearAFSH0Coeff = 0.876
-
-    public var gnri: Double? {
-        calcGNRI()
-    }
-
-    public var gnriRisk: GNRIRisk? {
-        classifyGNRI()
-    }
-
+public struct PatientRisk: Equatable, Sendable {
+    public let gnri: Double
+    public let gnriRisk: GNRIRisk
     // 0.0 ... 1.0
-    public var predicted30DDeathOrAmputation: Double? {
-        calcPredicted30DDA()
-    }
-
+    public let predicted30DDeathOrAmputation: Double
     // 0.0 ... 1.0
-    public var predicted30DMALE: Double? {
-        calcPredicted30DMALE()
-    }
-
+    public let predicted30DMALE: Double
     // 0.0 ... 1.0
-    public var predicted2YOS: Double? {
-        calcPredicted2YOS()
-    }
-
-    public var predicted2YOSRisk: TwoYearOSRisk? {
-        classifyOS()
-    }
-
+    public let predicted2YOS: Double
+    public let predicted2YOSRisk: TwoYearOSRisk
     // 0.0 ... 1.0
-    public var predicted2YAFS: Double? {
-        calcPredicted2YAFS()
+    public let predicted2YAFS: Double
+
+    private static let twoYearOSH0Coeff = 0.922
+    private static let twoYearAFSH0Coeff = 0.876
+
+    /// Returns `nil` when a required input (height, weight, albumin, age or
+    /// sex) is missing or implausible. Sex is a covariate of most of the
+    /// models and an unanswered sex would quietly be treated as male, so the
+    /// prediction is refused as a whole rather than partially resolved.
+    public init?(patientData: PatientData) {
+        guard let age = patientData.age,
+              patientData.sex != nil,
+              let gnri = Self.calcGNRI(patientData),
+              let gnriRisk = Self.classifyGNRI(gnri) else {
+            return nil
+        }
+        let context = RiskContext(patient: patientData, age: age, gnriRisk: gnriRisk)
+
+        let predicted2YOS = pow(Self.twoYearOSH0Coeff, exp(TwoYearOSQuestions.linearPredictor(for: context)))
+        guard let predicted2YOSRisk = Self.classifyOS(predicted2YOS) else {
+            return nil
+        }
+
+        self.gnri = gnri
+        self.gnriRisk = gnriRisk
+        self.predicted30DDeathOrAmputation = Self.logistic(
+            ThirtyDayDeathOrAmputationQuestions.linearPredictor(for: context))
+        self.predicted30DMALE = Self.logistic(
+            ThirtyDayMALEQuestions.linearPredictor(for: context))
+        self.predicted2YOS = predicted2YOS
+        self.predicted2YOSRisk = predicted2YOSRisk
+        self.predicted2YAFS = pow(Self.twoYearAFSH0Coeff, exp(TwoYearAFSQuestions.linearPredictor(for: context)))
     }
 
-    var patientData: PatientData
-
-    public init(of patientData: PatientData) {
-        self.patientData = patientData
+    private static func logistic(_ sigma: Double) -> Double {
+        1.0 / (1.0 + exp(sigma))
     }
 
-    private func calcGNRI() -> Double? {
+    private static func calcGNRI(_ patientData: PatientData) -> Double? {
         guard let heightCM = patientData.height,
               let weight = patientData.weight,
               let alb = patientData.alb,
@@ -79,97 +86,45 @@ public struct PatientRisk {
         return 14.89 * alb + 41.7 * weightIndex
     }
 
-    private func calcPredicted30DDA() -> Double? {
-        guard let gnriRisk else {
-            return nil
-        }
-        let sigma = ThirtyDayDeathOrAmputationQuestions.allCases
-            .filter { $0.applies(to: patientData, gnriRisk: gnriRisk) }
-            .map(\.coefficient)
-            .reduce(0.0, +)
-        return 1.0 / (1.0 + exp(sigma))
-    }
-
-    private func calcPredicted30DMALE() -> Double? {
-        // `applies(to:)` reads sex as "female or not", which would quietly
-        // treat an unanswered sex as male, so require it explicitly.
-        guard let age = patientData.age, patientData.sex != nil, let gnriRisk else {
-            return nil
-        }
-        let sigma = ThirtyDayMALEQuestions.allCases
-            .filter { $0.applies(to: patientData, age: age, gnriRisk: gnriRisk) }
-            .map(\.coefficient)
-            .reduce(0.0, +)
-        return 1.0 / (1.0 + exp(sigma))
-    }
-
-    private func calcPredicted2YOS() -> Double? {
-        guard let age = patientData.age, patientData.sex != nil, let gnriRisk else {
-            return nil
-        }
-        let sigma = TwoYearOSQuestions.allCases
-            .filter { $0.applies(to: patientData, age: age, gnriRisk: gnriRisk) }
-            .map(\.coefficient)
-            .reduce(0.0, +)
-        return pow(twoYearOSH0Coeff, exp(sigma))
-    }
-
-    private func calcPredicted2YAFS() -> Double? {
-        guard let age = patientData.age, patientData.sex != nil, let gnriRisk else {
-            return nil
-        }
-        let sigma = TwoYearAFSQuestions.allCases
-            .filter { $0.applies(to: patientData, age: age, gnriRisk: gnriRisk) }
-            .map(\.coefficient)
-            .reduce(0.0, +)
-        return pow(twoYearAFSH0Coeff, exp(sigma))
-    }
-
-    private func classifyGNRI() -> GNRIRisk? {
-        guard let gnri else {
-            return nil
-        }
+    private static func classifyGNRI(_ gnri: Double) -> GNRIRisk? {
         // Per the reference papers (Miyata et al.):
         // no risk >=98, low 92..<98, moderate 82..<92, major <82
         switch gnri {
-        case 98.0...Double.infinity:
-            return .noRisk
+        case 98.0...:
+            .noRisk
         case 92.0..<98.0:
-            return .low
+            .low
         case 82.0..<92.0:
-            return .moderate
+            .moderate
         case 0.0..<82.0:
-            return .major
+            .major
         default:
-            return nil
+            nil
         }
     }
 
-    private func classifyOS() -> TwoYearOSRisk? {
-        guard let os = predicted2YOS else {
-            return nil
-        }
+    private static func classifyOS(_ os: Double) -> TwoYearOSRisk? {
         switch os {
         case 0.70...1.0:
-            return .low
+            .low
         case 0.50..<0.70:
-            return .medium
+            .medium
         case 0.0..<0.50:
-            return .high
+            .high
         default:
-            return nil
+            nil
         }
     }
 }
 
-public enum GNRIRisk {
+public enum GNRIRisk: Sendable, Hashable {
     case noRisk
     case low
     case moderate
     case major
 }
 
-public enum TwoYearOSRisk {
+public enum TwoYearOSRisk: Sendable, Hashable {
     case low
     case medium
     case high

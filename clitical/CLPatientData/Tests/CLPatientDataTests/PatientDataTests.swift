@@ -3,8 +3,8 @@ import Testing
 
 @Suite
 struct PatientDataTests {
-    @Test
-    func testInit() {
+    @Test("Default values")
+    func defaultValues() {
         let pd = PatientData()
         // Sex has no clinically safe default: it must be chosen explicitly,
         // so an untouched form is distinguishable from a deliberate answer.
@@ -33,8 +33,8 @@ struct PatientDataTests {
         #expect(pd.rutherford == .class4)
     }
 
-    @Test
-    func testValueSemantics() {
+    @Test("Copies are independent")
+    func copiesAreIndependent() {
         var original = PatientData()
         original.age = 70
         var copy = original
@@ -43,8 +43,8 @@ struct PatientDataTests {
         #expect(copy.age == 80)
     }
 
-    @Test
-    func testClearResetsToInitialState() {
+    @Test("clear() resets to the initial state")
+    func clearResetsToInitialState() {
         var pd = PatientData()
         pd.age = 70
         pd.height = 160.0

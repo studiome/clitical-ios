@@ -21,8 +21,8 @@ enum AppLanguage: String, CaseIterable, Identifiable {
     /// The language's endonym, shown identically regardless of the active locale.
     var displayName: String {
         switch self {
-        case .ja: return "日本語"
-        case .en: return "English"
+        case .ja: "日本語"
+        case .en: "English"
         }
     }
 }
@@ -35,8 +35,13 @@ final class LocalizationManager: ObservableObject {
         didSet {
             UserDefaults.standard.set(language.rawValue, forKey: Self.storageKey)
             Bundle.setLanguage(language.rawValue)
+            languageBundle = Self.bundle(for: language)
         }
     }
+
+    /// The `.lproj` bundle of the current language, resolved once per change
+    /// rather than on every `string(forKey:)` call.
+    private var languageBundle: Bundle?
 
     var locale: Locale { Locale(identifier: language.rawValue) }
 
@@ -46,16 +51,19 @@ final class LocalizationManager: ObservableObject {
     /// re-localize on its own when only `Bundle.main`'s lookup is swapped, so
     /// callers must feed it a concrete, freshly resolved `String` instead.
     func string(forKey key: String) -> String {
-        guard let path = Bundle.main.path(forResource: language.rawValue, ofType: "lproj"),
-              let bundle = Bundle(path: path) else {
-            return key
-        }
-        return bundle.localizedString(forKey: key, value: nil, table: nil)
+        guard let languageBundle else { return key }
+        return languageBundle.localizedString(forKey: key, value: nil, table: nil)
+    }
+
+    private static func bundle(for language: AppLanguage) -> Bundle? {
+        Bundle.main.path(forResource: language.rawValue, ofType: "lproj")
+            .flatMap(Bundle.init(path:))
     }
 
     init() {
         let resolved = Self.storedLanguage() ?? Self.systemLanguage()
         language = resolved
+        languageBundle = Self.bundle(for: resolved)
         Bundle.setLanguage(resolved.rawValue)
     }
 
@@ -75,7 +83,13 @@ final class LocalizationManager: ObservableObject {
 
 // MARK: - Runtime bundle language override
 
-private var languageAssociationKey: UInt8 = 0
+private enum AssociationKeys {
+    // The address of this variable is the association key. It is a mutable
+    // static only because `objc_*AssociatedObject` takes it as an inout
+    // pointer; it is never written to, and `nonisolated(unsafe)` is not
+    // available in Swift 5 language mode.
+    static var language: UInt8 = 0
+}
 
 /// A `Bundle` subclass that reports and resolves a single, explicitly chosen
 /// language. Overriding `preferredLocalizations` makes SwiftUI resolve `Text`
@@ -83,7 +97,7 @@ private var languageAssociationKey: UInt8 = 0
 /// `localizedString` override covers `NSLocalizedString`-style lookups.
 private final class LanguageOverrideBundle: Bundle, @unchecked Sendable {
     private var selectedLanguage: String? {
-        objc_getAssociatedObject(self, &languageAssociationKey) as? String
+        objc_getAssociatedObject(self, &AssociationKeys.language) as? String
     }
 
     private var languageBundle: Bundle? {
@@ -115,7 +129,7 @@ extension Bundle {
     static func setLanguage(_ language: String) {
         object_setClass(Bundle.main, LanguageOverrideBundle.self)
         objc_setAssociatedObject(Bundle.main,
-                                 &languageAssociationKey,
+                                 &AssociationKeys.language,
                                  language,
                                  .OBJC_ASSOCIATION_RETAIN)
     }
