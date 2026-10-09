@@ -6,8 +6,6 @@
 import SwiftUI
 
 struct ReferencesView: View {
-    @EnvironmentObject private var localization: LocalizationManager
-
     private struct Reference: Identifiable {
         var id: URL { url }
         let text: String
@@ -51,7 +49,7 @@ struct ReferencesView: View {
                     }
                 }
             }
-            .navigationTitle(Text(verbatim: localization.string(forKey: "References")))
+            .navigationTitle(Text("References"))
             .sheet(item: $selectedReference) { reference in
                 SafariView(url: reference.url)
                     .ignoresSafeArea()

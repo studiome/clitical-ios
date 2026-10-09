@@ -33,8 +33,12 @@ enum AppInfo {
         }
     }
 
-    static func legalURL(for document: LegalDocument, language: AppLanguage) -> URL {
-        return URL(string: "https://studiome.github.io/clitical-legal/\(document.rawValue)/\(language.rawValue)/")!
+    /// The legal page in the language the system resolved for this app (the
+    /// per-app language setting), falling back to English for any language
+    /// the app does not ship.
+    static func legalURL(for document: LegalDocument) -> URL {
+        let language = Bundle.main.preferredLocalizations.first == "ja" ? "ja" : "en"
+        return URL(string: "https://studiome.github.io/clitical-legal/\(document.rawValue)/\(language)/")!
     }
 
     static var version: String {

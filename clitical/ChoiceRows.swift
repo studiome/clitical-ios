@@ -189,6 +189,5 @@ struct MenuChoiceRow<Value: Hashable>: View {
                           selection: .constant(.normal))
         }
     }
-    .environmentObject(LocalizationManager())
     .environment(\.locale, .init(identifier: "ja"))
 }

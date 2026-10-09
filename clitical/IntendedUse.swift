@@ -42,7 +42,8 @@ struct IntendedUseGate<Content: View>: View {
 }
 
 struct IntendedUseDisclaimerView: View {
-    @EnvironmentObject private var localization: LocalizationManager
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+    @ScaledMetric(relativeTo: .headline) private var buttonMinHeight = 28.0
 
     let onAcknowledge: () -> Void
 
@@ -87,14 +88,25 @@ struct IntendedUseDisclaimerView: View {
                         Label("DisclaimerReadTerms", systemImage: "doc.text")
                     }
                 }
+                // In a compact-height window (iPhone in landscape) a bottom
+                // bar would take a large share of the little height there
+                // is, so the acknowledgement scrolls with the notice instead.
+                if isCompactHeight {
+                    Section {
+                        acknowledgeContent
+                            .listRowBackground(Color.clear)
+                    }
+                }
             }
-            .navigationTitle(Text(verbatim: localization.string(forKey: "DisclaimerTitle")))
+            .navigationTitle(Text("DisclaimerTitle"))
             .navigationBarTitleDisplayMode(.inline)
             .safeAreaInset(edge: .bottom) {
-                acknowledgeBar
+                if !isCompactHeight {
+                    acknowledgeBar
+                }
             }
             .sheet(isPresented: $isShowingTerms) {
-                SafariView(url: AppInfo.legalURL(for: .terms, language: localization.language))
+                SafariView(url: AppInfo.legalURL(for: .terms))
                     .ignoresSafeArea()
             }
         }
@@ -103,7 +115,7 @@ struct IntendedUseDisclaimerView: View {
     private var header: some View {
         VStack(spacing: 8.0) {
             Image(systemName: "exclamationmark.triangle")
-                .font(.system(size: 36.0))
+                .font(.largeTitle)
                 .foregroundStyle(Color.accentColor)
                 .accessibilityHidden(true)
             Text("DisclaimerHeadline")
@@ -116,12 +128,20 @@ struct IntendedUseDisclaimerView: View {
         .accessibilityIdentifier("intendedUseNotice")
     }
 
+    private var isCompactHeight: Bool { verticalSizeClass == .compact }
+
     private var acknowledgeBar: some View {
+        acknowledgeContent
+            .padding()
+            .background(.bar)
+    }
+
+    private var acknowledgeContent: some View {
         VStack(spacing: 8.0) {
             Button(action: onAcknowledge) {
                 Text("DisclaimerAcknowledge")
                     .font(.headline)
-                    .frame(maxWidth: .infinity, minHeight: 28.0)
+                    .frame(maxWidth: .infinity, minHeight: buttonMinHeight)
                     .foregroundStyle(Color.prominentButtonLabel)
             }
             .buttonStyle(.borderedProminent)
@@ -131,7 +151,5 @@ struct IntendedUseDisclaimerView: View {
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
         }
-        .padding()
-        .background(.bar)
     }
 }

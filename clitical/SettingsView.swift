@@ -6,21 +6,24 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @EnvironmentObject private var localization: LocalizationManager
+    @Environment(\.openURL) private var openURL
 
     @State private var selectedLegalDocument: AppInfo.LegalDocument?
 
     var body: some View {
         NavigationStack {
             Form {
-                Section(header: Text("Language")) {
-                    Picker("Language", selection: $localization.language) {
-                        ForEach(AppLanguage.allCases) { language in
-                            Text(language.displayName).tag(language)
+                // The language is the system's per-app setting, not an in-app
+                // choice: this row just takes people to it.
+                Section(header: Text("Language"), footer: Text("LanguageFooter")) {
+                    Button {
+                        if let url = URL(string: UIApplication.openSettingsURLString) {
+                            openURL(url)
                         }
+                    } label: {
+                        Label("LanguageOpenSettings", systemImage: "globe")
                     }
-                    .pickerStyle(.inline)
-                    .labelsHidden()
+                    .accessibilityIdentifier("openLanguageSettings")
                 }
                 Section {
                     ForEach(AppInfo.LegalDocument.allCases) { document in
@@ -44,9 +47,9 @@ struct SettingsView: View {
                     }
                 }
             }
-            .navigationTitle(Text(verbatim: localization.string(forKey: "Settings")))
+            .navigationTitle(Text("Settings"))
             .sheet(item: $selectedLegalDocument) { document in
-                SafariView(url: AppInfo.legalURL(for: document, language: localization.language))
+                SafariView(url: AppInfo.legalURL(for: document))
                     .ignoresSafeArea()
             }
         }

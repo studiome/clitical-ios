@@ -156,6 +156,5 @@ private enum AppSection: String, CaseIterable, Identifiable {
 
 #Preview {
     MainTabView()
-        .environmentObject(LocalizationManager())
         .environment(\.locale, .init(identifier: "ja"))
 }

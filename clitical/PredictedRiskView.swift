@@ -9,7 +9,6 @@ import SwiftUI
 import CLPatientData
 
 struct PredictedRiskView: View {
-    @EnvironmentObject private var localization: LocalizationManager
     let risk: PatientRisk?
     let showsNavigationTitle: Bool
 
@@ -33,7 +32,8 @@ struct PredictedRiskView: View {
                         percentText(risk.predicted30DMALE, fractionDigits: 1)
                     }
                 }
-                Section(header: Text("2YearPrediction")) {
+                Section(header: Text("2YearPrediction"),
+                        footer: Text("TwoYearDescription").font(.caption)) {
                     RiskRow(icon: "heart.text.square",
                             title: "2YOS") {
                         percentText(risk.predicted2YOS, fractionDigits: 0)
@@ -67,10 +67,20 @@ struct PredictedRiskView: View {
                     .accessibilityElement(children: .combine)
                 }
             }
-            .conditionalNavigationTitle(
-                showsNavigationTitle,
-                title: localization.string(forKey: "RiskViewTitle")
-            )
+            .conditionalNavigationTitle(showsNavigationTitle)
+        } else {
+            errorState
+        }
+    }
+
+    /// `ContentUnavailableView` is the standard presentation for a screen with
+    /// nothing to show; iOS 16 gets an equivalent hand-built layout.
+    @ViewBuilder
+    private var errorState: some View {
+        if #available(iOS 17.0, *) {
+            ContentUnavailableView {
+                Label("AnErrorOccured", systemImage: "exclamationmark.triangle")
+            }
         } else {
             VStack(spacing: 12.0) {
                 Image(systemName: "exclamationmark.triangle")
@@ -105,10 +115,10 @@ struct PredictedRiskView: View {
 
 private extension View {
     @ViewBuilder
-    func conditionalNavigationTitle(_ isVisible: Bool, title: String) -> some View {
+    func conditionalNavigationTitle(_ isVisible: Bool) -> some View {
         if isVisible {
             self
-                .navigationTitle(Text(verbatim: title))
+                .navigationTitle(Text("RiskViewTitle"))
                 .navigationBarTitleDisplayMode(.inline)
         } else {
             self
@@ -205,13 +215,11 @@ private struct RiskRow<Content: View>: View {
 
 #Preview("Error") {
     PredictedRiskView(risk: nil)
-        .environmentObject(LocalizationManager())
         .environment(\.locale, .init(identifier: "ja"))
 }
 
 #Preview("Result") {
     PredictedRiskView(risk: PatientRisk(patientData: previewPatientData()))
-        .environmentObject(LocalizationManager())
         .environment(\.locale, .init(identifier: "ja"))
 }
 

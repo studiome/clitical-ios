@@ -26,7 +26,6 @@
 		2189A24F3004AE2A0002AA14 /* Labels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2189A24E3004AE2A0002AA14 /* Labels.swift */; };
 		218C5C232983BDEA006A4592 /* PredictedRiskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218C5C222983BDEA006A4592 /* PredictedRiskView.swift */; };
 		2196DF7A296DC20600A9FF81 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2196DF7C296DC20600A9FF81 /* Localizable.strings */; };
-		21AA010000000000000000A2 /* LocalizationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AA010000000000000000A1 /* LocalizationManager.swift */; };
 		21AA010000000000000000B2 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AA010000000000000000B1 /* MainTabView.swift */; };
 		21FB98E7302E9DED008432ED /* CLPatientData in Frameworks */ = {isa = PBXBuildFile; productRef = 21FB98E6302E9DED008432ED /* CLPatientData */; };
 		21FB99030000000000000001 /* clitical/CLPatientData/Tests/CLPatientDataTests/PatientDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FB99010000000000000001 /* clitical/CLPatientData/Tests/CLPatientDataTests/PatientDataTests.swift */; };
@@ -68,7 +67,6 @@
 		2189A24E3004AE2A0002AA14 /* Labels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Labels.swift; sourceTree = "<group>"; };
 		218C5C222983BDEA006A4592 /* PredictedRiskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictedRiskView.swift; sourceTree = "<group>"; };
 		2196DF7D296DC21400A9FF81 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
-		21AA010000000000000000A1 /* LocalizationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationManager.swift; sourceTree = "<group>"; };
 		21AA010000000000000000B1 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		21FB99010000000000000001 /* clitical/CLPatientData/Tests/CLPatientDataTests/PatientDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = clitical/CLPatientData/Tests/CLPatientDataTests/PatientDataTests.swift; sourceTree = SOURCE_ROOT; };
 		21FB99020000000000000001 /* clitical/CLPatientData/Tests/CLPatientDataTests/PatientRiskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = clitical/CLPatientData/Tests/CLPatientDataTests/PatientRiskTests.swift; sourceTree = SOURCE_ROOT; };
@@ -136,7 +134,6 @@
 				212A1FCA2951B38000508396 /* Preview Content */,
 				2189A24C3004AE240002AA14 /* ChoiceRows.swift */,
 				2189A24E3004AE2A0002AA14 /* Labels.swift */,
-				21AA010000000000000000A1 /* LocalizationManager.swift */,
 				21AA010000000000000000B1 /* MainTabView.swift */,
 				217B41B03078CD1C0001D9BC /* NumberFieldRow.swift */,
 				217B41B23078CD1C0001D9BC /* SafariView.swift */,
@@ -316,7 +313,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				212A1FC72951B38000508396 /* RootContentView.swift in Sources */,
-				21AA010000000000000000A2 /* LocalizationManager.swift in Sources */,
 				21AA010000000000000000B2 /* MainTabView.swift in Sources */,
 				217B41BB3078CD1C0001D9BC /* SettingsView.swift in Sources */,
 				218C5C232983BDEA006A4592 /* PredictedRiskView.swift in Sources */,

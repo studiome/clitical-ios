@@ -11,8 +11,6 @@ import SwiftUI
 /// and methodology, so this screen — not an external web page — is where that
 /// disclosure lives.
 struct AboutView: View {
-    @EnvironmentObject private var localization: LocalizationManager
-
     private struct Prediction: Identifiable {
         let id: String
         let icon: String
@@ -84,14 +82,14 @@ struct AboutView: View {
                 creditRow(label: "AboutBuild", verbatim: AppInfo.build)
             }
         }
-        .navigationTitle(Text(verbatim: localization.string(forKey: "About")))
+        .navigationTitle(Text("About"))
         .navigationBarTitleDisplayMode(.inline)
     }
 
     private var header: some View {
         VStack(spacing: 8.0) {
             Image(systemName: "chart.line.uptrend.xyaxis")
-                .font(.system(size: 40.0))
+                .font(.largeTitle)
                 .foregroundStyle(Color.accentColor)
                 .accessibilityHidden(true)
             Text(verbatim: AppInfo.name)

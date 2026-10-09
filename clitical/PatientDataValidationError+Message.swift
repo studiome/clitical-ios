@@ -12,22 +12,6 @@
 import Foundation
 import CLPatientData
 
-// These literal localizable API calls ensure Xcode includes the keys that are
-// resolved dynamically above when exporting localization catalogs.
-private enum ValidationMessageLocalizationKeys {
-    static let ageRequired = String(localized: "AgeRequiredErrorMessage")
-    static let ageRange = String(localized: "AgeRangeErrorMessage")
-    static let sexRequired = String(localized: "SexRequiredErrorMessage")
-    static let heightRequired = String(localized: "HeightRequiredErrorMessage")
-    static let heightRange = String(localized: "HeightRangeErrorMessage")
-    static let weightRequired = String(localized: "WeightRequiredErrorMessage")
-    static let weightRange = String(localized: "WeightRangeErrorMessage")
-    static let albuminRequired = String(localized: "AlbuminRequiredErrorMessage")
-    static let albuminRange = String(localized: "AlbuminRangeErrorMessage")
-    static let noLesion = String(localized: "IrrelevantLesionMessage")
-    static let defaultError = String(localized: "DefaultError")
-}
-
 extension PatientDataValidationError {
     /// The localization key of the alert message.
     var messageKey: String {
@@ -67,9 +51,9 @@ extension PatientDataValidationError {
         [range.lowerBound.formatted(.number), range.upperBound.formatted(.number)]
     }
 
-    /// Resolves the message against the app's current language.
-    func message(using localization: LocalizationManager) -> String {
-        let format = localization.string(forKey: messageKey)
+    /// The message in the language the system resolved for the app.
+    var message: String {
+        let format = String(localized: String.LocalizationValue(messageKey))
         guard let rangeArguments else { return format }
         return String(format: format, arguments: rangeArguments)
     }
