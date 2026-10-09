@@ -74,23 +74,10 @@ struct PredictedRiskView: View {
     }
 
     /// `ContentUnavailableView` is the standard presentation for a screen with
-    /// nothing to show; iOS 16 gets an equivalent hand-built layout.
-    @ViewBuilder
+    /// nothing to show.
     private var errorState: some View {
-        if #available(iOS 17.0, *) {
-            ContentUnavailableView {
-                Label("AnErrorOccured", systemImage: "exclamationmark.triangle")
-            }
-        } else {
-            VStack(spacing: 12.0) {
-                Image(systemName: "exclamationmark.triangle")
-                    .font(.largeTitle)
-                    .accessibilityHidden(true)
-                Text("AnErrorOccured")
-                    .multilineTextAlignment(.center)
-            }
-            .foregroundStyle(.secondary)
-            .padding()
+        ContentUnavailableView {
+            Label("AnErrorOccured", systemImage: "exclamationmark.triangle")
         }
     }
 

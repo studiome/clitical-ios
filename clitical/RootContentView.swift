@@ -30,7 +30,7 @@ struct RootContentView: View {
                 compactBody
             }
         }
-        .onChange(of: patientData) { _ in
+        .onChange(of: patientData) {
             invalidatePrediction()
         }
         // Attached here rather than to the Predict row: the toolbar button
@@ -353,52 +353,27 @@ struct RootContentView: View {
 private struct RiskPreviewPane: View {
     let risk: PatientRisk?
 
-    @ScaledMetric(relativeTo: .callout) private var messageMaxWidth = 360.0
-
     var body: some View {
         Group {
             if let risk {
                 PredictedRiskView(risk: risk, showsNavigationTitle: false)
-            } else if #available(iOS 17.0, *) {
+            } else {
                 ContentUnavailableView {
                     Label("RiskPreviewEmptyTitle", systemImage: "chart.line.uptrend.xyaxis")
                 } description: {
                     Text("RiskPreviewEmptyMessage")
                 }
-            } else {
-                VStack(spacing: 12) {
-                    Image(systemName: "chart.line.uptrend.xyaxis")
-                        .font(.largeTitle)
-                        .foregroundStyle(.secondary)
-                        .accessibilityHidden(true)
-                    Text("RiskPreviewEmptyTitle")
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                    Text("RiskPreviewEmptyMessage")
-                        .font(.callout)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: messageMaxWidth)
-                }
-                .padding()
             }
         }
     }
 }
 
 private extension View {
-    @ViewBuilder
     func riskAssessmentListStyle() -> some View {
-        if #available(iOS 17.0, *) {
-            self
-                .listStyle(.insetGrouped)
-                .scrollDismissesKeyboard(.immediately)
-                .contentMargins(.horizontal, 16, for: .scrollContent)
-        } else {
-            self
-                .listStyle(.insetGrouped)
-                .scrollDismissesKeyboard(.immediately)
-        }
+        self
+            .listStyle(.insetGrouped)
+            .scrollDismissesKeyboard(.immediately)
+            .contentMargins(.horizontal, 16, for: .scrollContent)
     }
 
     /// Places a keyboard-dismiss button at the leading side of the navigation
@@ -411,25 +386,14 @@ private extension View {
     /// changes, which also broke XCUITest. A navigation-bar item leaves the
     /// keyboard geometry alone. Move it back to `.keyboard` once the iOS 26
     /// negative-frame issue is fixed.
-    @ViewBuilder
     func keyboardDismissButton(
         isActive: Bool,
         dismiss: @escaping () -> Void
     ) -> some View {
-        if #available(iOS 17.0, *) {
-            toolbar {
-                if isActive {
-                    ToolbarItem(placement: .topBarLeading) {
-                        keyboardDismissLabel(dismiss)
-                    }
-                }
-            }
-        } else {
-            toolbar {
-                if isActive {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        keyboardDismissLabel(dismiss)
-                    }
+        toolbar {
+            if isActive {
+                ToolbarItem(placement: .topBarLeading) {
+                    keyboardDismissLabel(dismiss)
                 }
             }
         }
