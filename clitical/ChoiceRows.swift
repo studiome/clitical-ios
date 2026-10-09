@@ -1,5 +1,5 @@
 //
-//  ChoiceListView.swift
+//  ChoiceRows.swift
 //  clitical-ios
 //
 //  Created by kmiyahara on 2026/07/13.
@@ -16,13 +16,13 @@ import CLPatientData
 /// `Toggle` keeps them side by side however narrow the label gets, which
 /// hyphenates single words ("In-frapopliteal") into an unreadable column.
 struct ToggleRow: View {
-    let title: String        // localization key
+    let title: LocalizedStringKey
     let footer: LocalizedStringKey?
     @Binding var selection: Bool
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
-    init(title: String,
+    init(title: LocalizedStringKey,
          footer: LocalizedStringKey? = nil,
          selection: Binding<Bool>) {
         self.title = title
@@ -35,10 +35,10 @@ struct ToggleRow: View {
             VStack(alignment: .leading, spacing: 8) {
                 label
                 Toggle(isOn: $selection) {
-                    Text(LocalizedStringKey(title))
+                    Text(title)
                 }
                 .labelsHidden()
-                .accessibilityLabel(Text(LocalizedStringKey(title)))
+                .accessibilityLabel(Text(title))
             }
         } else {
             Toggle(isOn: $selection) {
@@ -49,7 +49,7 @@ struct ToggleRow: View {
 
     private var label: some View {
         VStack(alignment: .leading, spacing: 2) {
-            Text(LocalizedStringKey(title))
+            Text(title)
             if let footer {
                 Text(footer).font(.footnote).foregroundStyle(.secondary)
             }
@@ -66,16 +66,16 @@ struct ToggleRow: View {
 /// selected, which is exactly what an unanswered required question should
 /// look like.
 struct SegmentedRow<Value: Hashable>: View {
-    let title: String
+    let title: LocalizedStringKey
     let footer: LocalizedStringKey?
     let options: [Value]
-    let label: (Value) -> String
+    let label: (Value) -> LocalizedStringKey
     @Binding var selection: Value
 
-    init(title: String,
+    init(title: LocalizedStringKey,
          footer: LocalizedStringKey? = nil,
          options: [Value],
-         label: @escaping (Value) -> String,
+         label: @escaping (Value) -> LocalizedStringKey,
          selection: Binding<Value>) {
         self.title = title
         self.footer = footer
@@ -86,10 +86,10 @@ struct SegmentedRow<Value: Hashable>: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(LocalizedStringKey(title))
-            Picker(LocalizedStringKey(title), selection: $selection) {
+            Text(title)
+            Picker(title, selection: $selection) {
                 ForEach(options, id: \.self) { option in
-                    Text(LocalizedStringKey(label(option)))
+                    Text(label(option))
                         .tag(option)
                 }
             }
@@ -109,18 +109,18 @@ struct SegmentedRow<Value: Hashable>: View {
 /// guidance to use a menu (rather than a pushed list) for a longer set of
 /// choices.
 struct MenuChoiceRow<Value: Hashable>: View {
-    let title: String
+    let title: LocalizedStringKey
     let footer: LocalizedStringKey?
     let options: [Value]
-    let label: (Value) -> String
+    let label: (Value) -> LocalizedStringKey
     @Binding var selection: Value
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
-    init(title: String,
+    init(title: LocalizedStringKey,
          footer: LocalizedStringKey? = nil,
          options: [Value],
-         label: @escaping (Value) -> String,
+         label: @escaping (Value) -> LocalizedStringKey,
          selection: Binding<Value>) {
         self.title = title
         self.footer = footer
@@ -152,7 +152,7 @@ struct MenuChoiceRow<Value: Hashable>: View {
 
     private var titleColumn: some View {
         VStack(alignment: .leading, spacing: 2) {
-            Text(LocalizedStringKey(title))
+            Text(title)
             if let footer {
                 Text(footer).font(.footnote).foregroundStyle(.secondary)
             }
@@ -160,9 +160,9 @@ struct MenuChoiceRow<Value: Hashable>: View {
     }
 
     private var picker: some View {
-        Picker(LocalizedStringKey(title), selection: $selection) {
+        Picker(title, selection: $selection) {
             ForEach(options, id: \.self) { option in
-                Text(LocalizedStringKey(label(option)))
+                Text(label(option))
                     .tag(option)
             }
         }
@@ -189,6 +189,5 @@ struct MenuChoiceRow<Value: Hashable>: View {
                           selection: .constant(.normal))
         }
     }
-    .environmentObject(LocalizationManager())
     .environment(\.locale, .init(identifier: "ja"))
 }

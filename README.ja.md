@@ -66,7 +66,6 @@ clitical-ios/
 │   ├── ChoiceListView.swift      # ToggleRow / SegmentedRow / MenuChoiceRow
 │   ├── AgeFormView.swift ほか     # 数値入力フォーム（年齢・身長・体重・Alb）
 │   ├── Labels.swift              # ドメイン enum → ローカライズキーの対応
-│   ├── LocalizationManager.swift # アプリ内言語切り替え
 │   ├── QuestionError.swift       # 入力エラーの定義
 │   └── CLPatientData/            # ローカル Swift Package（ドメインロジック）
 │       ├── Sources/CLPatientData/
@@ -86,10 +85,7 @@ clitical-ios/
   回帰係数は `Questions.swift` に説明変数ごとの `enum` として集約されています。
 - **値型の患者データ** — `PatientData` は `struct` で、`@State` / `@Binding` を通じて
   各フォームに渡されます。永続化は行いません。
-- **アプリ内言語切り替え** — `LocalizationManager` が `Bundle.main` のクラスを差し替え、
-  選択した `.lproj` を優先させることで、再起動なしに `Text("key")` を再解決します。
-  UIKit 側にキャッシュされるナビゲーションタイトルのみ `localization.string(forKey:)` で
-  明示的に解決しています。
+- **システムのアプリ別言語設定** — アプリ内の言語切り替えは持たず、iOS のアプリ別言語設定に従います。設定タブにその画面を開く行があります。
 - **HIG 準拠の UI** — 設定的な項目はタブを持たせず「設定」タブに集約し、選択肢は画面遷移では
   なくインラインの `Picker` / `Toggle` で表現しています。
 
@@ -124,7 +120,7 @@ xcodebuild -project clitical-ios.xcodeproj -scheme clitical-ios -destination 'pl
 
 対応言語は日本語（既定）と英語です。文言は `ja.lproj/Localizable.strings` と
 `en.lproj/Localizable.strings` に配置し、キーは両ファイルで一致させます。
-選択言語は `UserDefaults` の `app_language` に保存され、初回起動時は端末の言語設定に従います。
+言語は iOS のアプリ別言語設定に従います。
 
 ## バージョニング
 
@@ -145,7 +141,7 @@ Xcode プロジェクトのビルド設定で管理しています。表示バ�
 ## 利用規約
 
 法務関連の文書はアプリ外でホストしており、「設定」から `SFSafariViewController` で
-表示します。表示言語は設定で選択中の言語に従います。
+表示します。表示言語はアプリの現在の言語に従います。
 
 - **利用規約** — [日本語](https://studiome.github.io/clitical-legal/terms/ja/) /
   [English](https://studiome.github.io/clitical-legal/terms/en/)
@@ -165,7 +161,7 @@ URL は `MainTabView.swift` の `AppInfo.legalURL(for:language:)` で組み立�
 ## プライバシー
 
 入力された患者データは端末内でのみ処理され、外部への送信・保存は行いません。
-アプリ内に保存されるのは、選択言語の設定と、同意済みの通知バージョンのみです。
+アプリ内に保存されるのは、同意済みの通知バージョンのみです。
 
 ## ライセンス
 

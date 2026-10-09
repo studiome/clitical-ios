@@ -26,15 +26,15 @@ struct PatientDataValidationTests {
         return pd
     }
 
-    @Test
-    func testCompleteDataValidates() {
+    @Test("Complete data validates")
+    func completeDataValidates() {
         #expect(validPatientData().validate() == nil)
     }
 
     // MARK: - Missing values
 
-    @Test
-    func testMissingValuesAreReportedInFormOrder() {
+    @Test("Missing values are reported in form order")
+    func missingValuesAreReportedInFormOrder() {
         var pd = PatientData()
         #expect(pd.validate() == .ageMissing)
         pd.age = 70
@@ -53,59 +53,59 @@ struct PatientDataValidationTests {
 
     // MARK: - Out-of-range values
 
-    @Test(arguments: [17, 121, 0, -1])
-    func testAgeOutsideRangeIsRejected(age: Int) {
+    @Test("Age outside range is rejected", arguments: [17, 121, 0, -1])
+    func ageOutsideRangeIsRejected(age: Int) {
         var pd = validPatientData()
         pd.age = age
         #expect(pd.validate() == .ageOutOfRange)
     }
 
-    @Test(arguments: [18, 70, 120])
-    func testAgeInsideRangeIsAccepted(age: Int) {
+    @Test("Age inside range is accepted", arguments: [18, 70, 120])
+    func ageInsideRangeIsAccepted(age: Int) {
         var pd = validPatientData()
         pd.age = age
         #expect(pd.validate() == nil)
     }
 
     /// The unit mix-up this whole check exists for: 1.7 is a height in metres.
-    @Test(arguments: [1.7, 0.0, 99.9, 250.1, -165.0])
-    func testHeightOutsideRangeIsRejected(height: Double) {
+    @Test("Height outside range is rejected", arguments: [1.7, 0.0, 99.9, 250.1, -165.0])
+    func heightOutsideRangeIsRejected(height: Double) {
         var pd = validPatientData()
         pd.height = height
         #expect(pd.validate() == .heightOutOfRange)
     }
 
-    @Test(arguments: [100.0, 165.0, 250.0])
-    func testHeightInsideRangeIsAccepted(height: Double) {
+    @Test("Height inside range is accepted", arguments: [100.0, 165.0, 250.0])
+    func heightInsideRangeIsAccepted(height: Double) {
         var pd = validPatientData()
         pd.height = height
         #expect(pd.validate() == nil)
     }
 
-    @Test(arguments: [19.9, 0.0, 300.1, -60.0])
-    func testWeightOutsideRangeIsRejected(weight: Double) {
+    @Test("Weight outside range is rejected", arguments: [19.9, 0.0, 300.1, -60.0])
+    func weightOutsideRangeIsRejected(weight: Double) {
         var pd = validPatientData()
         pd.weight = weight
         #expect(pd.validate() == .weightOutOfRange)
     }
 
-    @Test(arguments: [20.0, 60.0, 300.0])
-    func testWeightInsideRangeIsAccepted(weight: Double) {
+    @Test("Weight inside range is accepted", arguments: [20.0, 60.0, 300.0])
+    func weightInsideRangeIsAccepted(weight: Double) {
         var pd = validPatientData()
         pd.weight = weight
         #expect(pd.validate() == nil)
     }
 
     /// Albumin reported in g/L (35) instead of g/dL (3.5) is the mix-up here.
-    @Test(arguments: [0.9, 6.1, 35.0, 0.0, -3.5])
-    func testAlbuminOutsideRangeIsRejected(alb: Double) {
+    @Test("Albumin outside range is rejected", arguments: [0.9, 6.1, 35.0, 0.0, -3.5])
+    func albuminOutsideRangeIsRejected(alb: Double) {
         var pd = validPatientData()
         pd.alb = alb
         #expect(pd.validate() == .albuminOutOfRange)
     }
 
-    @Test(arguments: [1.0, 3.5, 6.0])
-    func testAlbuminInsideRangeIsAccepted(alb: Double) {
+    @Test("Albumin inside range is accepted", arguments: [1.0, 3.5, 6.0])
+    func albuminInsideRangeIsAccepted(alb: Double) {
         var pd = validPatientData()
         pd.alb = alb
         #expect(pd.validate() == nil)
@@ -113,8 +113,8 @@ struct PatientDataValidationTests {
 
     // MARK: - Lesions
 
-    @Test
-    func testAnyArteryLesionSatisfiesTheLesionRequirement() {
+    @Test("Any artery lesion satisfies the lesion requirement")
+    func anyArteryLesionSatisfiesRequirement() {
         for lesion in [\PatientData.hasAILesion,
                        \PatientData.hasFPLesion,
                        \PatientData.hasBKLesion] {
@@ -127,8 +127,8 @@ struct PatientDataValidationTests {
         }
     }
 
-    @Test
-    func testConcomitantLesionsDoNotSatisfyTheLesionRequirement() {
+    @Test("Concomitant lesions do not satisfy the lesion requirement")
+    func concomitantLesionsDoNotSatisfyRequirement() {
         var pd = validPatientData()
         pd.hasBKLesion = false
         pd.hasContraLateralLesion = true

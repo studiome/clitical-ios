@@ -12,19 +12,19 @@
 "LesionInfo" = "Sites of Artery Occlusive Lesions";
 "OtherLesionInfo" = "Concomitant Vascular Lesions";
 "Complications" = "Complications";
-"SexQuestionTitle" =  "Sex";
+"SexQuestionTitle" = "Sex";
 "SexMale" = "Male";
 "SexFemale" = "Female";
 "CHFQuestionTitle" = "Congestive heart failure";
 "CHFQuestionDescription" = "Includes a history of admission for CHF, clinical symptoms of CHF, or clearly reduced cardiac function on echocardiography.";
-"SmokingQuestionTitle" = "Smoking Status";
+"SmokingQuestionTitle" = "Smoking status";
 "SmokingQuestionDescription" = "Includes current smokers and ex-smokers.";
 "AILesionQuestionTitle" = "Aorto-Iliac";
-"AgeQuestionTitle" = "Age [years]";
-"WeightQuestionTitle" = "Body Weight [kg]";
-"HeightQuestionTitle" = "Body Height [cm]";
-"AlbQuestionTitle" = "Albumin [g/dL]";
-"ActivityQuestionTitle" = "Activity";
+"AgeQuestionTitle" = "Age";
+"WeightQuestionTitle" = "Weight";
+"HeightQuestionTitle" = "Height";
+"AlbQuestionTitle" = "Albumin";
+"ActivityQuestionTitle" = "ADL";
 "ActivityAmbulatory" = "Ambulatory";
 "ActivityWheelchair" = "Wheelchair";
 "ActivityImmobile" = "Immobile";
@@ -32,7 +32,7 @@
 "UrgencyUrgent" = "Urgent";
 "UrgencyElective" = "Elective";
 "CKDQuestionTitle" = "Chronic kidney disease";
-"CKDQuestionDescription" = "eGFR(estimated glomerular filtration rate) [mL/min/1.73m\U00B2], Normal: 60 or higher, G3: 30-59, G4: 15-29, G5: below 15, G5D: below 15 in haemodialysis";
+"CKDQuestionDescription" = "eGFR (estimated glomerular filtration rate, mL/min/1.73m\U00B2). Normal: 60 or higher, G3: 30-59, G4: 15-29, G5: below 15, G5D: below 15 in haemodialysis";
 "CKDNormal" = "Normal";
 "CKDG3" = "G3";
 "CKDG4" = "G4";
@@ -41,10 +41,10 @@
 "FeverQuestionTitle" = "Fever";
 "FeverQuestionDescription" = "Body temperature higher than 38\U2103";
 "WBCQuestionTitle" = "Abnormal WBC";
-"WBCQuestionDescription" = "White blood cell count > 8000 [/\U00B5L]";
-"LocalInfectionQuestionTitle" = "Local Infection";
+"WBCQuestionDescription" = "White blood cell count > 8000 (/\U00B5L)";
+"LocalInfectionQuestionTitle" = "Local infection";
 "LocalInfectionQuestionDescription" = "Suppurative wound, or at least two of the following: heat, erythema, lymphangitis, lymph node swelling, oedema, and pain";
-"RutherfordClassQuestionTitle" = "Rutherford Classification";
+"RutherfordClassQuestionTitle" = "Rutherford classification";
 "Rutherford4" = "Class 4";
 "Rutherford5" = "Class 5";
 "Rutherford6" = "Class 6";
@@ -59,7 +59,7 @@
 "CVDQuestionTitle" = "Cerebral vascular disease";
 "CVDQuestionDescription" = "Stroke and/or transient ischemic attacks";
 "DLQuestionTitle" = "Dyslipidemia";
-"DLQuestionDescription" = "Serum low density lipoprotein (LDL-C) > 140 [mg/dL]";
+"DLQuestionDescription" = "Serum low density lipoprotein (LDL-C) > 140 (mg/dL)";
 "MalignancyQuestionTitle" = "Malignant neoplasm";
 "MalignancyNo" = "No";
 "MalignancyPast" = "Past history";
@@ -74,16 +74,16 @@
 "2YOSMediumRisk" = "Medium Risk";
 "2YOSHighRisk" = "High Risk";
 "ErrorTitle"  = "Cannot Predict Risk";
-"AgeRequiredErrorMessage" = "Enter a value for Age [years].";
-"HeightRequiredErrorMessage" = "Enter a value for Body Height [cm].";
-"WeightRequiredErrorMessage" = "Enter a value for Body Weight [kg].";
-"AlbuminRequiredErrorMessage" = "Enter a value for Albumin [g/dL].";
+"AgeRequiredErrorMessage" = "Enter a value for Age (years).";
+"HeightRequiredErrorMessage" = "Enter a value for Height (cm).";
+"WeightRequiredErrorMessage" = "Enter a value for Weight (kg).";
+"AlbuminRequiredErrorMessage" = "Enter a value for Albumin (g/dL).";
 "IrrelevantLesionMessage" = "Check the artery lesion sites. At least one lesion must be turned on.";
 "SexRequiredHint" = "Required.";
 "SexRequiredErrorMessage" = "Choose a value for Sex.";
 "AgeRangeErrorMessage" = "Age must be between %1$@ and %2$@ years. Check the unit of the value you entered.";
-"HeightRangeErrorMessage" = "Body height must be between %1$@ and %2$@ cm. Check the unit of the value you entered.";
-"WeightRangeErrorMessage" = "Body weight must be between %1$@ and %2$@ kg. Check the unit of the value you entered.";
+"HeightRangeErrorMessage" = "Height must be between %1$@ and %2$@ cm. Check the unit of the value you entered.";
+"WeightRangeErrorMessage" = "Weight must be between %1$@ and %2$@ kg. Check the unit of the value you entered.";
 "AlbuminRangeErrorMessage" = "Albumin must be between %1$@ and %2$@ g/dL. Check the unit of the value you entered.";
 "RESET" = "Reset data";
 "ResetConfirmationTitle" = "Reset all entered data?";
@@ -112,7 +112,7 @@
 "AppTerms" = "Terms of Use";
 "AppPrivacyPolicy" = "Privacy Policy";
 "AppSupport" = "Support";
-"TapToOpenLink" = "Tap to open link.";
+"TapToOpenLink" = "Opens the article on doi.org.";
 "AppLegalese" = "2022 Kazuhiro Miyahara, JSVS, JCLIMB";
 
 /* Intended use notice, shown before the app itself on first launch */
@@ -148,7 +148,7 @@
 "AboutLimitations" = "Scope and limitations";
 "AboutLimitationsBody" = "The models were derived from patients who underwent revascularisation for CLTI in Japan and were registered in the JCLIMB registry of the Japanese Society for Vascular Surgery. Accuracy is not assured for other populations, procedures or care settings. The values are population-level estimates and do not describe the outcome of an individual patient.";
 "AboutPrivacy" = "Privacy";
-"AboutPrivacyBody" = "Patient data is processed on this device only and is never sent or stored elsewhere. The only thing the app saves is the language you select.";
+"AboutPrivacyBody" = "Patient data is processed on this device only and is never sent or stored elsewhere. The only thing the app saves is that you have acknowledged the intended-use notice.";
 "AboutDisclaimer" = "Disclaimer";
 "AboutDisclaimerBody" = "This app is intended to support the clinical judgement of healthcare professionals. The values it calculates are estimates from statistical models and do not determine diagnosis or treatment. The final decision remains the responsibility of the attending physician.";
 "AboutCredits" = "Credits";
@@ -158,3 +158,13 @@
 "AboutDeveloperName" = "Kazuhiro Miyahara";
 "AboutVersion" = "Version";
 "AboutBuild" = "Build";
+
+/* Inline validation, units, language settings */
+"RequiredFieldHint" = "Required.";
+"UnitYears" = "years";
+"UnitCM" = "cm";
+"UnitKG" = "kg";
+"UnitGPerDL" = "g/dL";
+"LanguageOpenSettings" = "Open Language Settings";
+"LanguageFooter" = "The app language follows the iOS per-app language setting. Choose it in the Settings app, under this app's Language.";
+"TwoYearDescription" = "OS: overall survival. AFS: amputation-free survival (alive without major amputation).";

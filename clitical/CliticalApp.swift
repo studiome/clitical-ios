@@ -9,15 +9,11 @@ import SwiftUI
 
 @main
 struct CliticalApp: App {
-    @StateObject private var localization = LocalizationManager()
-
     var body: some Scene {
         WindowGroup {
             IntendedUseGate {
                 MainTabView()
             }
-            .environmentObject(localization)
-            .environment(\.locale, localization.locale)
         }
     }
 }
