@@ -15,10 +15,19 @@ let acknowledgedDisclaimerArguments = [
     "-intended_use_disclaimer_version", "2026-08",
 ]
 
-/// What an empty numeric field reports. The fields carry a placeholder so an
-/// untouched row reads as an input field rather than as blank space, and
-/// XCUITest surfaces that placeholder as the field's value.
-let emptyNumberFieldValue = "--"
+/// What an empty age field reports. The fields carry an example value as their
+/// placeholder so an untouched row reads as an input field rather than as
+/// blank space, and XCUITest surfaces that placeholder as the field's value.
+/// Tests therefore enter a different age (`enteredAge`) so that a typed value
+/// can be told apart from the placeholder.
+let emptyAgeFieldValue = "70"
+let enteredAge = "68"
+
+/// The language the app resolves from the system. The app no longer has an
+/// in-app language switch, so tests choose a language the way a user does
+/// with the per-app language setting: through the launch-time system keys.
+let englishArguments = ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+let japaneseArguments = ["-AppleLanguages", "(ja)", "-AppleLocale", "ja_JP"]
 
 final class cliticalUITests: XCTestCase {
 
@@ -42,7 +51,7 @@ final class cliticalUITests: XCTestCase {
     /// acknowledged: no risk form, no tabs, no calculated values.
     func testIntendedUseNoticeGatesTheAppUntilAcknowledged() throws {
         let app = XCUIApplication()
-        app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += englishArguments
         // Force the notice regardless of what an earlier run on this simulator
         // acknowledged: the argument domain wins over the persisted value.
         app.launchArguments += ["-intended_use_disclaimer_version", "unacknowledged"]
@@ -59,80 +68,54 @@ final class cliticalUITests: XCTestCase {
                        "The app is reachable before the notice is acknowledged")
     }
 
-    /// Verifies the bottom tab menu exists and that selecting English in the
-    /// Language tab re-localizes the whole UI live (no relaunch).
-    func testLanguageTabSwitchesLocaleLive() throws {
+    /// There is no in-app language switch any more: the app follows the
+    /// system per-app language. The tabs localize from the launch language,
+    /// and Settings offers a row that opens the app's page in iOS Settings
+    /// (not tapped here, as it would leave the app).
+    func testSettingsOffersSystemLanguageSettingsRow() throws {
         let app = XCUIApplication()
-        app.launchArguments += ["-app_language", "ja"]
+        app.launchArguments += japaneseArguments
         app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
-        // Three top-level destinations, starting in Japanese. On iPad and
+        // Three top-level destinations, in the launch language. On iPad and
         // newer OSes these may be exposed as sidebar items instead of a
         // bottom tab bar.
-        let jaTabs = ["リスク計算", "参考文献", "設定"]
-        for label in jaTabs {
+        for label in ["リスク計算", "参考文献", "設定"] {
             XCTAssertTrue(topLevelItem(label, in: app).waitForExistence(timeout: 5),
                           "Missing tab: \(label)")
         }
+        XCTAssertTrue(app.staticTexts["患者基本情報"].waitForExistence(timeout: 5),
+                      "Section header did not follow the launch language")
 
-        // Open the Settings tab and choose English in the language picker.
         tapTopLevelItem("設定", in: app)
-        let englishOption = languageOption("English", in: app)
-        XCTAssertTrue(englishOption.waitForExistence(timeout: 5), "English option not found")
-        englishOption.tap()
-
-        // The whole UI (including top-level navigation) should now be English.
-        XCTAssertTrue(topLevelItem("Risk Assessment", in: app).waitForExistence(timeout: 5),
-                      "UI did not switch to English live")
-        XCTAssertTrue(topLevelItem("References", in: app).exists)
-        XCTAssertTrue(topLevelItem("Settings", in: app).exists)
-        XCTAssertFalse(topLevelItem("リスク計算", in: app).exists)
-
-        // Navigation bar titles must also re-localize live, not just tab labels.
-        tapTopLevelItem("Risk Assessment", in: app)
-        XCTAssertTrue(app.staticTexts["Basic Information"].waitForExistence(timeout: 5),
-                      "In-body section header did not switch to English live")
-        XCTAssertTrue(app.navigationBars["Patient Data"].waitForExistence(timeout: 5),
-                      "Risk calculation nav title did not switch to English live")
-        XCTAssertFalse(app.navigationBars["患者データ"].exists)
-
-        // The Sex segmented control's options must also re-localize live,
-        // not just tab labels. Sex is now an inline segmented row (no pushed
-        // screen), so we assert its segment labels directly.
-        let maleOption = app.buttons["Male"]
-        scrollTo(maleOption, in: app)
-        XCTAssertTrue(maleOption.waitForExistence(timeout: 5),
-                      "Sex segmented option did not switch to English live")
-        XCTAssertTrue(app.buttons["Female"].exists, "Female segmented option missing")
-
-        tapTopLevelItem("References", in: app)
-        XCTAssertTrue(app.navigationBars["References"].waitForExistence(timeout: 5),
-                      "References nav title did not switch to English live")
-
-        tapTopLevelItem("Settings", in: app)
-        XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 5),
-                      "Settings nav title did not switch to English live")
+        let languageRow = app.buttons["openLanguageSettings"]
+        XCTAssertTrue(languageRow.waitForExistence(timeout: 5),
+                      "Settings must offer a row that opens the system language setting")
+        XCTAssertEqual(languageRow.label, "言語設定を開く")
+        // The old in-app picker must be gone.
+        XCTAssertFalse(app.buttons["English"].exists)
+        XCTAssertFalse(app.switches["English"].exists)
     }
 
     /// Verifies the References and Settings tabs render their content and links.
     func testReferencesAndSettingsTabsRenderContent() throws {
         let app = XCUIApplication()
-        app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += englishArguments
         app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
         tapTopLevelItem("References", in: app)
-        XCTAssertTrue(app.staticTexts["Tap to open link."].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Opens the article on doi.org."].waitForExistence(timeout: 5))
         let citation = app.descendants(matching: .any)
             .containing(NSPredicate(format: "label BEGINSWITH %@", "1. Miyata")).firstMatch
         XCTAssertTrue(citation.waitForExistence(timeout: 5), "Reference citation missing")
 
         tapTopLevelItem("Settings", in: app)
-        let englishButton = languageOption("English", in: app)
-        scrollTo(englishButton, in: app)
-        XCTAssertTrue(englishButton.waitForExistence(timeout: 5),
-                      "Language picker missing from Settings")
+        let languageRow = app.buttons["openLanguageSettings"]
+        XCTAssertTrue(languageRow.waitForExistence(timeout: 5),
+                      "Language row missing from Settings")
+        XCTAssertEqual(languageRow.label, "Open Language Settings")
         // Legal and support actions may be rendered as buttons or links
         // depending on the OS version, so query by label across all elements.
         for label in ["Terms of Use", "Privacy Policy", "Support"] {
@@ -153,18 +136,18 @@ final class cliticalUITests: XCTestCase {
     /// not recreate the risk form and discard patient input.
     func testSwitchingSectionsPreservesPatientData() throws {
         let app = XCUIApplication()
-        app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += englishArguments
         app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
         fillAgeField(in: app)
         tapTopLevelItem("References", in: app)
-        XCTAssertTrue(app.staticTexts["Tap to open link."].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Opens the article on doi.org."].waitForExistence(timeout: 5))
 
         tapTopLevelItem("Risk Assessment", in: app)
-        let ageField = app.textFields["Age [years]"]
+        let ageField = app.textFields["Age years"]
         scrollUpTo(ageField, in: app)
-        XCTAssertEqual(ageField.value as? String, "70",
+        XCTAssertEqual(ageField.value as? String, enteredAge,
                        "Changing sections must preserve entered patient data")
     }
 
@@ -179,13 +162,13 @@ final class cliticalUITests: XCTestCase {
     /// TabView: predicting with an empty form surfaces the validation alert.
     func testRiskCalculationTabPredictShowsValidationAlert() throws {
         let app = XCUIApplication()
-        app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += englishArguments
         app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
         tapTopLevelItem("Risk Assessment", in: app)
         // The Predict button sits at the bottom of a long scrolling form.
-        let predict = app.buttons["Predict Risk"]
+        let predict = app.buttons["predictRisks"]
         scrollTo(predict, in: app)
         XCTAssertTrue(predict.waitForExistence(timeout: 5), "Predict button missing")
         predict.tap()
@@ -199,13 +182,13 @@ final class cliticalUITests: XCTestCase {
     func testAccessibilityExtraLargeTextKeepsNumberFieldsUsable() throws {
         let app = XCUIApplication()
         app.launchArguments += [
-            "-app_language", "en",
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
             "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL",
         ]
         app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
-        for label in ["Age [years]", "Body Height [cm]", "Body Weight [kg]", "Albumin [g/dL]"] {
+        for label in ["Age years", "Height cm", "Weight kg", "Albumin g/dL"] {
             let field = app.textFields[label]
             scrollIntoTappableArea(field, in: app)
             XCTAssertTrue(field.waitForExistence(timeout: 5), "Missing field: \(label)")
@@ -221,7 +204,7 @@ final class cliticalUITests: XCTestCase {
     /// can recover without searching the entire form.
     func testPredictWithEmptyFormNamesFirstMissingNumberField() throws {
         let app = XCUIApplication()
-        app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += englishArguments
         app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
@@ -230,7 +213,7 @@ final class cliticalUITests: XCTestCase {
         let alert = app.alerts.firstMatch
         XCTAssertTrue(alert.waitForExistence(timeout: 5), "Validation alert did not appear")
         XCTAssertTrue(
-            alert.staticTexts["Enter a value for Age [years]."].exists,
+            alert.staticTexts["Enter a value for Age (years)."].exists,
             "The alert should name the first field that needs attention"
         )
     }
@@ -239,7 +222,7 @@ final class cliticalUITests: XCTestCase {
     /// sex — which has no default and must be answered explicitly.
     func testPredictWithOnlyAgeNamesSexAsNextMissingAnswer() throws {
         let app = XCUIApplication()
-        app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += englishArguments
         app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
@@ -256,7 +239,7 @@ final class cliticalUITests: XCTestCase {
 
     func testPredictWithAgeAndSexNamesHeightAsNextMissingNumberField() throws {
         let app = XCUIApplication()
-        app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += englishArguments
         app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
@@ -267,7 +250,7 @@ final class cliticalUITests: XCTestCase {
         let alert = app.alerts.firstMatch
         XCTAssertTrue(alert.waitForExistence(timeout: 5), "Validation alert did not appear")
         XCTAssertTrue(
-            alert.staticTexts["Enter a value for Body Height [cm]."].exists,
+            alert.staticTexts["Enter a value for Height (cm)."].exists,
             "The alert should name the next missing field"
         )
     }
@@ -276,15 +259,15 @@ final class cliticalUITests: XCTestCase {
     /// metres used to produce a plausible looking risk instead of an error.
     func testHeightEnteredInMetresIsRejected() throws {
         let app = XCUIApplication()
-        app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += englishArguments
         app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
         fillAgeField(in: app)
         selectSex("Male", in: app)
-        fillNumberField("Body Height [cm]", with: "1.7", in: app)
-        fillNumberField("Body Weight [kg]", with: "60", in: app)
-        fillNumberField("Albumin [g/dL]", with: "3.5", in: app)
+        fillNumberField("Height cm", with: "1.7", in: app)
+        fillNumberField("Weight kg", with: "60", in: app)
+        fillNumberField("Albumin g/dL", with: "3.5", in: app)
         setToggle(row: "Infrapopliteal", to: "Yes", in: app)
         tapPredictButton(in: app)
 
@@ -299,7 +282,7 @@ final class cliticalUITests: XCTestCase {
     /// pushes the predicted-risk screen with the 2-year and GNRI results.
     func testPredictWithValidDataShowsRiskResults() throws {
         let app = XCUIApplication()
-        app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += englishArguments
         app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
@@ -326,7 +309,7 @@ final class cliticalUITests: XCTestCase {
     /// remove the now-stale result from the preview pane.
     func testEditingPatientDataClearsPredictedRiskPreview() throws {
         let app = XCUIApplication()
-        app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += englishArguments
         app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
@@ -361,7 +344,7 @@ final class cliticalUITests: XCTestCase {
     /// labeled — matching the pattern already used for Sex.
     func testUrgencyQuestionIsSegmentedControlWithBothLabels() throws {
         let app = XCUIApplication()
-        app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += englishArguments
         app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
@@ -371,15 +354,19 @@ final class cliticalUITests: XCTestCase {
         scrollTo(urgent, in: app)
         XCTAssertTrue(urgent.waitForExistence(timeout: 5),
                       "Urgency segmented option 'Urgent' missing")
-        XCTAssertTrue(app.buttons["Elective"].exists,
+        let elective = app.buttons["Elective"]
+        XCTAssertTrue(elective.exists,
                       "Urgency segmented option 'Elective' missing")
+        // Elective is the default state, so it leads the control.
+        XCTAssertLessThan(elective.frame.minX, urgent.frame.minX,
+                          "Elective must come before Urgent")
     }
 
     /// With valid numbers but no artery lesion selected, predicting must show
     /// the lesion-specific validation alert instead of the risk screen.
     func testPredictWithoutLesionShowsLesionAlert() throws {
         let app = XCUIApplication()
-        app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += englishArguments
         app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
@@ -393,11 +380,97 @@ final class cliticalUITests: XCTestCase {
         XCTAssertFalse(app.navigationBars["Predicted Risks"].exists)
     }
 
+    /// A height typed in metres is flagged right under the field, as soon as
+    /// it is entered, without waiting for a Predict attempt.
+    func testOutOfRangeHeightShowsInlineErrorWithoutPredicting() throws {
+        let app = XCUIApplication()
+        app.launchArguments += englishArguments
+        app.launchArguments += acknowledgedDisclaimerArguments
+        app.launch()
+
+        fillNumberField("Height cm", with: "1.7", in: app)
+
+        let inlineError = inlineMessage("heightInlineError", in: app)
+        XCTAssertTrue(inlineError.waitForExistence(timeout: 5),
+                      "An out-of-range height must show an inline error immediately")
+        XCTAssertTrue(inlineError.label.contains("100"),
+                      "The inline error should state the accepted range")
+        XCTAssertFalse(app.alerts.firstMatch.exists,
+                       "Inline validation must not raise the alert by itself")
+    }
+
+    /// After a failed Predict attempt, an empty required field says so inline.
+    func testFailedPredictShowsRequiredHintUnderAge() throws {
+        let app = XCUIApplication()
+        app.launchArguments += englishArguments
+        app.launchArguments += acknowledgedDisclaimerArguments
+        app.launch()
+
+        XCTAssertFalse(inlineMessage("ageInlineError", in: app).exists,
+                       "No required hint before any Predict attempt")
+        tapPredictButton(in: app)
+        let alert = app.alerts.firstMatch
+        XCTAssertTrue(alert.waitForExistence(timeout: 5), "Validation alert did not appear")
+        alert.buttons.firstMatch.tap()
+
+        let hint = inlineMessage("ageInlineError", in: app)
+        scrollUpTo(hint, in: app)
+        XCTAssertTrue(hint.waitForExistence(timeout: 5),
+                      "A required hint should appear under the empty Age field")
+        XCTAssertTrue(hint.label.contains("Required"))
+    }
+
+    /// The primary action must not require scrolling a long form: it is also
+    /// in the navigation bar.
+    func testPredictToolbarButtonIsReachableWithoutScrolling() throws {
+        let app = XCUIApplication()
+        app.launchArguments += englishArguments
+        app.launchArguments += acknowledgedDisclaimerArguments
+        app.launch()
+
+        let toolbarPredict = app.buttons["predictRisksToolbar"]
+        XCTAssertTrue(toolbarPredict.waitForExistence(timeout: 5),
+                      "Predict button missing from the navigation bar")
+        toolbarPredict.tap()
+        XCTAssertTrue(app.alerts.firstMatch.waitForExistence(timeout: 5),
+                      "Toolbar Predict must run the same validation as the list button")
+    }
+
+    /// In a compact-height window (iPhone landscape) the acknowledge button
+    /// must not sit in a bottom bar that eats the little height there is; it
+    /// scrolls with the notice and must still be reachable.
+    func testDisclaimerAcknowledgeIsReachableInLandscape() throws {
+        XCUIDevice.shared.orientation = .landscapeLeft
+        let app = XCUIApplication()
+        app.launchArguments += englishArguments
+        app.launchArguments += ["-intended_use_disclaimer_version", "unacknowledged"]
+        app.launch()
+
+        // The button is the last row of the notice's list, so it only exists
+        // once scrolled to (and, being a list row, it scrolls: a bottom bar
+        // would already be on screen from the start).
+        let acknowledge = app.buttons["acknowledgeDisclaimer"]
+        let list = app.collectionViews.firstMatch
+        XCTAssertTrue(list.waitForExistence(timeout: 5))
+        let windowFrame = app.windows.firstMatch.frame
+        XCTAssertFalse(acknowledge.exists,
+                       "In compact height the button must not be a bottom bar")
+        var swipes = 0
+        while !(acknowledge.exists && windowFrame.contains(acknowledge.frame)) && swipes < 12 {
+            list.swipeUp()
+            swipes += 1
+        }
+        XCTAssertTrue(acknowledge.exists && windowFrame.contains(acknowledge.frame),
+                      "Acknowledge button must be reachable by scrolling in landscape")
+        // Not tapped: the launch argument that forces the notice also pins
+        // the stored value, so acknowledging could not lead anywhere here.
+    }
+
     /// Reset is destructive, so it must ask for confirmation first: cancelling
     /// keeps the entered data, confirming clears it.
     func testResetAsksForConfirmationBeforeClearingData() throws {
         let app = XCUIApplication()
-        app.launchArguments += ["-app_language", "en"]
+        app.launchArguments += englishArguments
         app.launchArguments += acknowledgedDisclaimerArguments
         app.launch()
 
@@ -425,9 +498,9 @@ final class cliticalUITests: XCTestCase {
             app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.1)).tap()
         }
 
-        let ageField = app.textFields["Age [years]"]
+        let ageField = app.textFields["Age years"]
         scrollUpTo(ageField, in: app)
-        XCTAssertEqual(ageField.value as? String, "70",
+        XCTAssertEqual(ageField.value as? String, enteredAge,
                        "Dismissing the confirmation must not clear the data")
 
         // Confirming must clear the data (the placeholder shows again).
@@ -440,11 +513,17 @@ final class cliticalUITests: XCTestCase {
         resetConfirmationButton(in: app).tap()
 
         scrollUpTo(ageField, in: app)
-        XCTAssertEqual(ageField.value as? String, emptyNumberFieldValue,
+        XCTAssertEqual(ageField.value as? String, emptyAgeFieldValue,
                        "Confirming the dialog must clear the data")
     }
 
     // MARK: - Helpers
+
+    /// An inline validation message, found by identifier across element types
+    /// since it is exposed as a single combined element.
+    private func inlineMessage(_ identifier: String, in app: XCUIApplication) -> XCUIElement {
+        app.descendants(matching: .any).matching(identifier: identifier).firstMatch
+    }
 
     private func topLevelItem(_ label: String, in app: XCUIApplication) -> XCUIElement {
         let tabButton = app.tabBars.buttons[label]
@@ -489,14 +568,6 @@ final class cliticalUITests: XCTestCase {
         let item = topLevelItem(label, in: app)
         XCTAssertTrue(item.waitForExistence(timeout: 5), "Missing top-level item: \(label)")
         item.tap()
-    }
-
-    /// On iOS 16, an inline SwiftUI Picker is exposed as switches; later
-    /// runtimes expose the same options as buttons. Select the control type
-    /// that is present so the test asserts the same user-visible choice.
-    private func languageOption(_ label: String, in app: XCUIApplication) -> XCUIElement {
-        let toggle = app.switches[label]
-        return toggle.exists ? toggle : app.buttons[label]
     }
 
     /// Scrolls the patient-data form down in small increments until the
@@ -600,11 +671,11 @@ final class cliticalUITests: XCTestCase {
     /// downwards, so reaching sex — which sits just below age — after the
     /// albumin field near the bottom would cost 40 fruitless swipes.
     private func fillRequiredFields(in app: XCUIApplication) {
-        fillNumberField("Age [years]", with: "70", in: app)
+        fillNumberField("Age years", with: enteredAge, in: app)
         selectSex("Male", in: app)
-        fillNumberField("Body Height [cm]", with: "160", in: app)
-        fillNumberField("Body Weight [kg]", with: "55", in: app)
-        fillNumberField("Albumin [g/dL]", with: "4", in: app)
+        fillNumberField("Height cm", with: "160", in: app)
+        fillNumberField("Weight kg", with: "55", in: app)
+        fillNumberField("Albumin g/dL", with: "4", in: app)
     }
 
     /// Selects one segment of the Sex segmented control.
@@ -617,7 +688,7 @@ final class cliticalUITests: XCTestCase {
 
     /// Enters only age for reset behavior checks that do not need valid risk data.
     private func fillAgeField(in app: XCUIApplication) {
-        fillNumberField("Age [years]", with: "70", in: app)
+        fillNumberField("Age years", with: enteredAge, in: app)
     }
 
     private func fillNumberField(
@@ -792,7 +863,7 @@ final class cliticalUITests: XCTestCase {
 
     /// Scrolls to the Predict button at the bottom of the form and taps it.
     private func tapPredictButton(in app: XCUIApplication) {
-        let predict = app.buttons["Predict Risk"]
+        let predict = app.buttons["predictRisks"]
         scrollIntoTappableArea(predict, in: app)
         XCTAssertTrue(predict.waitForExistence(timeout: 5), "Predict button missing")
         predict.tap()
