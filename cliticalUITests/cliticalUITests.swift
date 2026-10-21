@@ -438,12 +438,10 @@ final class cliticalUITests: XCTestCase {
 
     /// In a compact-height window (iPhone landscape) the acknowledge button
     /// must not sit in a bottom bar that eats the little height there is; it
-    /// scrolls with the notice and must still be reachable. iPhone only: iPad
-    /// landscape is still regular height, where the bottom bar is correct.
+    /// scrolls with the notice and must still be reachable. Only meaningful
+    /// when the rotated window really is compact height: iPad (and an
+    /// unfolded iPhone Duo) stay regular height, where the bottom bar is correct.
     func testDisclaimerAcknowledgeIsReachableInLandscape() throws {
-        guard UIDevice.current.userInterfaceIdiom == .phone else {
-            throw XCTSkip("Only iPhone landscape has compact height")
-        }
         XCUIDevice.shared.orientation = .landscapeLeft
         addTeardownBlock { XCUIDevice.shared.orientation = .portrait }
         let app = XCUIApplication()
@@ -457,7 +455,13 @@ final class cliticalUITests: XCTestCase {
         let acknowledge = app.buttons["acknowledgeDisclaimer"]
         let list = app.collectionViews.firstMatch
         XCTAssertTrue(list.waitForExistence(timeout: 5))
-        let windowFrame = app.windows.firstMatch.frame
+        let window = app.windows.firstMatch
+        // Ask the app's window rather than the device idiom: whether the
+        // height is compact depends on the window size, not on the device.
+        guard window.verticalSizeClass == .compact else {
+            throw XCTSkip("Landscape window is not compact height on this device")
+        }
+        let windowFrame = window.frame
         XCTAssertFalse(acknowledge.exists,
                        "In compact height the button must not be a bottom bar")
         var swipes = 0
