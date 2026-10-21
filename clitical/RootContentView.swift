@@ -418,6 +418,19 @@ private extension View {
                     .accessibilityIdentifier("predictRisksToolbar")
             }
         }
+        .keepsNavigationBarOnScroll()
+    }
+
+    /// From iOS 27 the system may minimize the navigation bar as the list
+    /// scrolls (it does on iPhone Duo), which takes the Predict button with
+    /// it. That button is the shortcut past the long form, so keep the bar.
+    @ViewBuilder
+    private func keepsNavigationBarOnScroll() -> some View {
+        if #available(iOS 27.0, *) {
+            toolbarMinimizationBehavior(.never, for: .navigationBar)
+        } else {
+            self
+        }
     }
 }
 
